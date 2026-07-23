@@ -1,11 +1,12 @@
 using UnityEngine;
 
-public class abdullah : MonoBehaviour
+public class deneme : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        transform.scale += 5; 
+        // abdullah aslan main brachte değişiklik yaptı.
+        debug.log("Abdullah Aslan");
     }
 
     // Update is called once per frame
