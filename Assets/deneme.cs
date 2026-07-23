@@ -7,6 +7,9 @@ public class deneme : MonoBehaviour
     {
         // abdullah aslan main brachte değişiklik yaptı.
         debug.log("Abdullah Aslan");
+
+        // abdullah aslan abdullah/paket1 branchinde değişiklik yaptı.
+        
     }
 
     // Update is called once per frame
