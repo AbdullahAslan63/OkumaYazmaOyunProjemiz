@@ -10,6 +10,7 @@ public class deneme : MonoBehaviour
 
         // Abdullah Aslan main branchte.
         // Abdullah Aslan said/avatar branchinde.
+        // ikinci commiti attım.
 
     }
 
