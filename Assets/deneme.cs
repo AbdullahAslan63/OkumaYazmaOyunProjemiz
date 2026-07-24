@@ -9,12 +9,12 @@ public class deneme : MonoBehaviour
         debug.log("Abdullah Aslan");
 
         // abdullah aslan abdullah/paket1 branchinde değişiklik yaptı.
-        //merhaba ben said
+        // merhaba ben said
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
