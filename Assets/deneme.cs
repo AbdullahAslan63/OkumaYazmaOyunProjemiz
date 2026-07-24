@@ -9,6 +9,7 @@ public class deneme : MonoBehaviour
         debug.log("Abdullah Aslan");
 
         // Abdullah Aslan main branchte.
+        // Abdullah Aslan said/avatar branchinde.
 
     }
 
