@@ -1,5 +1,5 @@
 using UnityEngine;
-
+// Abdullah Aslan test yaptı.
 /// <summary>
 /// Oyuncunun seçtiği hayvan, renk ve aksesuarı tutar.
 /// Sahne değişse bile silinmez; kalıcı seçimler PlayerPrefs ile kaydedilir.
