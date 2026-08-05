@@ -15,19 +15,25 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 
 ---
 
+
+
 ## Onaylanmış kararlar
 
-| Konu | Karar |
-| ---- | ----- |
-| Mekanik | Balon sabit; altta 4 pozisyon; objeler balona sürüklenir |
-| Scriptler | `ObjeSurukleme.cs` + `SepetOyunYoneticisi.cs` |
-| Giriş | Fare + touch/parmak |
-| Yanlış bırakma | Geri bildirim + obje başlangıç pozisyonuna döner |
-| Süre | Varsayılan **60** saniye (`kalanSure`) |
-| Doğru puan | Varsayılan **+10** (`dogruPuan`) |
-| Paket 3 | Bitmeden oyun yöneticisi yazılmaz |
+
+| Konu           | Karar                                                    |
+| -------------- | -------------------------------------------------------- |
+| Mekanik        | Balon sabit; altta 4 pozisyon; objeler balona sürüklenir |
+| Scriptler      | `ObjeSurukleme.cs` + `SepetOyunYoneticisi.cs`            |
+| Giriş          | Fare + touch/parmak                                      |
+| Yanlış bırakma | Geri bildirim + obje başlangıç pozisyonuna döner         |
+| Süre           | Varsayılan **60** saniye (`kalanSure`)                   |
+| Doğru puan     | Varsayılan **+10** (`dogruPuan`)                         |
+| Paket 3        | Bitmeden oyun yöneticisi yazılmaz                        |
+
 
 ---
+
+
 
 ## Faz akışı
 
@@ -43,6 +49,8 @@ Faz 0 (Hazırlık)
 
 ---
 
+
+
 # Faz 0 — Hazırlık
 
 **Amaç:** Ortam ve asset’leri kontrol et; klasörleri aç.
@@ -51,19 +59,21 @@ Faz 0 (Hazırlık)
 
 1. `AGENTS.md` dosyasını baştan sona oku.
 2. Grafik ekibinden şu asset’lerin gelip gelmediğini not et (yoksa isimleri / “eksik” yaz):
-   - Arkaplan (Mini Oyun 1)
-   - Balon görseli
-   - Örnek obje sprite’ları (test için en az 2–4 tane)
+  - Arkaplan (Mini Oyun 1)
+  - Balon görseli
+  - Örnek obje sprite’ları (test için en az 2–4 tane)
 3. Unity Project penceresinde klasörleri oluştur (yoksa):
-   - `Assets/_Scripts/SepetOyunu/`
-   - `Assets/_Prefabs/SepetOyunu/`
-   - `Assets/_Scenes/` (yoksa)
+  - `Assets/_Scripts/SepetOyunu/`
+  - `Assets/_Prefabs/SepetOyunu/`
+  - `Assets/_Scenes/` (yoksa)
+
+
 
 ## Tamamlandı kontrol listesi
 
-- [ ] `AGENTS.md` okundu
+- [x] `AGENTS.md` okundu
 - [ ] Asset envanteri not edildi (var / eksik)
-- [ ] `Assets/_Scripts/SepetOyunu/` var
+- [x] `Assets/_Scripts/SepetOyunu/` var
 - [ ] `Assets/_Prefabs/SepetOyunu/` var
 - [ ] `Assets/_Scenes/` var
 
@@ -71,17 +81,23 @@ Faz 0 (Hazırlık)
 
 ---
 
+
+
 # Faz 1 — Sahne kurulumu (kod yok)
 
 **Amaç:** `SepetOyunu` sahnesini mekanik testine hazır hale getir. Bu fazda C# yazılmaz.
 
 ## Unity Editor — adım adım
 
+
+
 ### 1.1 Yeni sahne
 
 1. Menü: **File > New Scene** (2D şablon varsa onu seç).
 2. **File > Save As…** → yol: `Assets/_Scenes/SepetOyunu.unity`
 3. Hierarchy’de **Main Camera** seçili olsun; Projection **Orthographic** olsun.
+
+
 
 ### 1.2 Arkaplan
 
@@ -91,6 +107,8 @@ Faz 0 (Hazırlık)
 4. **Order in Layer** = `-10` yap (her şeyin arkasında kalsın).
 5. Kameranın gördüğü alanı kaplayacak şekilde ölçekle / konumla.
 
+
+
 ### 1.3 Balon (sabit hedef)
 
 1. Hierarchy > 2D Sprite (veya boş + Sprite Renderer), adı: `Balon`.
@@ -98,18 +116,22 @@ Faz 0 (Hazırlık)
 3. **Add Component > Box Collider 2D**.
 4. Inspector’da **Is Trigger** kutusunu **işaretle**.
 5. Tag oluştur:
-   - Inspector’da Tag > **Add Tag…**
-   - `+` ile yeni tag adı: `Balon`
-   - `Balon` objesine geri dön, Tag = **Balon** seç.
+  - Inspector’da Tag > **Add Tag…**
+  - `+` ile yeni tag adı: `Balon`
+  - `Balon` objesine geri dön, Tag = **Balon** seç.
 6. Collider boyutunu balon görseline göre ayarla (Edit Collider).
+
+
 
 ### 1.4 Harf rozeti
 
 1. Hierarchy’de `Balon`’a sağ tık > **3D Object > Text - TextMeshPro** (veya TextMeshPro > Text).
-   - İlk kullanımda TMP Import penceresi çıkarsa **Import TMP Essentials** de.
+  - İlk kullanımda TMP Import penceresi çıkarsa **Import TMP Essentials** de.
 2. Child’ın adını `HarfRozeti` yap.
 3. Balonun üstünde görünecek şekilde konumlandır; puntoyu büyüt.
 4. Geçici test için yazıya `A` yaz (Faz 4’te kod güncelleyecek).
+
+
 
 ### 1.5 Obje prefab şablonu
 
@@ -122,16 +144,20 @@ Faz 0 (Hazırlık)
 7. Prefab kaydolduktan sonra Hierarchy’deki örnek instance’ı silebilirsin (Faz 2’de test için tekrar koyarsın).
 8. Bu fazda scripte gerek yok; script Faz 2’de eklenecek.
 
+
+
 ### 1.6 Sabit obje pozisyonları
 
 1. Hierarchy’de Create Empty, adı: `ObjePozisyonlari` (üst grup, isteğe bağlı).
 2. Altına 4 boş obje:
-   - `ObjePozisyon1`
-   - `ObjePozisyon2`
-   - `ObjePozisyon3`
-   - `ObjePozisyon4`
+  - `ObjePozisyon1`
+  - `ObjePozisyon2`
+  - `ObjePozisyon3`
+  - `ObjePozisyon4`
 3. Dördünü ekranın **alt** kısmına, yan yana eşit aralıklarla yerleştir.
 4. Gizmo ile Scene görünümünde konumları kontrol et (Play’de de kamera çerçevesinde kalsın).
+
+
 
 ### 1.7 Hızlı görsel kontrol
 
@@ -140,10 +166,12 @@ Faz 0 (Hazırlık)
 3. Play’den çık (**Play** tekrar).
 4. Sahneyi kaydet (**Ctrl/Cmd+S**).
 
+
+
 ## Tamamlandı kontrol listesi
 
-- [ ] `Assets/_Scenes/SepetOyunu.unity` kayıtlı
-- [ ] Arkaplan `Order in Layer = -10`
+- [x] `Assets/_Scenes/SepetOyunu.unity` kayıtlı
+- [x] Arkaplan `Order in Layer = -10`
 - [ ] `Balon` üzerinde Box Collider 2D + **Is Trigger**
 - [ ] Tag `Balon` atanmış
 - [ ] Child `HarfRozeti` (TMP) var
@@ -155,6 +183,8 @@ Faz 0 (Hazırlık)
 **Çıkış:** Sahne iskeleti hazır. → Faz 2
 
 ---
+
+
 
 # Faz 2 — ObjeSurukleme.cs (touch destekli)
 
@@ -168,11 +198,13 @@ Faz 0 (Hazırlık)
 
 **Olması gereken public alanlar:**
 
-| Alan | Tip | Varsayılan / not |
-| ---- | --- | ---------------- |
-| `objeAdi` | `string` | Inspector’dan |
-| `dogruHarf` | `char` | Bu objenin baş harfi |
-| `birakmaMesafesi` | `float` | `1.5` |
+
+| Alan              | Tip      | Varsayılan / not     |
+| ----------------- | -------- | -------------------- |
+| `objeAdi`         | `string` | Inspector’dan        |
+| `dogruHarf`       | `char`   | Bu objenin baş harfi |
+| `birakmaMesafesi` | `float`  | `1.5`                |
+
 
 **Davranış:**
 
@@ -211,11 +243,13 @@ Faz 4’te bu satırı `SepetOyunYoneticisi.Instance.ObjeBirakildi(this);` ile d
 7. **Main Camera** seçili; oyun objeleri camera view içinde olsun.
 8. Collider’ların açık olduğunu kontrol et (`Obje` trigger değil, `Balon` trigger).
 9. **Play**:
-   - Objeyi sürükle — fareyi takip etmeli.
-   - Balondan uzağa bırak — başlangıç yerine dönmeli.
-   - Balona yakın bırak — Console’da log görünmeli; yanlışlıkla yok olmamalı.
+  - Objeyi sürükle — fareyi takip etmeli.
+  - Balondan uzağa bırak — başlangıç yerine dönmeli.
+  - Balona yakın bırak — Console’da log görünmeli; yanlışlıkla yok olmamalı.
 10. Play’den çık; sahneyi kaydet.
 11. (İsteğe bağlı) Unity Device Simulator / dokunmatik test: touchPath ile aynı davranışı doğrula.
+
+
 
 ## Tamamlandı kontrol listesi
 
@@ -230,6 +264,8 @@ Faz 4’te bu satırı `SepetOyunYoneticisi.Instance.ObjeBirakildi(this);` ile d
 
 ---
 
+
+
 # Faz 3 — Paket 3 checkpoint (kod yazma yok)
 
 **Amaç:** `SepetOyunYoneticisi` yazmadan önce ortak sistemlerin hazır olduğunu doğrula. **Bu fazda yeni oyun kodu yazılmaz.**
@@ -238,11 +274,15 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen sadece checklist’i doldurursun; eksikse 
 
 ## Kontrol edilecekler
 
+
+
 ### 3.1 Veri
 
 - [ ] `HarfObjeVerisi` ScriptableObject script’i var (`Assets/_Scripts/Ortak/` veya kılavuza uygun yer)
 - [ ] `Assets/_Data/Harfler/` (veya benzeri) altında en az birkaç harf asset’i (hedef: A, E, I, İ, O, Ö, U, Ü)
 - [ ] Her asset’te `harf` + `dogruObjeler` sprite listesi dolu (test için en az 1 harfte 2+ obje)
+
+
 
 ### 3.2 Script API’leri (public isimler kılavuza uymalı)
 
@@ -250,9 +290,13 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen sadece checklist’i doldurursun; eksikse 
 - [ ] `SkorYoneticisi` — `SkorEkle(int miktar)`, skor yazısı alanı
 - [ ] `GeriBildirimYoneticisi` — `DogruGoster()`, `YanlisGoster()`
 
+
+
 ### 3.3 Sahneye taşınabilirlik
 
 - [ ] Bu bileşenler `SepetOyunu` sahnesine eklenebilir / prefab’lanabilir durumda (en azından diğer sahnede çalıştığı gösterilmiş)
+
+
 
 ## Tamamlandı kontrol listesi
 
@@ -262,6 +306,8 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen sadece checklist’i doldurursun; eksikse 
 **Çıkış şartı:** Checklist yeşil olmadan Faz 4’e geçme. → Faz 4
 
 ---
+
+
 
 # Faz 4 — SepetOyunYoneticisi.cs
 
@@ -283,17 +329,19 @@ Planı oku, onayla, sonra kod prompt’una geç.
 
 **Public alanlar (isimler sabit):**
 
-| Alan | Tip | Varsayılan |
-| ---- | --- | ---------- |
-| `soruSecici` | `SoruSecici` | Inspector |
-| `skorYoneticisi` | `SkorYoneticisi` | Inspector |
-| `geriBildirim` | `GeriBildirimYoneticisi` | Inspector |
-| `objePrefab` | `GameObject` | Obje.prefab |
-| `objePozisyonlari` | `Transform[]` | 4 eleman |
-| `harfRozeti` | `TextMeshPro` | dünya uzayı TMP |
-| `sureYazisi` | `TextMeshProUGUI` | UI |
-| `kalanSure` | `float` | **60** |
-| `dogruPuan` | `int` | **10** |
+
+| Alan               | Tip                      | Varsayılan      |
+| ------------------ | ------------------------ | --------------- |
+| `soruSecici`       | `SoruSecici`             | Inspector       |
+| `skorYoneticisi`   | `SkorYoneticisi`         | Inspector       |
+| `geriBildirim`     | `GeriBildirimYoneticisi` | Inspector       |
+| `objePrefab`       | `GameObject`             | Obje.prefab     |
+| `objePozisyonlari` | `Transform[]`            | 4 eleman        |
+| `harfRozeti`       | `TextMeshPro`            | dünya uzayı TMP |
+| `sureYazisi`       | `TextMeshProUGUI`        | UI              |
+| `kalanSure`        | `float`                  | **60**          |
+| `dogruPuan`        | `int`                    | **10**          |
+
 
 **Fonksiyonlar:**
 
@@ -310,6 +358,8 @@ Planı oku, onayla, sonra kod prompt’una geç.
 
 > Planı onayladım. `SepetOyunYoneticisi` C# kodunu yaz. AGENTS.md’ye uy. Public alanlar: soruSecici, skorYoneticisi, geriBildirim, objePrefab, Transform[] objePozisyonlari, TextMeshPro harfRozeti, TextMeshProUGUI sureYazisi, float kalanSure=60f, int dogruPuan=10. Singleton Instance. Start’ta YeniTurBaslat. Update’te süre. ObjeleriOlustur: aktif harfin dogruObjeler’inden 1–2, diğer harflerden 2–3 çeldirici, karıştır, pozisyonlara Instantiate et, her ObjeSurukleme’ye sprite/objeAdi/dogruHarf ata. ObjeBirakildi: doğruysa SkorEkle(dogruPuan), DogruGoster, YeniTurBaslat; yanlışsa YanlisGoster. OyunuBitir süre bitince. Avatar kodu yok. Her satıra Türkçe yorum.
 
+
+
 ## 4.D — ObjeSurukleme bağını güncelle
 
 Faz 2’de sadece `Debug.Log` vardıysa, bırakma başarılı dalını şuna çevir:
@@ -317,12 +367,16 @@ Faz 2’de sadece `Debug.Log` vardıysa, bırakma başarılı dalını şuna çe
 - `SepetOyunYoneticisi.Instance != null` iken `Instance.ObjeBirakildi(this);`
 - null ise log (güvenlik)
 
+
+
 ## 4.E — Unity Editor (bu fazda zorunlu değil ama önerilir)
 
 Sadece compile kontrolü yeterli olabilir; tam bağlama **Faz 5**. En azından:
 
 1. Script’in Project’te göründüğünü ve Console’da error olmadığını doğrula.
 2. Henüz sahneye ekleme — Faz 5.
+
+
 
 ## Tamamlandı kontrol listesi
 
@@ -337,11 +391,15 @@ Sadece compile kontrolü yeterli olabilir; tam bağlama **Faz 5**. En azından:
 
 ---
 
+
+
 # Faz 5 — Bağlama ve entegrasyon testi
 
 **Amaç:** Her şeyi Inspector’da bağla; Play’de tam akışı doğrula.
 
 ## Unity Editor — adım adım
+
+
 
 ### 5.1 Oyun yöneticisi objesi
 
@@ -349,18 +407,24 @@ Sadece compile kontrolü yeterli olabilir; tam bağlama **Faz 5**. En azından:
 2. Hierarchy > Create Empty, adı: `OyunYoneticisi`.
 3. **Add Component > SepetOyunYoneticisi**.
 
+
+
 ### 5.2 UI — süre ve skor
 
 1. Hierarchy > UI > **Canvas** (yoksa oluştur).
-   - Canvas Scaler: **Scale With Screen Size**; Reference Resolution örn. 1920×1080.
+  - Canvas Scaler: **Scale With Screen Size**; Reference Resolution örn. 1920×1080.
 2. Canvas altında UI > Text - TextMeshPro, adı: `SureYazisi` (örn. sağ üst).
 3. Paket 3’teki skor objesini bu sahneye ekle / oluştur (`SkorYazisi` + `SkorYoneticisi` component’i kılavuza göre).
 4. Geri bildirim objelerini ekle (`DogruIkon`, `YanlisIkon`, Particle, Audio — Paket 3’ün Editor adımları).
+
+
 
 ### 5.3 Ortak sistem objeleri
 
 1. Boş obje veya Paket 3 prefab’ı: `SoruSecici` component + Inspector’da `tumHarfler` dizisini harf asset’leriyle doldur.
 2. `SkorYoneticisi` ve `GeriBildirimYoneticisi` referanslarını hazırla.
+
+
 
 ### 5.4 Inspector doldurma (`OyunYoneticisi`)
 
@@ -375,11 +439,15 @@ Sadece compile kontrolü yeterli olabilir; tam bağlama **Faz 5**. En azından:
 7. `sureYazisi` → Canvas’taki TMP
 8. `kalanSure` = 60, `dogruPuan` = 10 (gerekirse düzelt)
 
+
+
 ### 5.5 Build Settings (önemli)
 
 1. **File > Build Settings**
 2. **Add Open Scenes** ile `SepetOyunu` listede olsun (yoksa sürükle).
 3. Paket 6 tam geçiş için diğer sahneleri de ekleyecek; sen en azından kendi sahnenin listede olduğunu doğrula.
+
+
 
 ### 5.6 Play test checklist
 
@@ -394,6 +462,8 @@ Play’e bas ve sırayla dene:
 - [ ] Aynı harf arka arkaya gelmiyor (mümkünse birkaç tur dene — `SoruSecici`)
 - [ ] Console’da kırmızı error yok
 
+
+
 ## Tamamlandı kontrol listesi
 
 - [ ] Tüm Inspector referansları dolu (None yok)
@@ -404,6 +474,8 @@ Play’e bas ve sırayla dene:
 **Çıkış:** Mini Oyun 1 oynanabilir. → Faz 6
 
 ---
+
+
 
 # Faz 6 — Teslim (Paket 6’ya)
 
@@ -427,6 +499,8 @@ Paket 6’dan beklenenler:
 - [ ] Build Settings son kontrolü
 ```
 
+
+
 ## Tamamlandı kontrol listesi
 
 - [ ] Faz 0–5 listeleri bu dosyada işaretli
@@ -439,18 +513,27 @@ Paket 6’dan beklenenler:
 
 ---
 
+
+
 ## Hızlı referans — dosya yolları
 
-| Ne | Yol |
-| -- | --- |
-| Sürükleme | `Assets/_Scripts/SepetOyunu/ObjeSurukleme.cs` |
-| Yönetici | `Assets/_Scripts/SepetOyunu/SepetOyunYoneticisi.cs` |
-| Prefab | `Assets/_Prefabs/SepetOyunu/Obje.prefab` |
-| Sahne | `Assets/_Scenes/SepetOyunu.unity` |
-| Ekip kuralları | `AGENTS.md` |
+
+| Ne             | Yol                                                 |
+| -------------- | --------------------------------------------------- |
+| Sürükleme      | `Assets/_Scripts/SepetOyunu/ObjeSurukleme.cs`       |
+| Yönetici       | `Assets/_Scripts/SepetOyunu/SepetOyunYoneticisi.cs` |
+| Prefab         | `Assets/_Prefabs/SepetOyunu/Obje.prefab`            |
+| Sahne          | `Assets/_Scenes/SepetOyunu.unity`                   |
+| Ekip kuralları | `AGENTS.md`                                         |
+
+
+
 
 ## İptal
 
-| Dosya | Durum |
-| ----- | ----- |
+
+| Dosya              | Durum                                         |
+| ------------------ | --------------------------------------------- |
 | `SepetHareketi.cs` | Yazılmaz. Balon sabit; sürüklenen objelerdir. |
+
+
