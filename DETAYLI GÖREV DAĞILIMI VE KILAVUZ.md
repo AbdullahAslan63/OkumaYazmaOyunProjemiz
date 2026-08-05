@@ -36,7 +36,9 @@ Balon **sabit duruyor**. Objeler ekranın alt kısmında sabit duruyor, oyuncu i
 
 ---
 
-## 📦 MUSTAFA SAİD BAYRAM — Avatar Sistemi
+## 📦 PAKET 1 — MUSTAFA SAİD BAYRAM — Avatar Sistemi ve Seçim Ekranı
+
+Bu paket eski **Paket 1 (Avatar Sistemi)** ile **Paket 2 (Avatar Seçim Ekranı)** görevlerini birleştirir. Önce temel avatar hafıza/görünüm sistemi (Adım 1.x), ardından seçim ekranı UI ve butonlar (Adım 2.x) yapılır.
 
 ### Adım 1.1 — Yönetici Objesini Oluştur (Unity Editöründe)
 
@@ -104,10 +106,6 @@ Balon **sabit duruyor**. Objeler ekranın alt kısmında sabit duruyor, oyuncu i
 
 `Avatar` objesini seç, script alanlarını doldur (Govde/Aksesuar renderer'ları sürükle, `hayvanlar` listesine 4 hayvanın resimlerini `Assets/_Art/Avatar/Karakterler/`'den sürükle). Play'e bas, doğru resim/renk görünüyor mu kontrol et.
 
----
-
-## 📦 ENES BARIŞ — Avatar Seçim Ekranı
-
 ### Adım 2.1-2.2 — Canvas ve Butonlar (Unity Editöründe)
 
 1. Hierarchy > sağ tık > UI > Canvas. Canvas Scaler: `Scale With Screen Size`, Reference Resolution belirle.
@@ -164,7 +162,7 @@ Play'e bas, tüm butonları dene.
 
 ---
 
-## 📦 MUSTAFA YİĞİT AVAN — Ortak Sistemler
+## 📦 PAKET 3 — MUSTAFA YİĞİT AVAN — Ortak Sistemler
 
 ### Adım 3.1 — Harf Verisi (ScriptableObject)
 
@@ -255,7 +253,7 @@ Play'e bas, tüm butonları dene.
 
 ---
 
-## 📦 MUHAMMED MUSTAFA AKTÜRK — Mini Oyun 1: Sepetle Toplama
+## 📦 PAKET 4 — ENES BARIŞ — Mini Oyun 1: Sepetle Toplama
 
 ### Adım 4.1-4.3 — Sahne Kurulumu (Unity Editöründe, kod gerektirmez)
 
@@ -318,7 +316,7 @@ Boş obje `OyunYoneticisi` oluştur, scripti ekle, tüm `public` alanları Inspe
 
 ---
 
-## 📦 MUSTAFA ÜZ — Mini Oyun 2: Hangisinin Baş Harfi
+## 📦 PAKET 5 — MUSTAFA ÜZ — Mini Oyun 2: Hangisinin Baş Harfi
 
 **Basitleştirme:** Seçenekler için ayrı bir "balon" görseli istenmedi — Adım 2.4'teki renk seçim çerçevesi görseli tekrar kullanılacak, içine obje resmi konacak.
 
@@ -380,7 +378,7 @@ Boş obje oluştur, scripti ekle, alanları doldur, Play'e bas.
 
 ---
 
-## 📦 SÜLEYMAN ÖZ — UI, Font, Efekt Bağlama ve Test
+## 📦 PAKET 6 — SÜLEYMAN ÖZ — UI, Font, Efekt Bağlama ve Test
 
 ### Adım 6.1 — Font Kurulumu (Unity Editöründe, kod gerektirmez)
 
@@ -419,12 +417,12 @@ Paket 3'teki boş `AudioClip`/görsel alanlarını diğer ekiplerden gelen dosya
 
 ---
 
-## 🗓️ Uygulama Sırası (Değişmedi)
+## 🗓️ Uygulama Sırası
 
 ```
-1. Hafta:  Paket 1 + Paket 3
-2. Hafta:  Paket 2, 4, 5 başlar
-3. Hafta:  Paket 2, 4, 5 devam — Paket 4/5'teki oyun yöneticisi scriptleri
+1. Hafta:  Paket 1 (avatar temeli, Adım 1.x) + Paket 3 paralel başlar
+2. Hafta:  Paket 1 devam (seçim ekranı, Adım 2.x) + Paket 4, 5 başlar
+3. Hafta:  Paket 4, 5 devam — oyun yöneticisi scriptleri
            en çok zaman alacak kısım (Plan Mode kullanmayı unutmayın)
 4. Hafta:  Paket 6 tam entegrasyon + test
 ```

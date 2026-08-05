@@ -121,23 +121,19 @@ Assets/_Scripts/
 
 ---
 
-## 👥 6 Kişilik Görev Dağılımı
+## 👥 5 Kişilik Görev Dağılımı
 
-Paketler, birbirine mümkün olduğunca az bağımlı ve farklı sahnelerde çalışacak şekilde ayrıldı — çakışma riski düşük. Kime hangi paketi vereceğine sen karar ver.
+Paketler, birbirine mümkün olduğunca az bağımlı ve farklı sahnelerde çalışacak şekilde ayrıldı — çakışma riski düşük. Eski Paket 1 (Avatar Sistemi) ile Paket 2 (Avatar Seçim Ekranı) birleştirildi; Mini Oyun 1 görevi Enes Barış'a verildi.
 
-### 📦 Paket 1 — Avatar Sistemi (Temel)
-**Dosyalar:** `AvatarYoneticisi.cs`, `AvatarGorunumu.cs`
-**Bağımlılık:** Yok, ilk başlar. Paket 2, 4 ve 5 buna bağımlı olduğu için erken bitmesi önemli.
-**Bilmesi gerekenler:** `public` değişken, Inspector'dan resim/renk atama, `SpriteRenderer.color`, `DontDestroyOnLoad`, `PlayerPrefs`
-**Kullanacağı asset:** Adım 1 (avatar), Adım 2 (aksesuar)
-
-### 📦 Paket 2 — Avatar Seçim Ekranı
-**Dosyalar:** `AvatarSecimEkrani.cs`, `RenkSecici.cs`, `AksesuarSecici.cs`
-**Bağımlılık:** Paket 1 (en azından iskelet halinde — paralel başlanabilir)
-**Bilmesi gerekenler:** UI Button, `OnClick`, `if/else`
-**Kullanacağı asset:** Adım 3 (arayüz parçaları)
+### 📦 Paket 1 — Avatar Sistemi ve Seçim Ekranı
+**Sorumlu:** Mustafa Said Bayram
+**Dosyalar:** `AvatarYoneticisi.cs`, `AvatarGorunumu.cs`, `AvatarSecimEkrani.cs`, `RenkSecici.cs`, `AksesuarSecici.cs`
+**Bağımlılık:** Yok, ilk başlar. Paket 4 ve 5 buna bağımlı olduğu için erken bitmesi önemli.
+**Bilmesi gerekenler:** `public` değişken, Inspector'dan resim/renk atama, `SpriteRenderer.color`, `DontDestroyOnLoad`, `PlayerPrefs`, UI Button, `OnClick`, `if/else`
+**Kullanacağı asset:** Adım 1 (avatar), Adım 2 (aksesuar), Adım 3 (arayüz parçaları)
 
 ### 📦 Paket 3 — Ortak Sistemler
+**Sorumlu:** Mustafa Yiğit Avan
 **Dosyalar:** `HarfObjeVerisi.cs`, `SoruSecici.cs`, `SkorYoneticisi.cs`, `GeriBildirimYoneticisi.cs`, `SesYoneticisi.cs`
 **Bağımlılık:** Yok, Paket 1 ile paralel başlar. Paket 4 ve 5 buna bağımlı, öncelikli bitmeli.
 **Bilmesi gerekenler:** ScriptableObject (veri kartı) kavramı, `List<>`, `Random.Range`, `AudioSource`
@@ -145,18 +141,21 @@ Paketler, birbirine mümkün olduğunca az bağımlı ve farklı sahnelerde çal
 **Not:** Bu paketi en sistemli düşünen çocuğa vermen faydalı olur — çünkü hem Mini Oyun 1 hem 2 buna dayanıyor.
 
 ### 📦 Paket 4 — Mini Oyun 1: Sepetle Toplama
+**Sorumlu:** Enes Barış
 **Dosyalar:** `SepetHareketi.cs`, `SepetOyunYoneticisi.cs`
 **Bağımlılık:** Paket 1 (avatarın sepette görünmesi) ve Paket 3 (harf/obje verisi) bitmiş olmalı
 **Bilmesi gerekenler:** Collider2D/trigger, `Instantiate`/`Destroy`, basit zamanlayıcı
 **Kullanacağı asset:** Adım 4 (arkaplan), Adım 5 (balon), Adım 7 (objeler)
 
 ### 📦 Paket 5 — Mini Oyun 2: Hangisinin Baş Harfi
+**Sorumlu:** Mustafa Üz
 **Dosyalar:** `HarfSecmeYoneticisi.cs`, `SecenekBalonu.cs`
 **Bağımlılık:** Paket 3 (harf/obje verisi) bitmiş olmalı
 **Bilmesi gerekenler:** Prefab + `Instantiate`, `OnMouseDown`, liste karıştırma
 **Kullanacağı asset:** Adım 7 (objeler) — arkaplan için Adım 4'ü paylaşabilir ya da ayrı istenebilir (netleştir)
 
 ### 📦 Paket 6 — UI + Ses/Efekt Bağlama + Test
+**Sorumlu:** Süleyman Öz
 **Kapsam:** Skor/harf yazılarının font ayarı (TextMeshPro kurulumu), efekt/ses dosyalarını sistemlere bağlama, sahneler arası geçiş butonları, genel test
 **Bağımlılık:** Diğer paketlerin en azından iskelet halinde bitmiş olması — proje sonuna doğru yoğunlaşır, ama font kurulumuna en baştan başlanabilir
 **Bilmesi gerekenler:** TextMeshPro temelleri, `SceneManager.LoadScene`, temel test (elle deneme, hata bulma)
@@ -168,11 +167,11 @@ Paketler, birbirine mümkün olduğunca az bağımlı ve farklı sahnelerde çal
 ## 🗓️ Önerilen Sıra
 
 ```
-1. Hafta:  Paket 1 + Paket 3 paralel başlar
+1. Hafta:  Paket 1 (avatar temeli) + Paket 3 paralel başlar
            Paket 6'nın font kurulumu paralel başlayabilir
-2. Hafta:  Paket 1 ve 3 biter → Paket 2, 4, 5 başlar
-3. Hafta:  Paket 2, 4, 5 devam eder
-4. Hafta:  Paket 2, 4, 5 biter → Paket 6 tam entegrasyon + test
+2. Hafta:  Paket 1 devam (seçim ekranı) → Paket 4, 5 başlar
+3. Hafta:  Paket 4, 5 devam eder
+4. Hafta:  Paket 4, 5 biter → Paket 6 tam entegrasyon + test
 ```
 
 ---
