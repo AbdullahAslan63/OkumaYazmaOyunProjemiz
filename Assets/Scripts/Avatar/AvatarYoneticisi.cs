@@ -7,9 +7,18 @@ public class AvatarYoneticisi : MonoBehaviour
 
     // --- SEÇİLEN BİLGİLER ---
     [Header("Avatar Seçimleri")]
-    public int seciliHayvanIndex;      // 0=Kedi, 1=Tavşan, 2=Kuş, 3=Rakun
+    public int seciliHayvanIndex;      // 0=Kedi, 1=Tavşan, 2=Köpek, 3=Rakun
     public Color seciliRenk = Color.white;
     public int seciliAksesuarIndex = -1; // -1 = Aksesuar yok
+
+    public string SeciliHayvanAdi => seciliHayvanIndex switch
+    {
+        0 => "kedi",
+        1 => "tavsan",
+        2 => "kopek",
+        3 => "rakun",
+        _ => "tavsan"
+    };
 
     // PlayerPrefs Kayıt Anahtarları
     private const string KEY_HAYVAN = "Avatar_HayvanIndex";

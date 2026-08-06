@@ -686,7 +686,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7034fb4a3b2c1b469003bcacff6abdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AvatarCustomizer
-  ekranGorseli: {fileID: 0}
+  ekranGorseli: {fileID: 403836635}
   allOutfits: []
 --- !u!1 &290758766
 GameObject:
@@ -1010,6 +1010,7 @@ GameObject:
   m_Component:
   - component: {fileID: 403836636}
   - component: {fileID: 403836635}
+  - component: {fileID: 403836637}
   m_Layer: 0
   m_Name: KarakterKonumu
   m_TagString: Untagged
@@ -1087,11 +1088,25 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 5.65, y: 0.29, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 1}
+  m_LocalScale: {x: 0.82, y: 0.82, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &403836637
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 403836634}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7034fb4a3b2c1b469003bcacff6abdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AvatarCustomizer
+  ekranGorseli: {fileID: 403836635}
+  allOutfits: []
 --- !u!1 &420963261
 GameObject:
   m_ObjectHideFlags: 0
@@ -1612,7 +1627,7 @@ Transform:
   m_GameObject: {fileID: 722203354}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -476.47, y: -268.33, z: 0}
+  m_LocalPosition: {x: -478.87, y: -269.09, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2104,6 +2119,7 @@ GameObject:
   - component: {fileID: 858591747}
   - component: {fileID: 858591749}
   - component: {fileID: 858591748}
+  - component: {fileID: 858591750}
   m_Layer: 5
   m_Name: RenkPaneli
   m_TagString: Untagged
@@ -2168,6 +2184,43 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 858591746}
   m_CullTransparentMesh: 1
+--- !u!114 &858591750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 858591746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8c4e2f91b0d4e6a9f3c7d5e1b2a8460, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RenkSecici
+  renkler:
+  - ad: Beyaz
+    renk: {r: 1, g: 1, b: 1, a: 1}
+  - ad: Kirmizi
+    renk: {r: 0.92, g: 0.28, b: 0.28, a: 1}
+  - ad: Mavi
+    renk: {r: 0.28, g: 0.55, b: 0.95, a: 1}
+  - ad: Yesil
+    renk: {r: 0.3, g: 0.78, b: 0.4, a: 1}
+  - ad: Sari
+    renk: {r: 1, g: 0.88, b: 0.25, a: 1}
+  - ad: Turuncu
+    renk: {r: 1, g: 0.55, b: 0.18, a: 1}
+  - ad: Pembe
+    renk: {r: 1, g: 0.55, b: 0.75, a: 1}
+  - ad: Kahve
+    renk: {r: 0.62, g: 0.4, b: 0.22, a: 1}
+  butonBoyutu: 78
+  yatayBosluk: 16
+  dikeyBosluk: 16
+  gridMerkezi: {x: -280, y: 40}
+  siraAdetleri:
+  - 3
+  - 3
+  - 2
 --- !u!1 &867289782
 GameObject:
   m_ObjectHideFlags: 0
@@ -2194,7 +2247,7 @@ Transform:
   m_GameObject: {fileID: 867289782}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -474.1, y: -268.38, z: 0}
+  m_LocalPosition: {x: -476.12, y: -269.11, z: 0}
   m_LocalScale: {x: 0.22, y: 0.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2333,7 +2386,7 @@ Transform:
   m_GameObject: {fileID: 1094696555}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -472.53, y: -268.66, z: 0}
+  m_LocalPosition: {x: -475.24, y: -269.57, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2425,7 +2478,7 @@ Transform:
   m_GameObject: {fileID: 1111664477}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -478.76, y: -264.54, z: 0}
+  m_LocalPosition: {x: -480.89, y: -265.4, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2637,7 +2690,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7034fb4a3b2c1b469003bcacff6abdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AvatarCustomizer
-  ekranGorseli: {fileID: 0}
+  ekranGorseli: {fileID: 403836635}
   allOutfits: []
 --- !u!1 &1184075563
 GameObject:
@@ -2789,7 +2842,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1204168811
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3299,6 +3352,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AvatarCustomizer
   ekranGorseli: {fileID: 403836635}
   allOutfits:
+  - characterName: kedi
+    accessoryName: yok
+    outfitSprite: {fileID: 4383145210153637834, guid: 9c76a3a8d223a284ba96091bbfe27b66, type: 3}
+  - characterName: kopek
+    accessoryName: yok
+    outfitSprite: {fileID: -1697422220042300713, guid: ba2671d789e75ce4c814b79a8b54edab, type: 3}
+  - characterName: tavsan
+    accessoryName: yok
+    outfitSprite: {fileID: -9137232129691832271, guid: 465bb60eefcd868479e50deec180f6a9, type: 3}
+  - characterName: rakun
+    accessoryName: yok
+    outfitSprite: {fileID: -3121074332411749344, guid: 8f68f5ae8a8e896488ebfb7c8da42447, type: 3}
   - characterName: tavsan
     accessoryName: kulaklik
     outfitSprite: {fileID: -2296258613831102350, guid: 11a190a2aa5196445a1a27bb668f8e5f, type: 3}
@@ -3400,7 +3465,7 @@ Transform:
   m_GameObject: {fileID: 1497972713}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -473.4, y: -264.59, z: 0}
+  m_LocalPosition: {x: -475.31, y: -265.34, z: 0}
   m_LocalScale: {x: 0.34, y: 0.34, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3749,8 +3814,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7034fb4a3b2c1b469003bcacff6abdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AvatarCustomizer
-  ekranGorseli: {fileID: 0}
-  allOutfits: []
+  ekranGorseli: {fileID: 403836635}
+  allOutfits:
+  - characterName: 
+    accessoryName: 
+    outfitSprite: {fileID: 0}
 --- !u!1 &1589452137
 GameObject:
   m_ObjectHideFlags: 0
@@ -4006,7 +4074,7 @@ Transform:
   m_GameObject: {fileID: 1668761687}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -479.13, y: -264.71, z: 0}
+  m_LocalPosition: {x: -480.99, y: -265.34, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4218,8 +4286,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7034fb4a3b2c1b469003bcacff6abdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AvatarCustomizer
-  ekranGorseli: {fileID: 0}
-  allOutfits: []
+  ekranGorseli: {fileID: 403836635}
+  allOutfits:
+  - characterName: 
+    accessoryName: 
+    outfitSprite: {fileID: 0}
 --- !u!1 &1867867773
 GameObject:
   m_ObjectHideFlags: 0
@@ -4352,7 +4423,7 @@ Transform:
   m_GameObject: {fileID: 1874199077}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -478.76, y: -268.25, z: 0}
+  m_LocalPosition: {x: -480.85, y: -269.22, z: 0}
   m_LocalScale: {x: 0.22, y: 0.22, z: 1.0212}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4444,7 +4515,7 @@ Transform:
   m_GameObject: {fileID: 1906807837}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -480.05, y: -268.68, z: 0}
+  m_LocalPosition: {x: -481.97, y: -269.56, z: 0}
   m_LocalScale: {x: 0.6, y: 0.6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4536,7 +4607,7 @@ Transform:
   m_GameObject: {fileID: 1919367473}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -474.19, y: -264.46, z: 0}
+  m_LocalPosition: {x: -476.17, y: -265.37, z: 0}
   m_LocalScale: {x: 0.65, y: 0.65, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4619,7 +4690,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1997243480
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4976,7 +5047,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7034fb4a3b2c1b469003bcacff6abdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AvatarCustomizer
-  ekranGorseli: {fileID: 0}
+  ekranGorseli: {fileID: 403836635}
   allOutfits: []
 --- !u!1 &2092166145
 GameObject:
