@@ -4,23 +4,20 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class codes : MonoBehaviour
+/// <summary>
+/// Mini Oyun 2 yöneticisi: soru seçer, slotları ayarlar, tıklama sonucunu işler.
+/// Davranış mevcut sahne/tag yapısıyla uyumludur (prefab Instantiate yok).
+/// </summary>
+public class HarfSecmeYoneticisi : MonoBehaviour
 {
+    // Tek kopyaya erişim
+    public static HarfSecmeYoneticisi Instance;
+
     // 1=A(araba) 2=E(elma) 3=Ö(örümcek) 4=Ü(üzüm)
     // 5=I(ıslak) 6=İ(inek) 7=O(oyuncak) 8=U(uçak)
     // Slotlar: araba↔uçak | elma↔oyuncak | üzüm↔ıslak | örümcek↔inek
-    private readonly Dictionary<string, int> dogruHarf = new Dictionary<string, int>
-    {
-        { "araba", 1 },
-        { "elma", 2 },
-        { "orumcek", 3 },
-        { "uzum", 4 },
-        { "islakmendil", 5 },
-        { "inek", 6 },
-        { "oyuncak", 7 },
-        { "ucak", 8 }
-    };
 
+    // Harf id → görünen harf adı
     private readonly Dictionary<int, string> harfAdlari = new Dictionary<int, string>
     {
         { 1, "A" },
@@ -33,10 +30,23 @@ public class codes : MonoBehaviour
         { 8, "U" }
     };
 
+    // Harf id → char (SecenekBalonu karşılaştırması için)
+    private readonly Dictionary<int, char> harfChar = new Dictionary<int, char>
+    {
+        { 1, 'A' },
+        { 2, 'E' },
+        { 3, 'Ö' },
+        { 4, 'Ü' },
+        { 5, 'I' },
+        { 6, 'İ' },
+        { 7, 'O' },
+        { 8, 'U' }
+    };
+
     private float yukselmehizi = 5.0f;
     private float ucusSuresi = 2.0f;
     private float oyunSuresi = 60f;
-    private float kalanSure;
+    public float kalanSure;
     private int secilenharf;
     private int dogruSayisi;
     private int yanlisSayisi;
@@ -51,144 +61,85 @@ public class codes : MonoBehaviour
     private readonly List<int> soruHavuzu = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8 };
     private readonly List<int> soruDestesi = new List<int>();
 
-    private GameObject arababalon, elmabalon, orumcekbalon, uzumbalon;
-    private GameObject islakmendilbalon, inekbalon, oyuncakbalon, ucakbalon;
+    // Sekiz seçenek balonu bileşeni
+    private SecenekBalonu arabaBalon, elmaBalon, orumcekBalon, uzumBalon;
+    private SecenekBalonu islakBalon, inekBalon, oyuncakBalon, ucakBalon;
+    private readonly List<SecenekBalonu> tumBalonlar = new List<SecenekBalonu>();
 
+    // Feedback sahnedeki GO'lar (geçici; Ayarla'ya verilir)
     private GameObject dogruAraba, dogruElma, dogruOrumcek, dogruUzum;
     private GameObject dogruIslak, dogruInek, dogruOyuncak, dogruUcak;
     private GameObject yanlisAraba, yanlisElma, yanlisOrumcek, yanlisUzum;
     private GameObject yanlisIslak, yanlisInek, yanlisOyuncak, yanlisUcak;
 
+    // Büyük harf soru görselleri
     private GameObject soruA, soruE, soruOe, soruUe, soruI, soruIi, soruO, soruUu;
 
+    // Slot sabit pozisyonları
     private Vector3 posAraba, posElma, posOrumcek, posUzum;
     private Vector3 posIslak, posInek, posOyuncak, posUcak;
 
-    // ----------------- Bulucu -----------------
+    // ----------------- Yaşam döngüsü -----------------
 
-    GameObject FindInScene(System.Func<Transform, bool> esles)
+    void Awake()
     {
-        Transform[] all = Resources.FindObjectsOfTypeAll<Transform>();
-        for (int i = 0; i < all.Length; i++)
+        // Singleton ata
+        if (Instance != null && Instance != this)
         {
-            Transform t = all[i];
-            if (t == null) continue;
-            if (!t.gameObject.scene.IsValid()) continue;
-            if (esles(t)) return t.gameObject;
+            Destroy(gameObject);
+            return;
         }
-        return null;
+        Instance = this;
     }
 
-    GameObject FindByTagSafe(string tag)
+    void OnDestroy()
     {
-        return FindInScene(t =>
-        {
-            try { return t.CompareTag(tag); }
-            catch { return false; }
-        });
+        // Bu kopya Instance ise temizle
+        if (Instance == this)
+            Instance = null;
     }
-
-    GameObject FindByExactName(string exactName)
-    {
-        return FindInScene(t => string.Equals(t.name, exactName, System.StringComparison.Ordinal));
-    }
-
-    GameObject FindByNameContains(string namePart)
-    {
-        return FindInScene(t => t.name.IndexOf(namePart, System.StringComparison.Ordinal) >= 0);
-    }
-
-    GameObject FindFirst(params GameObject[] adaylar)
-    {
-        for (int i = 0; i < adaylar.Length; i++)
-            if (adaylar[i] != null) return adaylar[i];
-        return null;
-    }
-
-    GameObject FeedbackKopyala(GameObject sablon, string yeniAd)
-    {
-        if (sablon == null) return null;
-        GameObject kopya = Instantiate(sablon);
-        kopya.name = yeniAd;
-        kopya.transform.SetParent(null, true);
-        kopya.SetActive(false);
-        return kopya;
-    }
-
-    void SetActiveSafe(GameObject go, bool aktif)
-    {
-        if (go != null) go.SetActive(aktif);
-    }
-
-    void BringToFront(GameObject go)
-    {
-        if (go == null) return;
-        SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
-        if (sr != null) sr.sortingOrder = 100;
-    }
-
-    void TiklanabilirYap(GameObject balon)
-    {
-        if (balon == null) return;
-
-        Button[] butonlar = balon.GetComponentsInChildren<Button>(true);
-        for (int i = 0; i < butonlar.Length; i++)
-            butonlar[i].enabled = false;
-
-        BoxCollider2D box = balon.GetComponent<BoxCollider2D>();
-        if (box == null) box = balon.AddComponent<BoxCollider2D>();
-
-        SpriteRenderer sr = balon.GetComponent<SpriteRenderer>();
-        if (sr != null && sr.sprite != null)
-            box.size = sr.sprite.bounds.size;
-        else
-            box.size = new Vector2(7f, 12f);
-    }
-
-    void SlotAyarla(GameObject a, GameObject b, Vector3 slotPos, bool aAktif)
-    {
-        SetActiveSafe(a, aAktif);
-        SetActiveSafe(b, !aAktif);
-        if (aAktif)
-        {
-            if (a != null) a.transform.position = slotPos;
-        }
-        else
-        {
-            if (b != null) b.transform.position = slotPos;
-        }
-    }
-
-    // ----------------- Start -----------------
 
     void Start()
     {
         anaKamera = Camera.main;
         kalanSure = oyunSuresi;
 
+        // Harf sonuç sözlüklerini sıfırla
         for (int i = 0; i < soruHavuzu.Count; i++)
         {
             harfDogruBildimi[soruHavuzu[i]] = false;
             harfYanlisSayisi[soruHavuzu[i]] = 0;
         }
 
-        arababalon = FindByTagSafe("arababalon");
-        elmabalon = FindByTagSafe("elmabalon");
-        orumcekbalon = FindByTagSafe("orumcekbalon");
-        uzumbalon = FindByTagSafe("uzumbalon");
-        islakmendilbalon = FindFirst(
+        // Balon GameObject'lerini sahnede bul (tag yoksa isim)
+        GameObject arababalon = FindFirst(
+            FindByTagSafe("arababalon"),
+            FindByNameContains("shbaraba"));
+        GameObject elmabalon = FindFirst(
+            FindByTagSafe("elmabalon"),
+            FindByNameContains("shbelma"));
+        GameObject orumcekbalon = FindFirst(
+            FindByTagSafe("orumcekbalon"),
+            FindByNameContains("shb\u00f6r\u00fcmcek"));
+        GameObject uzumbalon = FindFirst(
+            FindByTagSafe("uzumbalon"),
+            FindByNameContains("shb\u00fcz\u00fcm"));
+        GameObject islakmendilbalon = FindFirst(
             FindByTagSafe("islakmendilbalon"),
             FindByNameContains("shb\u0131slakmendil"));
-        inekbalon = FindFirst(
+        GameObject inekbalon = FindFirst(
             FindByTagSafe("inekbalon"),
             FindByNameContains("shbinek"));
-        oyuncakbalon = FindFirst(
+        GameObject oyuncakbalon = FindFirst(
             FindByTagSafe("oyuncakbalon"),
             FindByNameContains("shboyuncak"));
-        ucakbalon = FindFirst(
+        // Sahnedeki tag: uçakbalon (unicode)
+        GameObject ucakbalon = FindFirst(
+            FindByTagSafe("u\u00e7akbalon"),
             FindByTagSafe("ucakbalon"),
             FindByNameContains("shbu\u00e7ak"));
 
+        // Doğru geri bildirim görsellerini bul
         dogruAraba = FindFirst(
             FindByNameContains("do\u011fruse\u00e7enekaraba"),
             FindByTagSafe("do\u011fruse\u00e7imtikiaraba"));
@@ -218,6 +169,7 @@ public class codes : MonoBehaviour
             FindByTagSafe("dogrutikiucak"));
         if (dogruUcak == null) dogruUcak = FeedbackKopyala(dogruAraba, "dogrusecenekucak");
 
+        // Yanlış geri bildirim görsellerini bul
         yanlisAraba = FindFirst(
             FindByNameContains("yanl\u0131\u015Fse\u00e7enekaraba"),
             FindByTagSafe("yanl\u0131\u015Fse\u00e7im\u00e7arp\u0131s\u0131araba"));
@@ -247,6 +199,7 @@ public class codes : MonoBehaviour
             FindByTagSafe("yanliscarpiucak"));
         if (yanlisUcak == null) yanlisUcak = FeedbackKopyala(yanlisAraba, "yanlissecenekucak");
 
+        // Soru harfi görsellerini bul
         soruA = FindFirst(FindByExactName("HangisininBasHarfiA_0"), FindByTagSafe("soruA"));
         soruE = FindFirst(FindByExactName("HangisininBasHarfiE_0"), FindByTagSafe("soruE"));
         soruOe = FindFirst(FindByExactName("HangisininBasHarfi\u00d6_0"), FindByTagSafe("soru\u00d6"));
@@ -259,6 +212,7 @@ public class codes : MonoBehaviour
         soruO = FindFirst(FindByExactName("HangisininBasHarfO_0"), FindByTagSafe("soruO"));
         soruUu = FindFirst(FindByExactName("HangisininBasHarfU_1"), FindByTagSafe("soruU"));
 
+        // Slot pozisyonlarını kaydet
         if (arababalon != null) posAraba = arababalon.transform.position;
         if (elmabalon != null) posElma = elmabalon.transform.position;
         if (orumcekbalon != null) posOrumcek = orumcekbalon.transform.position;
@@ -308,15 +262,17 @@ public class codes : MonoBehaviour
         else if (inekbalon != null)
             posInek = inekbalon.transform.position;
 
-        TiklanabilirYap(arababalon);
-        TiklanabilirYap(elmabalon);
-        TiklanabilirYap(orumcekbalon);
-        TiklanabilirYap(uzumbalon);
-        TiklanabilirYap(islakmendilbalon);
-        TiklanabilirYap(inekbalon);
-        TiklanabilirYap(oyuncakbalon);
-        TiklanabilirYap(ucakbalon);
+        // SecenekBalonu bileşenlerini ekle / yapılandır
+        arabaBalon = BalonHazirla(arababalon, "araba", 1, dogruAraba, yanlisAraba, posAraba);
+        elmaBalon = BalonHazirla(elmabalon, "elma", 2, dogruElma, yanlisElma, posElma);
+        orumcekBalon = BalonHazirla(orumcekbalon, "orumcek", 3, dogruOrumcek, yanlisOrumcek, posOrumcek);
+        uzumBalon = BalonHazirla(uzumbalon, "uzum", 4, dogruUzum, yanlisUzum, posUzum);
+        islakBalon = BalonHazirla(islakmendilbalon, "islakmendil", 5, dogruIslak, yanlisIslak, posIslak);
+        inekBalon = BalonHazirla(inekbalon, "inek", 6, dogruInek, yanlisInek, posInek);
+        oyuncakBalon = BalonHazirla(oyuncakbalon, "oyuncak", 7, dogruOyuncak, yanlisOyuncak, posOyuncak);
+        ucakBalon = BalonHazirla(ucakbalon, "ucak", 8, dogruUcak, yanlisUcak, posUcak);
 
+        // Feedback objelerini gizle ve öne al
         GameObject[] feedback = {
             yanlisAraba, yanlisElma, yanlisOrumcek, yanlisUzum,
             yanlisIslak, yanlisInek, yanlisOyuncak, yanlisUcak,
@@ -330,11 +286,139 @@ public class codes : MonoBehaviour
         }
 
         Debug.Log(
-            "Balon ucak/oyuncak: " + (ucakbalon != null) + "/" + (oyuncakbalon != null)
+            "Balon ucak/oyuncak: " + (ucakBalon != null) + "/" + (oyuncakBalon != null)
             + " | Soru O/U: " + (soruO != null) + "/" + (soruUu != null));
 
         SureYazisiniOlustur();
-        YeniSoruSec();
+        YeniSoru();
+    }
+
+    // GO üzerinde SecenekBalonu oluştur ve ayarla
+    SecenekBalonu BalonHazirla(GameObject go, string adi, int harfId, GameObject dogruFb, GameObject yanlisFb, Vector3 slotPos)
+    {
+        if (go == null)
+            return null;
+
+        SecenekBalonu balon = go.GetComponent<SecenekBalonu>();
+        if (balon == null)
+            balon = go.AddComponent<SecenekBalonu>();
+
+        balon.Ayarla(adi, harfChar[harfId], harfId, dogruFb, yanlisFb, slotPos);
+        balon.TiklanabilirYap();
+        tumBalonlar.Add(balon);
+        return balon;
+    }
+
+    // ----------------- Bulucu -----------------
+
+    GameObject FindInScene(System.Func<Transform, bool> esles)
+    {
+        Transform[] all = Resources.FindObjectsOfTypeAll<Transform>();
+        for (int i = 0; i < all.Length; i++)
+        {
+            Transform t = all[i];
+            if (t == null) continue;
+            if (!t.gameObject.scene.IsValid()) continue;
+            if (esles(t)) return t.gameObject;
+        }
+        return null;
+    }
+
+    // Daha önce sorgulanan tag sonuçları (tanımsız tag spamını kes)
+    private readonly Dictionary<string, bool> tagTanimCache = new Dictionary<string, bool>();
+
+    // Tag projede tanımlı mı? (tanımsızsa CompareTag konsola hata basar)
+    bool TagTanimliMi(string tag)
+    {
+        if (string.IsNullOrEmpty(tag))
+            return false;
+
+        bool cached;
+        if (tagTanimCache.TryGetValue(tag, out cached))
+            return cached;
+
+        bool tanimli;
+        try
+        {
+            // Tag yoksa UnityException atar; tanımlıysa (boş olsa bile) dizi döner
+            GameObject.FindGameObjectsWithTag(tag);
+            tanimli = true;
+        }
+        catch (UnityException)
+        {
+            tanimli = false;
+        }
+
+        tagTanimCache[tag] = tanimli;
+        return tanimli;
+    }
+
+    GameObject FindByTagSafe(string tag)
+    {
+        // Tanımsız tag ile tüm Transform'larda CompareTag çağırma
+        if (!TagTanimliMi(tag))
+            return null;
+
+        return FindInScene(t =>
+        {
+            try { return t.CompareTag(tag); }
+            catch { return false; }
+        });
+    }
+
+    GameObject FindByExactName(string exactName)
+    {
+        return FindInScene(t => string.Equals(t.name, exactName, System.StringComparison.Ordinal));
+    }
+
+    GameObject FindByNameContains(string namePart)
+    {
+        return FindInScene(t => t.name.IndexOf(namePart, System.StringComparison.Ordinal) >= 0);
+    }
+
+    GameObject FindFirst(params GameObject[] adaylar)
+    {
+        for (int i = 0; i < adaylar.Length; i++)
+            if (adaylar[i] != null) return adaylar[i];
+        return null;
+    }
+
+    GameObject FeedbackKopyala(GameObject sablon, string yeniAd)
+    {
+        if (sablon == null) return null;
+        GameObject kopya = Instantiate(sablon);
+        kopya.name = yeniAd;
+        kopya.transform.SetParent(null, true);
+        kopya.SetActive(false);
+        return kopya;
+    }
+
+    void SetActiveSafe(GameObject go, bool aktif)
+    {
+        if (go != null) go.SetActive(aktif);
+    }
+
+    void BringToFront(GameObject go)
+    {
+        if (go == null) return;
+        SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+        if (sr != null) sr.sortingOrder = 100;
+    }
+
+    void SlotAyarla(SecenekBalonu a, SecenekBalonu b, Vector3 slotPos, bool aAktif)
+    {
+        GameObject goA = a != null ? a.gameObject : null;
+        GameObject goB = b != null ? b.gameObject : null;
+        SetActiveSafe(goA, aAktif);
+        SetActiveSafe(goB, !aAktif);
+        if (aAktif)
+        {
+            if (a != null) a.transform.position = slotPos;
+        }
+        else
+        {
+            if (b != null) b.transform.position = slotPos;
+        }
     }
 
     // ----------------- UI -----------------
@@ -422,55 +506,28 @@ public class codes : MonoBehaviour
         Vector3 dunya = anaKamera.ScreenToWorldPoint(new Vector3(ekranPos.x, ekranPos.y, derinlik));
         Vector2 dunya2D = new Vector2(dunya.x, dunya.y);
 
+        // Önce collider isabeti
         Collider2D hit = Physics2D.OverlapPoint(dunya2D);
         if (hit != null)
         {
-            GameObject basilan = hit.gameObject;
-            if (BalonaAitMi(basilan, arababalon)) { ButonTiklandi("araba"); return; }
-            if (BalonaAitMi(basilan, elmabalon)) { ButonTiklandi("elma"); return; }
-            if (BalonaAitMi(basilan, orumcekbalon)) { ButonTiklandi("orumcek"); return; }
-            if (BalonaAitMi(basilan, uzumbalon)) { ButonTiklandi("uzum"); return; }
-            if (BalonaAitMi(basilan, islakmendilbalon)) { ButonTiklandi("islakmendil"); return; }
-            if (BalonaAitMi(basilan, inekbalon)) { ButonTiklandi("inek"); return; }
-            if (BalonaAitMi(basilan, oyuncakbalon)) { ButonTiklandi("oyuncak"); return; }
-            if (BalonaAitMi(basilan, ucakbalon)) { ButonTiklandi("ucak"); return; }
+            SecenekBalonu balon = hit.GetComponentInParent<SecenekBalonu>();
+            if (balon != null && balon.gameObject.activeInHierarchy)
+            {
+                balon.Tiklandi();
+                return;
+            }
         }
 
-        string balonAdi = SpriteSinirindanBul(dunya2D);
-        if (balonAdi != null) ButonTiklandi(balonAdi);
-    }
-
-    bool BalonaAitMi(GameObject basilan, GameObject balon)
-    {
-        if (balon == null || basilan == null || !balon.activeInHierarchy) return false;
-        Transform t = basilan.transform;
-        while (t != null)
+        // Collider kaçırırsa sprite sınırından bul
+        for (int i = 0; i < tumBalonlar.Count; i++)
         {
-            if (t.gameObject == balon) return true;
-            t = t.parent;
+            SecenekBalonu b = tumBalonlar[i];
+            if (b != null && b.NoktaSpriteIcinde(dunya2D))
+            {
+                b.Tiklandi();
+                return;
+            }
         }
-        return false;
-    }
-
-    string SpriteSinirindanBul(Vector2 dunya2D)
-    {
-        if (NoktaSpriteIcinde(arababalon, dunya2D)) return "araba";
-        if (NoktaSpriteIcinde(elmabalon, dunya2D)) return "elma";
-        if (NoktaSpriteIcinde(orumcekbalon, dunya2D)) return "orumcek";
-        if (NoktaSpriteIcinde(uzumbalon, dunya2D)) return "uzum";
-        if (NoktaSpriteIcinde(islakmendilbalon, dunya2D)) return "islakmendil";
-        if (NoktaSpriteIcinde(inekbalon, dunya2D)) return "inek";
-        if (NoktaSpriteIcinde(oyuncakbalon, dunya2D)) return "oyuncak";
-        if (NoktaSpriteIcinde(ucakbalon, dunya2D)) return "ucak";
-        return null;
-    }
-
-    bool NoktaSpriteIcinde(GameObject balon, Vector2 dunya2D)
-    {
-        if (balon == null || !balon.activeInHierarchy) return false;
-        SpriteRenderer sr = balon.GetComponent<SpriteRenderer>();
-        if (sr == null || !sr.enabled || sr.sprite == null) return false;
-        return sr.bounds.Contains(new Vector3(dunya2D.x, dunya2D.y, sr.bounds.center.z));
     }
 
     // ----------------- Soru akışı -----------------
@@ -488,7 +545,8 @@ public class codes : MonoBehaviour
         }
     }
 
-    void YeniSoruSec()
+    // Yeni rastgele (desteden) soru seç
+    public void YeniSoru()
     {
         if (oyunBitti || kalanSure <= 0f)
         {
@@ -516,65 +574,73 @@ public class codes : MonoBehaviour
         SetActiveSafe(soruO, secilenharf == 7);
         SetActiveSafe(soruUu, secilenharf == 8);
 
+        char soruChar = harfChar[secilenharf];
+
         // Slot: araba <-> uçak | A→araba, U→uçak, diğer→rastgele
         bool arabaAktif;
         if (secilenharf == 1) arabaAktif = true;
         else if (secilenharf == 8) arabaAktif = false;
         else arabaAktif = Random.Range(0, 2) == 0;
-        SlotAyarla(arababalon, ucakbalon, posAraba, arabaAktif);
+        SlotAyarla(arabaBalon, ucakBalon, posAraba, arabaAktif);
         if (!arabaAktif) posUcak = posAraba;
+        if (ucakBalon != null) ucakBalon.SlotPozisyonunuGuncelle(posUcak);
 
-        // Slot: elma <-> oyuncak | E→elma, O→oyuncak, diğer→rastgele
+        // Slot: elma <-> oyuncak
         bool elmaAktif;
         if (secilenharf == 2) elmaAktif = true;
         else if (secilenharf == 7) elmaAktif = false;
         else elmaAktif = Random.Range(0, 2) == 0;
-        SlotAyarla(elmabalon, oyuncakbalon, posElma, elmaAktif);
+        SlotAyarla(elmaBalon, oyuncakBalon, posElma, elmaAktif);
         if (!elmaAktif) posOyuncak = posElma;
+        if (oyuncakBalon != null) oyuncakBalon.SlotPozisyonunuGuncelle(posOyuncak);
 
-        // Slot: üzüm <-> ıslak | Ü→üzüm, I→ıslak, diğer→rastgele
+        // Slot: üzüm <-> ıslak
         bool uzumAktif;
         if (secilenharf == 4) uzumAktif = true;
         else if (secilenharf == 5) uzumAktif = false;
         else uzumAktif = Random.Range(0, 2) == 0;
-        SlotAyarla(uzumbalon, islakmendilbalon, posUzum, uzumAktif);
+        SlotAyarla(uzumBalon, islakBalon, posUzum, uzumAktif);
         if (!uzumAktif) posIslak = posUzum;
+        if (islakBalon != null) islakBalon.SlotPozisyonunuGuncelle(posIslak);
 
-        // Slot: örümcek <-> inek | Ö→örümcek, İ→inek, diğer→rastgele
+        // Slot: örümcek <-> inek
         bool orumcekAktif;
         if (secilenharf == 3) orumcekAktif = true;
         else if (secilenharf == 6) orumcekAktif = false;
         else orumcekAktif = Random.Range(0, 2) == 0;
-        SlotAyarla(orumcekbalon, inekbalon, posOrumcek, orumcekAktif);
+        SlotAyarla(orumcekBalon, inekBalon, posOrumcek, orumcekAktif);
         if (!orumcekAktif) posInek = posOrumcek;
+        if (inekBalon != null) inekBalon.SlotPozisyonunuGuncelle(posInek);
+
+        // Tüm balonlara aktif soru harfini yaz
+        for (int i = 0; i < tumBalonlar.Count; i++)
+        {
+            if (tumBalonlar[i] != null)
+                tumBalonlar[i].SoruHarfiniGuncelle(soruChar);
+        }
     }
 
-    void ButonTiklandi(string butonAdi)
+    // Kılavuz imzası: yalnızca bool (balonsuz çağrı desteklenmez — overload kullanılır)
+    public void SecenekSecildi(bool dogruMu)
+    {
+        Debug.LogWarning("SecenekSecildi(bool) balon bilgisiz çağrıldı; SecenekBalonu.Tiklandi kullanın.");
+    }
+
+    // Seçenek sonucunu işle (doğru → uçuş + yeni soru, yanlış → çarpı)
+    public void SecenekSecildi(bool dogruMu, SecenekBalonu secenek)
     {
         if (oyunBitti || islemYapiliyor || kalanSure <= 0f) return;
-        if (!dogruHarf.ContainsKey(butonAdi)) return;
+        if (secenek == null) return;
 
-        bool dogruMu = dogruHarf[butonAdi] == secilenharf;
-        Debug.Log("Tık: " + butonAdi + " | soru: " + secilenharf + " | dogru: " + dogruMu);
+        Debug.Log("Tık: " + secenek.objeAdi + " | soru: " + secilenharf + " | dogru: " + dogruMu);
 
         if (dogruMu)
         {
-            if (butonAdi == "araba")
-                StartCoroutine(DogruCevapSureci(arababalon, dogruAraba, posAraba, 1));
-            else if (butonAdi == "elma")
-                StartCoroutine(DogruCevapSureci(elmabalon, dogruElma, posElma, 2));
-            else if (butonAdi == "orumcek")
-                StartCoroutine(DogruCevapSureci(orumcekbalon, dogruOrumcek, posOrumcek, 3));
-            else if (butonAdi == "uzum")
-                StartCoroutine(DogruCevapSureci(uzumbalon, dogruUzum, posUzum, 4));
-            else if (butonAdi == "islakmendil")
-                StartCoroutine(DogruCevapSureci(islakmendilbalon, dogruIslak, posIslak, 5));
-            else if (butonAdi == "inek")
-                StartCoroutine(DogruCevapSureci(inekbalon, dogruInek, posInek, 6));
-            else if (butonAdi == "oyuncak")
-                StartCoroutine(DogruCevapSureci(oyuncakbalon, dogruOyuncak, posOyuncak, 7));
-            else if (butonAdi == "ucak")
-                StartCoroutine(DogruCevapSureci(ucakbalon, dogruUcak, posUcak, 8));
+            StartCoroutine(DogruCevapSureci(
+                secenek.gameObject,
+                secenek.dogruFeedback,
+                secenek.slotPozisyonu,
+                secenek.harfId));
         }
         else
         {
@@ -584,22 +650,7 @@ public class codes : MonoBehaviour
             else
                 harfYanlisSayisi[secilenharf] = 1;
 
-            if (butonAdi == "araba")
-                StartCoroutine(YanlisCevapSureci(yanlisAraba, arababalon));
-            else if (butonAdi == "elma")
-                StartCoroutine(YanlisCevapSureci(yanlisElma, elmabalon));
-            else if (butonAdi == "orumcek")
-                StartCoroutine(YanlisCevapSureci(yanlisOrumcek, orumcekbalon));
-            else if (butonAdi == "uzum")
-                StartCoroutine(YanlisCevapSureci(yanlisUzum, uzumbalon));
-            else if (butonAdi == "islakmendil")
-                StartCoroutine(YanlisCevapSureci(yanlisIslak, islakmendilbalon));
-            else if (butonAdi == "inek")
-                StartCoroutine(YanlisCevapSureci(yanlisInek, inekbalon));
-            else if (butonAdi == "oyuncak")
-                StartCoroutine(YanlisCevapSureci(yanlisOyuncak, oyuncakbalon));
-            else if (butonAdi == "ucak")
-                StartCoroutine(YanlisCevapSureci(yanlisUcak, ucakbalon));
+            StartCoroutine(YanlisCevapSureci(secenek.yanlisFeedback, secenek.gameObject));
         }
     }
 
@@ -638,7 +689,7 @@ public class codes : MonoBehaviour
         if (kalanSure <= 0f)
             OyunuBitir();
         else
-            YeniSoruSec();
+            YeniSoru();
 
         islemYapiliyor = false;
     }

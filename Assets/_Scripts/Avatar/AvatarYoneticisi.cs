@@ -106,7 +106,8 @@ public class AvatarYoneticisi : MonoBehaviour
         if (!Application.isPlaying)
             return;
 
-        AvatarGorunumu[] gorunumler = Object.FindObjectsByType<AvatarGorunumu>(FindObjectsSortMode.None);
+        // Sahnedeki tüm görünümleri bul (sıralama gerekmez)
+        AvatarGorunumu[] gorunumler = Object.FindObjectsByType<AvatarGorunumu>();
         for (int i = 0; i < gorunumler.Length; i++)
         {
             if (gorunumler[i] != null)

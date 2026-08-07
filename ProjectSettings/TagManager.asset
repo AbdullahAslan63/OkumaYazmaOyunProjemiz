@@ -3,7 +3,48 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - arababalon
+  - arababuton
+  - elmabalon
+  - elmabuton
+  - orumcekbalon
+  - orumcekbuton
+  - uzumbalon
+  - uzumbuton
+  - islakmendilbalon
+  - inekbalon
+  - oyuncakbalon
+  - uçakbalon
+  - soruA
+  - soruE
+  - soruI
+  - soruO
+  - soruU
+  - soruİ
+  - soruÖ
+  - soruÜ
+  - doğruseçimtikiaraba
+  - doğruseçimtikielma
+  - doğruseçimtikiörümcek
+  - doğruseçimtikiüzüm
+  - dogrutikiislakmendil
+  - dogrutikiinek
+  - dogrutikioyuncak
+  - dogrutikiucak
+  - doğruseçimtikiinek
+  - doğruseçimtikiuçak
+  - doğruseçimtikioyuncak
+  - yanliscarpiinek
+  - yanliscarpiislakmendil
+  - yanliscarpioyuncak
+  - yanliscarpiucak
+  - yanlışseçimçarpısıaraba
+  - yanlışseçimçarpısıelma
+  - yanlışseçimçarpısıörümcek
+  - yanlışseçimçarpısıüzüm
+  - yanlışseçimçarpısıoyuncak
+  - yanlışseçimçarpısıuçak
   layers:
   - Default
   - TransparentFX

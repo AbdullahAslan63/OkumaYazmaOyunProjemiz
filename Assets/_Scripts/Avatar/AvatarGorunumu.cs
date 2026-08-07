@@ -50,7 +50,8 @@ public class AvatarGorunumu : MonoBehaviour
         AvatarYoneticisi yonetici = AvatarYoneticisi.Instance;
         if (yonetici == null)
         {
-            yonetici = Object.FindFirstObjectByType<AvatarYoneticisi>();
+            // Instance yoksa sahnede herhangi bir yönetici ara
+            yonetici = Object.FindAnyObjectByType<AvatarYoneticisi>();
             if (yonetici == null)
             {
                 Debug.LogWarning(
