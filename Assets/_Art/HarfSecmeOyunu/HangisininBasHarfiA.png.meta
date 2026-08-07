@@ -1,0 +1,546 @@
+fileFormatVersion: 2
+guid: 8393f76db8fd9144abc3769222c02406
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 8534701622187789683
+    second: HangisininBasHarfiA_0
+  - first:
+      213: -1853250309830832429
+    second: HangisininBasHarfiA_1
+  - first:
+      213: 7436250870261426828
+    second: HangisininBasHarfiA_2
+  - first:
+      213: -7898263038843501164
+    second: HangisininBasHarfiA_3
+  - first:
+      213: 2711213509646033935
+    second: HangisininBasHarfiA_4
+  - first:
+      213: -8998793295207384955
+    second: HangisininBasHarfiA_5
+  - first:
+      213: 2610834594690764836
+    second: HangisininBasHarfiA_6
+  - first:
+      213: -7307837406750502843
+    second: HangisininBasHarfiA_7
+  - first:
+      213: -1697780279576612783
+    second: HangisininBasHarfiA_8
+  - first:
+      213: -2289662049043772016
+    second: HangisininBasHarfiA_9
+  - first:
+      213: -3243769071312741275
+    second: HangisininBasHarfiA_10
+  - first:
+      213: 5319757570141880364
+    second: HangisininBasHarfiA_11
+  - first:
+      213: 6074604356215775579
+    second: HangisininBasHarfiA_12
+  - first:
+      213: 434967708132493527
+    second: HangisininBasHarfiA_13
+  - first:
+      213: -5679372802127887699
+    second: HangisininBasHarfiA_14
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: HangisininBasHarfiA_0
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 523
+        width: 891
+        height: 392
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 37d047618e9517670800000000000000
+      internalID: 8534701622187789683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfiA_1
+      rect:
+        serializedVersion: 2
+        x: 91
+        y: 510
+        width: 310
+        height: 196
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3de86a289aee746e0800000000000000
+      internalID: -1853250309830832429
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfiA_2
+      rect:
+        serializedVersion: 2
+        x: 327
+        y: 434
+        width: 26
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8a2f9e74ced23760800000000000000
+      internalID: 7436250870261426828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfiA_3
+      rect:
+        serializedVersion: 2
+        x: 380
+        y: 89
+        width: 302
+        height: 415
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 495c22bec9bb36290800000000000000
+      internalID: -7898263038843501164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfiA_4
+      rect:
+        serializedVersion: 2
+        x: 699
+        y: 448
+        width: 32
+        height: 33
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0421b8825a20a520800000000000000
+      internalID: 2711213509646033935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfiA_5
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 350
+        width: 61
+        height: 64
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5883ff7fc2ddd1380800000000000000
+      internalID: -8998793295207384955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfiA_6
+      rect:
+        serializedVersion: 2
+        x: 746
+        y: 412
+        width: 15
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42018d72b3c8b3420800000000000000
+      internalID: 2610834594690764836
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfiA_7
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 336
+        width: 14
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 540135ed898559a90800000000000000
+      internalID: -7307837406750502843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfiA_8
+      rect:
+        serializedVersion: 2
+        x: 693
+        y: 331
+        width: 70
+        height: 73
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1503c29b4d54078e0800000000000000
+      internalID: -1697780279576612783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfiA_9
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 283
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 09d8d0f5f7c7930e0800000000000000
+      internalID: -2289662049043772016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfiA_10
+      rect:
+        serializedVersion: 2
+        x: 744
+        y: 291
+        width: 19
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56c51034731dbf2d0800000000000000
+      internalID: -3243769071312741275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfiA_11
+      rect:
+        serializedVersion: 2
+        x: 304
+        y: 200
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c208083235393d940800000000000000
+      internalID: 5319757570141880364
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfiA_12
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 233
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5128433a745d4450800000000000000
+      internalID: 6074604356215775579
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfiA_13
+      rect:
+        serializedVersion: 2
+        x: 331
+        y: 124
+        width: 31
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d8c00473d0590600800000000000000
+      internalID: 434967708132493527
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfiA_14
+      rect:
+        serializedVersion: 2
+        x: 707
+        y: 148
+        width: 21
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da2072ee680de21b0800000000000000
+      internalID: -5679372802127887699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      HangisininBasHarfiA_0: 8534701622187789683
+      HangisininBasHarfiA_1: -1853250309830832429
+      HangisininBasHarfiA_10: -3243769071312741275
+      HangisininBasHarfiA_11: 5319757570141880364
+      HangisininBasHarfiA_12: 6074604356215775579
+      HangisininBasHarfiA_13: 434967708132493527
+      HangisininBasHarfiA_14: -5679372802127887699
+      HangisininBasHarfiA_2: 7436250870261426828
+      HangisininBasHarfiA_3: -7898263038843501164
+      HangisininBasHarfiA_4: 2711213509646033935
+      HangisininBasHarfiA_5: -8998793295207384955
+      HangisininBasHarfiA_6: 2610834594690764836
+      HangisininBasHarfiA_7: -7307837406750502843
+      HangisininBasHarfiA_8: -1697780279576612783
+      HangisininBasHarfiA_9: -2289662049043772016
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
