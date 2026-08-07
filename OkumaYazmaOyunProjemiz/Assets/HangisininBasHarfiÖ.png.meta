@@ -1,0 +1,546 @@
+fileFormatVersion: 2
+guid: d6654fc96537a8d48b8bf4606636a438
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2672190547254948215
+    second: "HangisininBasHarfi\xD6_0"
+  - first:
+      213: 2864132879639213402
+    second: "HangisininBasHarfi\xD6_1"
+  - first:
+      213: 4197061273090426920
+    second: "HangisininBasHarfi\xD6_2"
+  - first:
+      213: -99985798137263620
+    second: "HangisininBasHarfi\xD6_3"
+  - first:
+      213: 5636544299068771725
+    second: "HangisininBasHarfi\xD6_4"
+  - first:
+      213: 8075143962818797771
+    second: "HangisininBasHarfi\xD6_5"
+  - first:
+      213: 4687825665586197919
+    second: "HangisininBasHarfi\xD6_6"
+  - first:
+      213: -2236228512623161859
+    second: "HangisininBasHarfi\xD6_7"
+  - first:
+      213: 1744395580778694651
+    second: "HangisininBasHarfi\xD6_8"
+  - first:
+      213: -878659372992867752
+    second: "HangisininBasHarfi\xD6_9"
+  - first:
+      213: -1808433904917374044
+    second: "HangisininBasHarfi\xD6_10"
+  - first:
+      213: -3848868140300127542
+    second: "HangisininBasHarfi\xD6_11"
+  - first:
+      213: 5668220800706756868
+    second: "HangisininBasHarfi\xD6_12"
+  - first:
+      213: 4267167206257119595
+    second: "HangisininBasHarfi\xD6_13"
+  - first:
+      213: 6037121480998450987
+    second: "HangisininBasHarfi\xD6_14"
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: "HangisininBasHarfi\xD6_0"
+      rect:
+        serializedVersion: 2
+        x: 88
+        y: 611
+        width: 972
+        height: 421
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 771b9451527851520800000000000000
+      internalID: 2672190547254948215
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "HangisininBasHarfi\xD6_1"
+      rect:
+        serializedVersion: 2
+        x: 101
+        y: 593
+        width: 341
+        height: 211
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a557960eda17fb720800000000000000
+      internalID: 2864132879639213402
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "HangisininBasHarfi\xD6_2"
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 507
+        width: 29
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8288a1badf4fe3a30800000000000000
+      internalID: 4197061273090426920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "HangisininBasHarfi\xD6_3"
+      rect:
+        serializedVersion: 2
+        x: 426
+        y: 103
+        width: 338
+        height: 505
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf9c1734277cc9ef0800000000000000
+      internalID: -99985798137263620
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "HangisininBasHarfi\xD6_4"
+      rect:
+        serializedVersion: 2
+        x: 770
+        y: 522
+        width: 36
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8d4fb22d27093e40800000000000000
+      internalID: 5636544299068771725
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "HangisininBasHarfi\xD6_5"
+      rect:
+        serializedVersion: 2
+        x: 298
+        y: 414
+        width: 69
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc064f576aca01070800000000000000
+      internalID: 8075143962818797771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "HangisininBasHarfi\xD6_6"
+      rect:
+        serializedVersion: 2
+        x: 822
+        y: 483
+        width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f95793e0b908e0140800000000000000
+      internalID: 4687825665586197919
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "HangisininBasHarfi\xD6_7"
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 399
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dfd0f7c040257f0e0800000000000000
+      internalID: -2236228512623161859
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "HangisininBasHarfi\xD6_8"
+      rect:
+        serializedVersion: 2
+        x: 764
+        y: 394
+        width: 77
+        height: 80
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf7431cd986553810800000000000000
+      internalID: 1744395580778694651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "HangisininBasHarfi\xD6_9"
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 340
+        width: 23
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8525132a4ff5ec3f0800000000000000
+      internalID: -878659372992867752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "HangisininBasHarfi\xD6_10"
+      rect:
+        serializedVersion: 2
+        x: 820
+        y: 349
+        width: 21
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ab90a9e1f627e6e0800000000000000
+      internalID: -1808433904917374044
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "HangisininBasHarfi\xD6_11"
+      rect:
+        serializedVersion: 2
+        x: 334
+        y: 249
+        width: 43
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ac2b71e81d2169ac0800000000000000
+      internalID: -3848868140300127542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "HangisininBasHarfi\xD6_12"
+      rect:
+        serializedVersion: 2
+        x: 767
+        y: 286
+        width: 42
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4014b9669c099ae40800000000000000
+      internalID: 5668220800706756868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "HangisininBasHarfi\xD6_13"
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 165
+        width: 34
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b61d62637f5083b30800000000000000
+      internalID: 4267167206257119595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "HangisininBasHarfi\xD6_14"
+      rect:
+        serializedVersion: 2
+        x: 779
+        y: 191
+        width: 24
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b27facc300a28c350800000000000000
+      internalID: 6037121480998450987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      "HangisininBasHarfi\xD6_0": 2672190547254948215
+      "HangisininBasHarfi\xD6_1": 2864132879639213402
+      "HangisininBasHarfi\xD6_10": -1808433904917374044
+      "HangisininBasHarfi\xD6_11": -3848868140300127542
+      "HangisininBasHarfi\xD6_12": 5668220800706756868
+      "HangisininBasHarfi\xD6_13": 4267167206257119595
+      "HangisininBasHarfi\xD6_14": 6037121480998450987
+      "HangisininBasHarfi\xD6_2": 4197061273090426920
+      "HangisininBasHarfi\xD6_3": -99985798137263620
+      "HangisininBasHarfi\xD6_4": 5636544299068771725
+      "HangisininBasHarfi\xD6_5": 8075143962818797771
+      "HangisininBasHarfi\xD6_6": 4687825665586197919
+      "HangisininBasHarfi\xD6_7": -2236228512623161859
+      "HangisininBasHarfi\xD6_8": 1744395580778694651
+      "HangisininBasHarfi\xD6_9": -878659372992867752
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
