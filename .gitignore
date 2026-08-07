@@ -15,6 +15,13 @@
 /[Uu]ser[Ss]ettings/
 *.log
 
+# Asla ikinci bir Unity proje kopyası / alt Library commit etme
+/OkumaYazmaOyunProjemiz/
+**/[Ll]ibrary/
+**/[Tt]emp/
+**/[Ll]ogs/
+**/[Uu]ser[Ss]ettings/
+
 # By default unity supports Blender asset imports, *.blend1 blender files do not need to be commited to version control.
 *.blend1
 *.blend1.meta
