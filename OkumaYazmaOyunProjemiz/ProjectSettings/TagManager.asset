@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags:
+  - arababalon
+  - arababuton
+  - elmabuton
+  - elmabalon
+  - orumcekbalon
+  - orumcekbuton
+  - uzumbalon
+  - uzumbuton
+  - soruA
+  - soruE
+  - "soru\xDC"
+  - "soru\xD6"
+  - "yanl\u0131\u015Fse\xE7im\xE7arp\u0131s\u0131araba"
+  - "yanl\u0131\u015Fse\xE7im\xE7arp\u0131s\u0131\xFCz\xFCm"
+  - "yanl\u0131\u015Fse\xE7im\xE7arp\u0131s\u0131elma"
+  - "yanl\u0131\u015Fse\xE7im\xE7arp\u0131s\u0131\xF6r\xFCmcek"
+  - "do\u011Fruse\xE7imtikiaraba"
+  - "do\u011Fruse\xE7imtiki\xFCz\xFCm"
+  - "do\u011Fruse\xE7imtiki\xF6r\xFCmcek"
+  - "do\u011Fruse\xE7imtikielma"
+  - islakmendilbalon
+  - soruI
+  - dogrutikiislakmendil
+  - yanliscarpiislakmendil
+  - inekbalon
+  - soruİ
+  - dogrutikiinek
+  - yanliscarpiinek
+  - ucakbalon
+  - oyuncakbalon
+  - soruO
+  - soruU
+  - dogrutikiucak
+  - dogrutikioyuncak
+  - yanliscarpiucak
+  - yanliscarpioyuncak
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  m_RenderingLayers:
+  - Default
+  m_MigratedRenderPipelines: []
