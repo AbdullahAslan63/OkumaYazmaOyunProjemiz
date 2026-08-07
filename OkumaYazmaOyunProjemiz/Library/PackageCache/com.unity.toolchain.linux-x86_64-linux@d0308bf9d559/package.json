@@ -1,0 +1,29 @@
+{
+  "name": "com.unity.toolchain.linux-x86_64-linux",
+  "displayName": "Toolchain Linux x64 Host for Linux Targets",
+  "description": "This package provides a cross-compilation toolchain for building Unity players targeting Linux and Embedded Linux platforms. It is designed to run on x86_64 Linux hosts and supports both x86_64 and Arm64 player targets",
+  "version": "1.1.0",
+  "unity": "6000.3",
+  "unityRelease": "0b8",
+  "keywords": [
+    "toolchain",
+    "linux",
+    "cross-compilation"
+  ],
+  "dependencies": {
+    "com.unity.sysroot.base": "1.1.0"
+  },
+  "_upm": {
+    "changelog": "### Changed\n- Incremented minor version for release"
+  },
+  "upmCi": {
+    "footprint": "c6782c237e1ca5a9bdc5e7799141b056c1c2e621"
+  },
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.toolchain.linux-x86_64-linux@1.1/manual/index.html",
+  "repository": {
+    "url": "https://github.com/Unity-Technologies/com.unity.sysroot.git",
+    "type": "git",
+    "revision": "44244c4a0eabd7dfc31ca9c06faf22734ab9de74"
+  },
+  "_fingerprint": "d0308bf9d55943c037b0c72354dff42cc5ff401b"
+}

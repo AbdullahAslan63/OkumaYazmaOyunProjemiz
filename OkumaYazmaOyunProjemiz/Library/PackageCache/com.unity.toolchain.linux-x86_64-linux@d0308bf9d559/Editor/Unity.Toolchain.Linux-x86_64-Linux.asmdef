@@ -1,0 +1,10 @@
+{
+    "name": "Unity.Toolchain.Linux-x86_64-Linux",
+    "references": [
+        "Unity.SysrootPackage.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": []
+}

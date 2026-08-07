@@ -1,0 +1,27 @@
+{
+  "name": "com.unity.sysroot.base",
+  "displayName": "Sysroot Base",
+  "version": "1.1.0",
+  "unity": "6000.3",
+  "unityRelease": "0b8",
+  "keywords": [
+    "unity",
+    "linux",
+    "sysroot"
+  ],
+  "description": "This is the base sysroot package required by all sysroot and toolchain packages",
+  "dependencies": {},
+  "_upm": {
+    "changelog": "### Changed\n- Incremented minor version for release"
+  },
+  "upmCi": {
+    "footprint": "8f55ef57f0dcf7c63ba8c4f4f89008d889c80992"
+  },
+  "documentationUrl": "https://docs.unity3d.com/Packages/com.unity.sysroot.base@1.1/manual/index.html",
+  "repository": {
+    "url": "https://github.com/Unity-Technologies/com.unity.sysroot.git",
+    "type": "git",
+    "revision": "44244c4a0eabd7dfc31ca9c06faf22734ab9de74"
+  },
+  "_fingerprint": "3559fe1aa613d71488a800cc1ce582e67d7d806a"
+}

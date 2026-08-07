@@ -1,0 +1,910 @@
+fileFormatVersion: 2
+guid: 1a22a34c7a463ff43ac62d204241dcc6
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -599881341585834150
+    second: HangisininBasHarfU_0
+  - first:
+      213: -3544558131916221290
+    second: HangisininBasHarfU_1
+  - first:
+      213: -7973218797630384071
+    second: HangisininBasHarfU_2
+  - first:
+      213: -8809010465327574315
+    second: HangisininBasHarfU_3
+  - first:
+      213: -4948451639816803281
+    second: HangisininBasHarfU_4
+  - first:
+      213: 7026536716207915022
+    second: HangisininBasHarfU_5
+  - first:
+      213: 3751901821215680614
+    second: HangisininBasHarfU_6
+  - first:
+      213: 7623018221907276532
+    second: HangisininBasHarfU_7
+  - first:
+      213: -5628135175332079840
+    second: HangisininBasHarfU_8
+  - first:
+      213: -3048594646022137213
+    second: HangisininBasHarfU_9
+  - first:
+      213: -1871458714608441430
+    second: HangisininBasHarfU_10
+  - first:
+      213: 4152658738119711651
+    second: HangisininBasHarfU_11
+  - first:
+      213: 4900424301463463109
+    second: HangisininBasHarfU_12
+  - first:
+      213: -5432034054608318865
+    second: HangisininBasHarfU_13
+  - first:
+      213: 7538075744466535002
+    second: HangisininBasHarfU_14
+  - first:
+      213: 8243946300549726911
+    second: HangisininBasHarfU_15
+  - first:
+      213: -9074202822316904751
+    second: HangisininBasHarfU_16
+  - first:
+      213: -9060644103490431274
+    second: HangisininBasHarfU_17
+  - first:
+      213: -4862520375789055666
+    second: HangisininBasHarfU_18
+  - first:
+      213: 2528066319511708630
+    second: HangisininBasHarfU_19
+  - first:
+      213: -3978912426661740330
+    second: HangisininBasHarfU_20
+  - first:
+      213: -1166687699333935987
+    second: HangisininBasHarfU_21
+  - first:
+      213: -744371132744874088
+    second: HangisininBasHarfU_22
+  - first:
+      213: 7086133384300584616
+    second: HangisininBasHarfU_23
+  - first:
+      213: -2899205406822301679
+    second: HangisininBasHarfU_24
+  - first:
+      213: -2284376654816911232
+    second: HangisininBasHarfU_25
+  - first:
+      213: -1800770394597511570
+    second: HangisininBasHarfU_26
+  - first:
+      213: 8982618426223127698
+    second: HangisininBasHarfU_27
+  - first:
+      213: -5380796696667051348
+    second: HangisininBasHarfU_28
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: HangisininBasHarfU_0
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 844
+        width: 12
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5f346f191bcca7f0800000000000000
+      internalID: -599881341585834150
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_1
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 527
+        width: 955
+        height: 430
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 694596da8233fcec0800000000000000
+      internalID: -3544558131916221290
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_2
+      rect:
+        serializedVersion: 2
+        x: 996
+        y: 860
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 93816ca5fbf695190800000000000000
+      internalID: -7973218797630384071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_3
+      rect:
+        serializedVersion: 2
+        x: 1006
+        y: 845
+        width: 10
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d2937767ab10c580800000000000000
+      internalID: -8809010465327574315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_4
+      rect:
+        serializedVersion: 2
+        x: 49
+        y: 829
+        width: 6
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2c258c9371935bb0800000000000000
+      internalID: -4948451639816803281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_5
+      rect:
+        serializedVersion: 2
+        x: 51
+        y: 822
+        width: 7
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e0000da4ae5438160800000000000000
+      internalID: 7026536716207915022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_6
+      rect:
+        serializedVersion: 2
+        x: 1007
+        y: 825
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 668a3b5f3de611430800000000000000
+      internalID: 3751901821215680614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_7
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 813
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f2fc113fa66ac960800000000000000
+      internalID: 7623018221907276532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_8
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 806
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 027537e80e8d4e1b0800000000000000
+      internalID: -5628135175332079840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_9
+      rect:
+        serializedVersion: 2
+        x: 1006
+        y: 810
+        width: 8
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38a51b3525731b5d0800000000000000
+      internalID: -3048594646022137213
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_10
+      rect:
+        serializedVersion: 2
+        x: 1003
+        y: 796
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa764f7e63e3706e0800000000000000
+      internalID: -1871458714608441430
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_11
+      rect:
+        serializedVersion: 2
+        x: 1005
+        y: 801
+        width: 6
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ab1c0fde1531a930800000000000000
+      internalID: 4152658738119711651
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_12
+      rect:
+        serializedVersion: 2
+        x: 994
+        y: 728
+        width: 16
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c4eb6940fdc10440800000000000000
+      internalID: 4900424301463463109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_13
+      rect:
+        serializedVersion: 2
+        x: 1002
+        y: 790
+        width: 7
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6e0f37bec98d94b0800000000000000
+      internalID: -5432034054608318865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_14
+      rect:
+        serializedVersion: 2
+        x: 65
+        y: 512
+        width: 340
+        height: 214
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a528aee73ff9c9860800000000000000
+      internalID: 7538075744466535002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_15
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 62
+        width: 355
+        height: 461
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb289a76b71686270800000000000000
+      internalID: 8243946300549726911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_16
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 433
+        width: 30
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1de24fb3c94f11280800000000000000
+      internalID: -9074202822316904751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_17
+      rect:
+        serializedVersion: 2
+        x: 722
+        y: 447
+        width: 38
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d617377130224280800000000000000
+      internalID: -9060644103490431274
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_18
+      rect:
+        serializedVersion: 2
+        x: 260
+        y: 342
+        width: 70
+        height: 72
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e419eff1b7bd48cb0800000000000000
+      internalID: -4862520375789055666
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_19
+      rect:
+        serializedVersion: 2
+        x: 774
+        y: 410
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d3ef1f5cee751320800000000000000
+      internalID: 2528066319511708630
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_20
+      rect:
+        serializedVersion: 2
+        x: 325
+        y: 327
+        width: 21
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6d08078aa3018c8c0800000000000000
+      internalID: -3978912426661740330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_21
+      rect:
+        serializedVersion: 2
+        x: 717
+        y: 320
+        width: 78
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8c026508b71fcfe0800000000000000
+      internalID: -1166687699333935987
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_22
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 269
+        width: 26
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 897cfab06667ba5f0800000000000000
+      internalID: -744371132744874088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_23
+      rect:
+        serializedVersion: 2
+        x: 771
+        y: 278
+        width: 25
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8aed542e4c0075260800000000000000
+      internalID: 7086133384300584616
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_24
+      rect:
+        serializedVersion: 2
+        x: 295
+        y: 180
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 110077b0b04f3c7d0800000000000000
+      internalID: -2899205406822301679
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_25
+      rect:
+        serializedVersion: 2
+        x: 718
+        y: 216
+        width: 46
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 080617c19834c40e0800000000000000
+      internalID: -2284376654816911232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_26
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 99
+        width: 38
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6ea9f3fdd06207e0800000000000000
+      internalID: -1800770394597511570
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_27
+      rect:
+        serializedVersion: 2
+        x: 731
+        y: 122
+        width: 26
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 29c68efdddba8ac70800000000000000
+      internalID: 8982618426223127698
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HangisininBasHarfU_28
+      rect:
+        serializedVersion: 2
+        x: 923
+        y: 95
+        width: 50
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: caaa09eb9e19355b0800000000000000
+      internalID: -5380796696667051348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      HangisininBasHarfU_0: -599881341585834150
+      HangisininBasHarfU_1: -3544558131916221290
+      HangisininBasHarfU_10: -1871458714608441430
+      HangisininBasHarfU_11: 4152658738119711651
+      HangisininBasHarfU_12: 4900424301463463109
+      HangisininBasHarfU_13: -5432034054608318865
+      HangisininBasHarfU_14: 7538075744466535002
+      HangisininBasHarfU_15: 8243946300549726911
+      HangisininBasHarfU_16: -9074202822316904751
+      HangisininBasHarfU_17: -9060644103490431274
+      HangisininBasHarfU_18: -4862520375789055666
+      HangisininBasHarfU_19: 2528066319511708630
+      HangisininBasHarfU_2: -7973218797630384071
+      HangisininBasHarfU_20: -3978912426661740330
+      HangisininBasHarfU_21: -1166687699333935987
+      HangisininBasHarfU_22: -744371132744874088
+      HangisininBasHarfU_23: 7086133384300584616
+      HangisininBasHarfU_24: -2899205406822301679
+      HangisininBasHarfU_25: -2284376654816911232
+      HangisininBasHarfU_26: -1800770394597511570
+      HangisininBasHarfU_27: 8982618426223127698
+      HangisininBasHarfU_28: -5380796696667051348
+      HangisininBasHarfU_3: -8809010465327574315
+      HangisininBasHarfU_4: -4948451639816803281
+      HangisininBasHarfU_5: 7026536716207915022
+      HangisininBasHarfU_6: 3751901821215680614
+      HangisininBasHarfU_7: 7623018221907276532
+      HangisininBasHarfU_8: -5628135175332079840
+      HangisininBasHarfU_9: -3048594646022137213
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
