@@ -72,10 +72,10 @@ Faz 0 (Hazırlık)
 ## Tamamlandı kontrol listesi
 
 - [x] `AGENTS.md` okundu
-- [ ] Asset envanteri not edildi (var / eksik)
+- [x] Asset envanteri not edildi (eksik)
 - [x] `Assets/_Scripts/SepetOyunu/` var
-- [ ] `Assets/_Prefabs/SepetOyunu/` var
-- [ ] `Assets/_Scenes/` var
+- [x] `Assets/_Prefabs/SepetOyunu/` var
+- [x] `Assets/_Scenes/` var
 
 **Çıkış:** Klasörler hazır; eksik asset’ler yazılı. → Faz 1
 
@@ -172,13 +172,13 @@ Faz 0 (Hazırlık)
 
 - [x] `Assets/_Scenes/SepetOyunu.unity` kayıtlı
 - [x] Arkaplan `Order in Layer = -10`
-- [ ] `Balon` üzerinde Box Collider 2D + **Is Trigger**
-- [ ] Tag `Balon` atanmış
-- [ ] Child `HarfRozeti` (TMP) var
-- [ ] Prefab `Assets/_Prefabs/SepetOyunu/Obje.prefab` var
-- [ ] Prefab’da Box Collider 2D **trigger değil**
-- [ ] `ObjePozisyon1`…`4` altta yerleştirildi
-- [ ] Play’de görsel kontrol yapıldı
+- [x] `Balon` üzerinde Box Collider 2D + **Is Trigger**
+- [x] Tag `Balon` atanmış
+- [x] Child `HarfRozeti` (TMP) var
+- [x] Prefab `Assets/_Prefabs/SepetOyunu/Obje.prefab` var
+- [x] Prefab’da Box Collider 2D **trigger değil**
+- [x] `ObjePozisyon1`…`4` altta yerleştirildi
+- [x] Play’de görsel kontrol yapıldı
 
 **Çıkış:** Sahne iskeleti hazır. → Faz 2
 
