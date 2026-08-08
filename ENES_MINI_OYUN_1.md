@@ -12,6 +12,8 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 4. `SepetHareketi.cs` yazma — iptal edildi; yerine `ObjeSurukleme.cs`.
 5. Bu sahnede avatar gösterme (avatar entegrasyonu yok).
 6. Cursor’a bir seferde tek script ver; yönetici için önce Plan Mode.
+7. Checklist’i çocuğun tek başına doldurmasını bekleme — `AGENTS.md` → **İlerleme takibi**: sık durum bildir, olgu sor, onaylara göre bu dosyadaki `[ ]` kutularını agent günceller.
+8. “Ne durumdayım?” sorusuna `AGENTS.md` → **yönlendirici cevap** şablonuyla yanıt ver; karar aldırma, plandaki sıradaki **tek işi** yaptır.
 
 ---
 

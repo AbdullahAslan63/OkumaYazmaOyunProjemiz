@@ -2,44 +2,44 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Tek bir seçenek balonunu temsil eder (world-space sprite + collider).
-/// Tıklanınca doğru/yanlış sonucunu HarfSecmeYoneticisi'ne bildirir.
+/// Tek seçenek balonu: tıklanınca doğru/yanlış sonucunu yöneticiye bildirir.
+/// Hem world-space SpriteRenderer hem (isteğe bağlı) UI Image destekler.
 /// </summary>
 public class SecenekBalonu : MonoBehaviour
 {
-    // Bu balonun obje kimliği (araba, elma, ...)
+    // Bu balonun obje adı (araba, elma, ...)
     public string objeAdi;
 
-    // Bu objenin baş harfi (A, E, Ö, ...)
+    // Kılavuz alanı: UI seçenek kullanılıyorsa obje görseli buraya atanır
+    public Image objeResmi;
+
+    // Bu objenin baş harfi
     private char dogruHarf;
 
     // Şu an sorulan harf
     private char aktifSoruHarfi;
 
-    // İç skor/süreç için harf numarası (1..8)
+    // Harf numarası (1..8) — sonuç ekranı için
     public int harfId { get; private set; }
 
     // Doğru / yanlış görsel geri bildirimi
     public GameObject dogruFeedback;
     public GameObject yanlisFeedback;
 
-    // Slotun sabit dünya pozisyonu
+    // Bu turun slot dünya pozisyonu (uçuş sonrası dönüş)
     public Vector3 slotPozisyonu;
 
-    // Collider ve tıklama hazırlığı
+    // Collider hazırla; varsa UI Button'u kapat (world tıklama kullanılır)
     public void TiklanabilirYap()
     {
-        // Varsa UI Button bileşenlerini kapat (world tıklama kullanıyoruz)
         Button[] butonlar = GetComponentsInChildren<Button>(true);
         for (int i = 0; i < butonlar.Length; i++)
             butonlar[i].enabled = false;
 
-        // BoxCollider2D yoksa ekle
         BoxCollider2D box = GetComponent<BoxCollider2D>();
         if (box == null)
             box = gameObject.AddComponent<BoxCollider2D>();
 
-        // Collider boyutunu sprite sınırına göre ayarla
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
         if (sr != null && sr.sprite != null)
             box.size = sr.sprite.bounds.size;
@@ -47,7 +47,7 @@ public class SecenekBalonu : MonoBehaviour
             box.size = new Vector2(7f, 12f);
     }
 
-    // Yöneticiden kimlik, harf ve feedback referanslarını al
+    // Yönetici: kimlik, harf, feedback ve slot pozisyonu
     public void Ayarla(string adi, char objeHarfi, int id, GameObject dogruFb, GameObject yanlisFb, Vector3 slotPos)
     {
         objeAdi = adi;
@@ -58,12 +58,14 @@ public class SecenekBalonu : MonoBehaviour
         slotPozisyonu = slotPos;
     }
 
-    // Aktif soru harfini güncelle (sprite sahnede zaten var)
+    // Kılavuz imzası: sprite + harfler (UI Image veya SpriteRenderer)
     public void Ayarla(Sprite resim, char objeHarfi, char soruHarfi)
     {
-        // İsteğe bağlı sprite güncellemesi (şu an sahne sprite'larını kullanıyoruz)
         if (resim != null)
         {
+            if (objeResmi != null)
+                objeResmi.sprite = resim;
+
             SpriteRenderer sr = GetComponent<SpriteRenderer>();
             if (sr != null)
                 sr.sprite = resim;
@@ -79,7 +81,7 @@ public class SecenekBalonu : MonoBehaviour
         aktifSoruHarfi = soruHarfi;
     }
 
-    // Slot pozisyonunu güncelle (çift slot değişince)
+    // Slot pozisyonunu güncelle
     public void SlotPozisyonunuGuncelle(Vector3 pos)
     {
         slotPozisyonu = pos;
@@ -88,19 +90,16 @@ public class SecenekBalonu : MonoBehaviour
     // Tıklanınca doğru mu kontrol et ve yöneticiye bildir
     public void Tiklandi()
     {
-        // Yönetici yoksa işlem yapma
         if (HarfSecmeYoneticisi.Instance == null)
             return;
 
-        // Bu obje harfi sorulan harfle aynı mı?
         bool dogruMu = dogruHarf == aktifSoruHarfi;
         HarfSecmeYoneticisi.Instance.SecenekSecildi(dogruMu, this);
     }
 
-    // Dünya noktasının bu balonun sprite sınırında olup olmadığı
+    // Dünya noktasının sprite sınırında olup olmadığı
     public bool NoktaSpriteIcinde(Vector2 dunya2D)
     {
-        // Pasif veya yoksa isabet yok
         if (!gameObject.activeInHierarchy)
             return false;
 
