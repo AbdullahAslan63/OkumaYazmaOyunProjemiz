@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3dd079d46c2337845aa2cafd5fc748c4, type: 3}
+  m_Name: "A HARF\u0130"
+  m_EditorClassIdentifier: Assembly-CSharp::HarfObjeVerisi
+  harf: 65
+  dogruObjeler:
+  - {fileID: -8680797543115379092, guid: 538830c7ce0c86c44808c1114751a753, type: 3}
