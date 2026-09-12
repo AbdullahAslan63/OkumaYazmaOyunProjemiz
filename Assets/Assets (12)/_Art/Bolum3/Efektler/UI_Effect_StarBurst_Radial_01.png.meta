@@ -1,0 +1,689 @@
+fileFormatVersion: 2
+guid: 20e0a3717f1d74061a7f6d8859d5beff
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 2217425849078932671
+    second: UI_Effect_StarBurst_Radial_01_0
+  - first:
+      213: -6733847837585255457
+    second: UI_Effect_StarBurst_Radial_01_1
+  - first:
+      213: -557560081410425840
+    second: UI_Effect_StarBurst_Radial_01_2
+  - first:
+      213: 3758070052773112901
+    second: UI_Effect_StarBurst_Radial_01_3
+  - first:
+      213: 7797819674032546752
+    second: UI_Effect_StarBurst_Radial_01_4
+  - first:
+      213: -4802155428579166019
+    second: UI_Effect_StarBurst_Radial_01_5
+  - first:
+      213: 1163331544473144603
+    second: UI_Effect_StarBurst_Radial_01_6
+  - first:
+      213: 4435136508354660580
+    second: UI_Effect_StarBurst_Radial_01_7
+  - first:
+      213: -2888122127191605464
+    second: UI_Effect_StarBurst_Radial_01_8
+  - first:
+      213: 1445946739305542985
+    second: UI_Effect_StarBurst_Radial_01_9
+  - first:
+      213: 6635157253580462886
+    second: UI_Effect_StarBurst_Radial_01_10
+  - first:
+      213: -3803423650806870169
+    second: UI_Effect_StarBurst_Radial_01_11
+  - first:
+      213: 3703678788370775769
+    second: UI_Effect_StarBurst_Radial_01_12
+  - first:
+      213: -6729481295992857911
+    second: UI_Effect_StarBurst_Radial_01_13
+  - first:
+      213: -5714772662485812409
+    second: UI_Effect_StarBurst_Radial_01_14
+  - first:
+      213: -7854924964819696132
+    second: UI_Effect_StarBurst_Radial_01_15
+  - first:
+      213: 5579872015363763857
+    second: UI_Effect_StarBurst_Radial_01_16
+  - first:
+      213: 4178253026597372691
+    second: UI_Effect_StarBurst_Radial_01_17
+  - first:
+      213: -4657813256398868529
+    second: UI_Effect_StarBurst_Radial_01_18
+  - first:
+      213: -9077237383929973882
+    second: UI_Effect_StarBurst_Radial_01_19
+  - first:
+      213: -1616905597522219706
+    second: UI_Effect_StarBurst_Radial_01_20
+  - first:
+      213: 7109066847982383049
+    second: UI_Effect_StarBurst_Radial_01_21
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_0
+      rect:
+        serializedVersion: 2
+        x: 75
+        y: 91
+        width: 379
+        height: 370
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fb46e12bf01e5ce10800000000000000
+      internalID: 2217425849078932671
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_1
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 415
+        width: 98
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd3d235b1119c82a0800000000000000
+      internalID: -6733847837585255457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_2
+      rect:
+        serializedVersion: 2
+        x: 442
+        y: 454
+        width: 31
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 01cf79e5f062348f0800000000000000
+      internalID: -557560081410425840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_3
+      rect:
+        serializedVersion: 2
+        x: 62
+        y: 430
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 54c23984dc8572430800000000000000
+      internalID: 3758070052773112901
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_4
+      rect:
+        serializedVersion: 2
+        x: 70
+        y: 425
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0c3234dcdab673c60800000000000000
+      internalID: 7797819674032546752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_5
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 411
+        width: 27
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: db83353a4115b5db0800000000000000
+      internalID: -4802155428579166019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 249
+        width: 177
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b1d045840ebf42010800000000000000
+      internalID: 1163331544473144603
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_7
+      rect:
+        serializedVersion: 2
+        x: 361
+        y: 257
+        width: 74
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4e888dee725cc8d30800000000000000
+      internalID: 4435136508354660580
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_8
+      rect:
+        serializedVersion: 2
+        x: 431
+        y: 333
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82f7ccc2a345be7d0800000000000000
+      internalID: -2888122127191605464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_9
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 325
+        width: 8
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 945f07006e8011410800000000000000
+      internalID: 1445946739305542985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_10
+      rect:
+        serializedVersion: 2
+        x: 449
+        y: 318
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62b15881e50d41c50800000000000000
+      internalID: 6635157253580462886
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_11
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 282
+        width: 31
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76f465b4756873bc0800000000000000
+      internalID: -3803423650806870169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_12
+      rect:
+        serializedVersion: 2
+        x: 422
+        y: 204
+        width: 50
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9de3dfe2c3c166330800000000000000
+      internalID: 3703678788370775769
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_13
+      rect:
+        serializedVersion: 2
+        x: 495
+        y: 252
+        width: 12
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cad5b56a641c92a0800000000000000
+      internalID: -6729481295992857911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_14
+      rect:
+        serializedVersion: 2
+        x: 279
+        y: 20
+        width: 89
+        height: 161
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 74b7b68aa8c01b0b0800000000000000
+      internalID: -5714772662485812409
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_15
+      rect:
+        serializedVersion: 2
+        x: 439
+        y: 110
+        width: 72
+        height: 77
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf503969c53bdf290800000000000000
+      internalID: -7854924964819696132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_16
+      rect:
+        serializedVersion: 2
+        x: 490
+        y: 181
+        width: 22
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 19e66e7d800bf6d40800000000000000
+      internalID: 5579872015363763857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_17
+      rect:
+        serializedVersion: 2
+        x: 152
+        y: 37
+        width: 79
+        height: 88
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31389088df22cf930800000000000000
+      internalID: 4178253026597372691
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_18
+      rect:
+        serializedVersion: 2
+        x: 249
+        y: 32
+        width: 34
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fcf6d3e758f1c5fb0800000000000000
+      internalID: -4657813256398868529
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_19
+      rect:
+        serializedVersion: 2
+        x: 386
+        y: 54
+        width: 10
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 68335fc41bc270280800000000000000
+      internalID: -9077237383929973882
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_20
+      rect:
+        serializedVersion: 2
+        x: 401
+        y: 67
+        width: 17
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64de8500de89f89e0800000000000000
+      internalID: -1616905597522219706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_StarBurst_Radial_01_21
+      rect:
+        serializedVersion: 2
+        x: 395
+        y: 40
+        width: 7
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9cfee7ef1aa78a260800000000000000
+      internalID: 7109066847982383049
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      UI_Effect_StarBurst_Radial_01_0: 2217425849078932671
+      UI_Effect_StarBurst_Radial_01_1: -6733847837585255457
+      UI_Effect_StarBurst_Radial_01_10: 6635157253580462886
+      UI_Effect_StarBurst_Radial_01_11: -3803423650806870169
+      UI_Effect_StarBurst_Radial_01_12: 3703678788370775769
+      UI_Effect_StarBurst_Radial_01_13: -6729481295992857911
+      UI_Effect_StarBurst_Radial_01_14: -5714772662485812409
+      UI_Effect_StarBurst_Radial_01_15: -7854924964819696132
+      UI_Effect_StarBurst_Radial_01_16: 5579872015363763857
+      UI_Effect_StarBurst_Radial_01_17: 4178253026597372691
+      UI_Effect_StarBurst_Radial_01_18: -4657813256398868529
+      UI_Effect_StarBurst_Radial_01_19: -9077237383929973882
+      UI_Effect_StarBurst_Radial_01_2: -557560081410425840
+      UI_Effect_StarBurst_Radial_01_20: -1616905597522219706
+      UI_Effect_StarBurst_Radial_01_21: 7109066847982383049
+      UI_Effect_StarBurst_Radial_01_3: 3758070052773112901
+      UI_Effect_StarBurst_Radial_01_4: 7797819674032546752
+      UI_Effect_StarBurst_Radial_01_5: -4802155428579166019
+      UI_Effect_StarBurst_Radial_01_6: 1163331544473144603
+      UI_Effect_StarBurst_Radial_01_7: 4435136508354660580
+      UI_Effect_StarBurst_Radial_01_8: -2888122127191605464
+      UI_Effect_StarBurst_Radial_01_9: 1445946739305542985
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

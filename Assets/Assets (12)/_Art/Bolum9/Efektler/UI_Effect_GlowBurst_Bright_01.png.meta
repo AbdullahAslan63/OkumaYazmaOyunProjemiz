@@ -1,0 +1,325 @@
+fileFormatVersion: 2
+guid: c53c93c91fc6b4692b04962e3785fec9
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 9207580787678348544
+    second: UI_Effect_GlowBurst_Bright_01_0
+  - first:
+      213: 6642341110453927843
+    second: UI_Effect_GlowBurst_Bright_01_1
+  - first:
+      213: -431429297551817232
+    second: UI_Effect_GlowBurst_Bright_01_2
+  - first:
+      213: 4185434826175771911
+    second: UI_Effect_GlowBurst_Bright_01_3
+  - first:
+      213: 457398040505202792
+    second: UI_Effect_GlowBurst_Bright_01_4
+  - first:
+      213: -955049713471117053
+    second: UI_Effect_GlowBurst_Bright_01_5
+  - first:
+      213: -1195066188558787747
+    second: UI_Effect_GlowBurst_Bright_01_6
+  - first:
+      213: -4374804991160684198
+    second: UI_Effect_GlowBurst_Bright_01_7
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: UI_Effect_GlowBurst_Bright_01_0
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 1
+        width: 503
+        height: 500
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 005874a41f5e7cf70800000000000000
+      internalID: 9207580787678348544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_GlowBurst_Bright_01_1
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 495
+        width: 30
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3af749d1c065e2c50800000000000000
+      internalID: 6642341110453927843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_GlowBurst_Bright_01_2
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 472
+        width: 16
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0f54ab5f651430af0800000000000000
+      internalID: -431429297551817232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_GlowBurst_Bright_01_3
+      rect:
+        serializedVersion: 2
+        x: 358
+        y: 486
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 70571cc8cc6a51a30800000000000000
+      internalID: 4185434826175771911
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_GlowBurst_Bright_01_4
+      rect:
+        serializedVersion: 2
+        x: 339
+        y: 471
+        width: 13
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 868b54d2811095600800000000000000
+      internalID: 457398040505202792
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_GlowBurst_Bright_01_5
+      rect:
+        serializedVersion: 2
+        x: 454
+        y: 471
+        width: 8
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30927bd785bfeb2f0800000000000000
+      internalID: -955049713471117053
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_GlowBurst_Bright_01_6
+      rect:
+        serializedVersion: 2
+        x: 6
+        y: 331
+        width: 13
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5b9fdb12a54a6fe0800000000000000
+      internalID: -1195066188558787747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_GlowBurst_Bright_01_7
+      rect:
+        serializedVersion: 2
+        x: 225
+        y: 19
+        width: 6
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a51f24c0a029943c0800000000000000
+      internalID: -4374804991160684198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      UI_Effect_GlowBurst_Bright_01_0: 9207580787678348544
+      UI_Effect_GlowBurst_Bright_01_1: 6642341110453927843
+      UI_Effect_GlowBurst_Bright_01_2: -431429297551817232
+      UI_Effect_GlowBurst_Bright_01_3: 4185434826175771911
+      UI_Effect_GlowBurst_Bright_01_4: 457398040505202792
+      UI_Effect_GlowBurst_Bright_01_5: -955049713471117053
+      UI_Effect_GlowBurst_Bright_01_6: -1195066188558787747
+      UI_Effect_GlowBurst_Bright_01_7: -4374804991160684198
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,793 @@
+fileFormatVersion: 2
+guid: a2aaa77eec1dd42e6a7db1e46af49796
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4095478021449357766
+    second: UI_Effect_Sparkle_Classic_01_0
+  - first:
+      213: 3634512537539604059
+    second: UI_Effect_Sparkle_Classic_01_1
+  - first:
+      213: 8994533954708820468
+    second: UI_Effect_Sparkle_Classic_01_2
+  - first:
+      213: -4983987229278519528
+    second: UI_Effect_Sparkle_Classic_01_3
+  - first:
+      213: 4636354291209877741
+    second: UI_Effect_Sparkle_Classic_01_4
+  - first:
+      213: 6782427561805627813
+    second: UI_Effect_Sparkle_Classic_01_5
+  - first:
+      213: -5894690960626382368
+    second: UI_Effect_Sparkle_Classic_01_6
+  - first:
+      213: 7228893454887312147
+    second: UI_Effect_Sparkle_Classic_01_7
+  - first:
+      213: 5536053330104450786
+    second: UI_Effect_Sparkle_Classic_01_8
+  - first:
+      213: -4761318132465005923
+    second: UI_Effect_Sparkle_Classic_01_9
+  - first:
+      213: -1523607645715004367
+    second: UI_Effect_Sparkle_Classic_01_10
+  - first:
+      213: 1685416870125319547
+    second: UI_Effect_Sparkle_Classic_01_11
+  - first:
+      213: 8858263126046454534
+    second: UI_Effect_Sparkle_Classic_01_12
+  - first:
+      213: 5299636285072345753
+    second: UI_Effect_Sparkle_Classic_01_13
+  - first:
+      213: 607639191144096370
+    second: UI_Effect_Sparkle_Classic_01_14
+  - first:
+      213: 1154085718670380116
+    second: UI_Effect_Sparkle_Classic_01_15
+  - first:
+      213: 3319450947387923388
+    second: UI_Effect_Sparkle_Classic_01_16
+  - first:
+      213: 511561061062955285
+    second: UI_Effect_Sparkle_Classic_01_17
+  - first:
+      213: 1687304488839989830
+    second: UI_Effect_Sparkle_Classic_01_18
+  - first:
+      213: -4092316816510892747
+    second: UI_Effect_Sparkle_Classic_01_19
+  - first:
+      213: -5148128102258308076
+    second: UI_Effect_Sparkle_Classic_01_20
+  - first:
+      213: -142844045919416415
+    second: UI_Effect_Sparkle_Classic_01_21
+  - first:
+      213: 9057850128345132756
+    second: UI_Effect_Sparkle_Classic_01_22
+  - first:
+      213: -4632798130630807435
+    second: UI_Effect_Sparkle_Classic_01_23
+  - first:
+      213: -3129264651737550481
+    second: UI_Effect_Sparkle_Classic_01_24
+  - first:
+      213: -6343628775983024273
+    second: UI_Effect_Sparkle_Classic_01_25
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 333
+        width: 172
+        height: 166
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a3667123070f927c0800000000000000
+      internalID: -4095478021449357766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_1
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 461
+        width: 9
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b5e60cb75e1607230800000000000000
+      internalID: 3634512537539604059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_2
+      rect:
+        serializedVersion: 2
+        x: 20
+        y: 467
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4f1db9a0af003dc70800000000000000
+      internalID: 8994533954708820468
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_3
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 417
+        width: 51
+        height: 70
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 81f35c1750255dab0800000000000000
+      internalID: -4983987229278519528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_4
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 449
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: de83c64d9a3a75040800000000000000
+      internalID: 4636354291209877741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_5
+      rect:
+        serializedVersion: 2
+        x: 171
+        y: 427
+        width: 34
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a14e30cee5002e50800000000000000
+      internalID: 6782427561805627813
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_6
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 302
+        width: 135
+        height: 158
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e9882f7dc9d13ea0800000000000000
+      internalID: -5894690960626382368
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_7
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 34
+        width: 352
+        height: 381
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 31b54b10c40325460800000000000000
+      internalID: 7228893454887312147
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_8
+      rect:
+        serializedVersion: 2
+        x: 305
+        y: 372
+        width: 52
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ee7e762c2304dc40800000000000000
+      internalID: 5536053330104450786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_9
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 214
+        width: 73
+        height: 115
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9a0cc392666cedb0800000000000000
+      internalID: -4761318132465005923
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_10
+      rect:
+        serializedVersion: 2
+        x: 485
+        y: 306
+        width: 27
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 134861c2bee0bdae0800000000000000
+      internalID: -1523607645715004367
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_11
+      rect:
+        serializedVersion: 2
+        x: 491
+        y: 288
+        width: 15
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b753542b6bdc36710800000000000000
+      internalID: 1685416870125319547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_12
+      rect:
+        serializedVersion: 2
+        x: 440
+        y: 220
+        width: 47
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 603b0fa416fdeea70800000000000000
+      internalID: 8858263126046454534
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_13
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 69
+        width: 106
+        height: 119
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99a02826f171c8940800000000000000
+      internalID: 5299636285072345753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_14
+      rect:
+        serializedVersion: 2
+        x: 321
+        y: 3
+        width: 157
+        height: 174
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 272efbbff94ce6800800000000000000
+      internalID: 607639191144096370
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_15
+      rect:
+        serializedVersion: 2
+        x: 460
+        y: 171
+        width: 52
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 45c03b5b8d2240010800000000000000
+      internalID: 1154085718670380116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_16
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 166
+        width: 7
+        height: 6
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbb1468ac0f011e20800000000000000
+      internalID: 3319450947387923388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_17
+      rect:
+        serializedVersion: 2
+        x: 487
+        y: 164
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 511549d131e691700800000000000000
+      internalID: 511561061062955285
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_18
+      rect:
+        serializedVersion: 2
+        x: 464
+        y: 138
+        width: 15
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64aca3d2e728a6710800000000000000
+      internalID: 1687304488839989830
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_19
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 134
+        width: 18
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 535c283998b2537c0800000000000000
+      internalID: -4092316816510892747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_20
+      rect:
+        serializedVersion: 2
+        x: 53
+        y: 60
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 41c00b654cc2e88b0800000000000000
+      internalID: -5148128102258308076
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_21
+      rect:
+        serializedVersion: 2
+        x: 147
+        y: 50
+        width: 46
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1af81b8d814840ef0800000000000000
+      internalID: -142844045919416415
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_22
+      rect:
+        serializedVersion: 2
+        x: 472
+        y: 44
+        width: 33
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4deecb083b2f3bd70800000000000000
+      internalID: 9057850128345132756
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_23
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 34
+        width: 6
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57038a355aef4bfb0800000000000000
+      internalID: -4632798130630807435
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_24
+      rect:
+        serializedVersion: 2
+        x: 355
+        y: 0
+        width: 14
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f613ff8f06e9294d0800000000000000
+      internalID: -3129264651737550481
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: UI_Effect_Sparkle_Classic_01_25
+      rect:
+        serializedVersion: 2
+        x: 421
+        y: 0
+        width: 8
+        height: 7
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f67f59cfc37e6f7a0800000000000000
+      internalID: -6343628775983024273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      UI_Effect_Sparkle_Classic_01_0: -4095478021449357766
+      UI_Effect_Sparkle_Classic_01_1: 3634512537539604059
+      UI_Effect_Sparkle_Classic_01_10: -1523607645715004367
+      UI_Effect_Sparkle_Classic_01_11: 1685416870125319547
+      UI_Effect_Sparkle_Classic_01_12: 8858263126046454534
+      UI_Effect_Sparkle_Classic_01_13: 5299636285072345753
+      UI_Effect_Sparkle_Classic_01_14: 607639191144096370
+      UI_Effect_Sparkle_Classic_01_15: 1154085718670380116
+      UI_Effect_Sparkle_Classic_01_16: 3319450947387923388
+      UI_Effect_Sparkle_Classic_01_17: 511561061062955285
+      UI_Effect_Sparkle_Classic_01_18: 1687304488839989830
+      UI_Effect_Sparkle_Classic_01_19: -4092316816510892747
+      UI_Effect_Sparkle_Classic_01_2: 8994533954708820468
+      UI_Effect_Sparkle_Classic_01_20: -5148128102258308076
+      UI_Effect_Sparkle_Classic_01_21: -142844045919416415
+      UI_Effect_Sparkle_Classic_01_22: 9057850128345132756
+      UI_Effect_Sparkle_Classic_01_23: -4632798130630807435
+      UI_Effect_Sparkle_Classic_01_24: -3129264651737550481
+      UI_Effect_Sparkle_Classic_01_25: -6343628775983024273
+      UI_Effect_Sparkle_Classic_01_3: -4983987229278519528
+      UI_Effect_Sparkle_Classic_01_4: 4636354291209877741
+      UI_Effect_Sparkle_Classic_01_5: 6782427561805627813
+      UI_Effect_Sparkle_Classic_01_6: -5894690960626382368
+      UI_Effect_Sparkle_Classic_01_7: 7228893454887312147
+      UI_Effect_Sparkle_Classic_01_8: 5536053330104450786
+      UI_Effect_Sparkle_Classic_01_9: -4761318132465005923
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
