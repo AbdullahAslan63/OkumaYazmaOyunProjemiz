@@ -18,52 +18,55 @@ Bu dosya **sadece Mustafa Üz** için faz kapılı çalışma planıdır. Kod ya
 
 ---
 
+
+
 ## Onaylanmış kararlar
 
-| Konu | Karar |
-| ---- | ----- |
-| Mekanik | Büyük harf sorulur; ekranda **4 seçenek**; 1 doğru + 3 çeldirici; tıklayarak seçim |
-| Scriptler | `HarfSecmeYoneticisi.cs` + `SecenekBalonu.cs` |
-| Sahne (güncel yol) | `Assets/Scenes/HarfSecmeOyunu.unity` |
-| Giriş | Fare + touch/parmak (`Input System`) |
-| Yanlış cevap | Geri bildirim; **aynı soru kalır** |
-| Doğru cevap | Kısa uçuş / tik; sonra yeni soru |
-| Süre | Varsayılan **60** saniye (`kalanSure`) |
-| Bitiş ekranı | Sade ve çocuk dostu: tebrik + 1–3 yıldız (daire) + `Doğru: N` + Ana Menü — harf rapor listesi **yok** |
-| Hedef cihazlar | **Mobil** ve **Windows akıllı tahta** (büyük ekran) — UI ölçeği kritik |
-| Balon girişi | Anında belirme yok; **aşağıdan yukarı** yükseliş; hızlar hafif rastgele farklarla |
-| Seslendirme | Çocuklar okumadığı için soru + obje adı sesleri gerekir → clip/API **Paket 3**; Paket 5 yalnızca güvenli çağrı noktası bırakır |
-| Paket 3 | Bitmeden ortak skor / soru seçici / geri bildirim yöneticisine tam bağlanılmaz |
+
+| Konu               | Karar                                                                                                                          |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| Mekanik            | Büyük harf sorulur; ekranda **4 seçenek**; 1 doğru + 3 çeldirici; tıklayarak seçim                                             |
+| Scriptler          | `HarfSecmeYoneticisi.cs` + `SecenekBalonu.cs`                                                                                  |
+| Sahne (güncel yol) | `Assets/Scenes/HarfSecmeOyunu.unity`                                                                                           |
+| Giriş              | Fare + touch/parmak (`Input System`)                                                                                           |
+| Yanlış cevap       | Geri bildirim; **aynı soru kalır**                                                                                             |
+| Doğru cevap        | Kısa uçuş / tik; sonra yeni soru                                                                                               |
+| Süre               | Varsayılan **60** saniye (`kalanSure`)                                                                                         |
+| Bitiş ekranı       | Sade ve çocuk dostu: tebrik + 1–3 yıldız (daire) + `Doğru: N` + Ana Menü — harf rapor listesi **yok**                          |
+| Hedef cihazlar     | **Mobil** ve **Windows akıllı tahta** (büyük ekran) — UI ölçeği kritik                                                         |
+| Balon girişi       | Anında belirme yok; **aşağıdan yukarı** yükseliş; hızlar hafif rastgele farklarla                                              |
+| Seslendirme        | Çocuklar okumadığı için soru + obje adı sesleri gerekir → clip/API **Paket 3**; Paket 5 yalnızca güvenli çağrı noktası bırakır |
+| Paket 3            | Bitmeden ortak skor / soru seçici / geri bildirim yöneticisine tam bağlanılmaz                                                 |
+
 
 ---
 
-## Mevcut durum özeti (2026-08)
 
-**Çalışıyor / büyük ölçüde hazır:**
 
-- `HarfSecmeYoneticisi` + `SecenekBalonu` scriptleri
-- Sahne + art (harf görselleri, 8 obje balonu, tik/çarpı, arkaplan)
-- Her turda 1 doğru + 3 çeldirici, karıştırma, 4 slota yerleştirme
-- Tıklama (mouse/touch), süre, sade bitiş ekranı, Ana Menü (`SceneManager`)
-- Build Settings’te `HarfSecmeOyunu` kayıtlı
-- Inspector alanları + bulunamazsa `AutoDoldur` (isimle bulma)
+## Mevcut durum özeti (2026-09)
 
-**Eksik / sonraki fazlar:**
+**Yeniden yazım (seçenek 1 — UI + SO + Instantiate):**
 
-- Soru harfi ve üst UI’nin arka plan üzerinde **okunabilirliği**
-- UI punto / renk / ölçek — çocuklara canlı; mobil + akıllı tahta
-- Seçenek balonlarının **aşağıdan yükselerek** girmesi
-- Prefab klasörü boş; kılavuzdaki UI Button prefab modeline tam geçilmedi (world sprite modeli kullanılıyor — bilinçli mevcut durum)
-- Paket 3 API bağları (`SoruSecici`, `SkorYoneticisi`, `GeriBildirimYoneticisi`, `SesYoneticisi`) henüz yok
+- `HarfSecmeYoneticisi` + `SecenekBalonu` sıfırdan: Canvas UI prefab, `HarfObjeVerisi` / `SoruSecici` / skor / geri bildirim
+- Düz Hierarchy + `AutoDoldur` / isim araması **kaldırıldı**
+- Prefab: `Assets/_Prefabs/HarfSecmeOyunu/SecenekBalonu.prefab`
+- Veri: `Assets/_Data/Harfler/Harf_*.asset` (Bolum1 Objeler)
+- Sahne kurulumu: Unity menü **Oyun > Bolum1 Kurulumu (Avatar + HarfSecme)** (veya otomatik eksik kurulum)
 
-**Bilinen notlar (bug / teknik borç):**
+**Eksik / sonraki:**
 
-- Süre/skor yazısı runtime `Legacy Text` ile üretiliyor; TextMeshPro + sabit Canvas hedeflenmeli
-- Yıldızlar UI `Image` kareleri (gerçek yıldız sprite’ı yok) — Faz 4’te görsel polish
-- `Ana Menü` hedefi `anaMenuSahneAdi` (varsayılan `AbdullahScene`) — menü sahnesi netleşince güncelle
-- Inspector’da `secenekler` / slotlar elle bağlanmadan `AutoDoldur`’a güveniliyor; teslimde mümkünse elle bağla
+- Play smoke test (mobil + tahta)
+- Ses clip bağlama (Paket 6)
+- Faz 4 UI polish (punto / panel) Play teyidi sonrası
+
+**Bilinen notlar:**
+
+- Ana Menü hedefi: `AvatarOlusturmaEkrani`
+- TMP: `com.unity.ugui` üzerinden TextMeshProUGUI
 
 ---
+
+
 
 ## Faz akışı
 
@@ -81,6 +84,8 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 
 ---
 
+
+
 # Faz 0 — Hazırlık
 
 **Amaç:** Ortam ve asset’leri kontrol et; klasörleri doğrula.
@@ -90,15 +95,17 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 1. `AGENTS.md` dosyasını baştan sona oku.
 2. Bu dosyayı (`MUSTAFA_UZ_MINI_OYUN_2.md`) oku.
 3. Asset envanteri:
-   - Arkaplan (Kapadokya / balon teması)
-   - 8 harf soru görseli (A E Ö Ü I İ O U)
-   - 8 seçenek balonu sprite’ı
-   - Doğru / yanlış feedback görselleri
+  - Arkaplan (Kapadokya / balon teması)
+  - 8 harf soru görseli (A E Ö Ü I İ O U)
+  - 8 seçenek balonu sprite’ı
+  - Doğru / yanlış feedback görselleri
 4. Klasörler:
-   - `Assets/_Scripts/HarfSecmeOyunu/`
-   - `Assets/_Art/HarfSecmeOyunu/`
-   - `Assets/_Prefabs/HarfSecmeOyunu/` (şu an boş olabilir — not et)
-   - Sahne: `Assets/Scenes/HarfSecmeOyunu.unity`
+  - `Assets/_Scripts/HarfSecmeOyunu/`
+  - `Assets/_Art/HarfSecmeOyunu/`
+  - `Assets/_Prefabs/HarfSecmeOyunu/` (şu an boş olabilir — not et)
+  - Sahne: `Assets/Scenes/HarfSecmeOyunu.unity`
+
+
 
 ## Tamamlandı kontrol listesi
 
@@ -113,6 +120,8 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 
 ---
 
+
+
 # Faz 1 — Sahne + art iskeleti (kod yok)
 
 **Amaç:** Oynanabilir sahne görselleri yerinde. Bu fazda yeni C# yazılmaz.
@@ -123,6 +132,8 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 2. Arkaplan, 8 balon, 8 soru harfi GO, tik/çarpı feedback’ler Hierarchy’de mi bak.
 3. Main Camera Orthographic mi kontrol et.
 4. Play olmadan Scene/Game view’da dört slot bölgesinin ekranı kapladığını not et (mobil/tahta için Faz 4’te yeniden ölçeklenecek).
+
+
 
 ## Tamamlandı kontrol listesi
 
@@ -137,6 +148,8 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 
 ---
 
+
+
 # Faz 2 — SecenekBalonu.cs
 
 **Amaç:** Tek seçenek; tıklanınca doğru/yanlış sonucunu yöneticiye bildirir.
@@ -145,16 +158,20 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 
 ## Public / beklenen API
 
-| Alan / fonksiyon | Not |
-| ---------------- | --- |
-| `objeAdi` | string |
-| `objeResmi` | `Image` (kılavuz; UI yolu kullanılırsa) |
-| `Ayarla(...)` | Kimlik + harf + feedback + slot |
-| `Ayarla(Sprite, char, char)` | Kılavuz imzası |
-| `SoruHarfiniGuncelle(char)` | Aktif soru harfi |
-| `Tiklandi()` | `HarfSecmeYoneticisi.Instance.SecenekSecildi(...)` |
-| `TiklanabilirYap()` | Collider |
-| `NoktaSpriteIcinde` | Collider kaçırırsa yedek isabet |
+
+| Alan / fonksiyon             | Not                                                |
+| ---------------------------- | -------------------------------------------------- |
+| `objeAdi`                    | string                                             |
+| `objeResmi`                  | `Image` (kılavuz; UI yolu kullanılırsa)            |
+| `Ayarla(...)`                | Kimlik + harf + feedback + slot                    |
+| `Ayarla(Sprite, char, char)` | Kılavuz imzası                                     |
+| `SoruHarfiniGuncelle(char)`  | Aktif soru harfi                                   |
+| `Tiklandi()`                 | `HarfSecmeYoneticisi.Instance.SecenekSecildi(...)` |
+| `TiklanabilirYap()`          | Collider                                           |
+| `NoktaSpriteIcinde`          | Collider kaçırırsa yedek isabet                    |
+
+
+
 
 ## Tamamlandı kontrol listesi
 
@@ -166,6 +183,8 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 **Çıkış:** Seçenek birimi hazır. → Faz 3
 
 ---
+
+
 
 # Faz 3 — HarfSecmeYoneticisi temel akış + bitiş ekranı
 
@@ -182,6 +201,8 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 - Bitiş: tebrik + 1–3 işaret + `Doğru: N` + Ana Menü (harf rapor listesi yok)
 - Paket 3 olmadan yerel skor sayacı kullanılabilir
 
+
+
 ## Tamamlandı kontrol listesi
 
 - [x] Temel soru / seçenek / tıklama akışı Play’de çalışıyor
@@ -196,6 +217,8 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 
 ---
 
+
+
 # Faz 4 — UI okunabilirlik + ölçekleme (mobil / akıllı tahta)
 
 **Amaç:** “Hangisinin baş harfi” sorusu ve üst UI, meşgul arka plan üzerinde **net okunur**; punto/renk/layout **çocuklara canlı**; hem **küçük mobil** hem **büyük Windows tahta** ekranında bozulmaz.
@@ -209,6 +232,8 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 3. Canvas Scaler: **Scale With Screen Size**; Reference Resolution örn. **1920×1080**; Match değerini hem telefon hem tahta için Play Mode + mümkünse Device Simulator / farklı Game view çözünürlükleriyle dene.
 4. Bitiş ekranı aynı ölçek/renk diline yaklaşsın (tebrik büyük, buton tok, yıldızlar gerçekçi veya canlı sprite).
 
+
+
 ## 4.B — Unity Editor (önce)
 
 1. Hierarchy’de kalıcı **Canvas** oluştur (runtime’da her seferinde üretme hedefi).
@@ -217,11 +242,15 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 4. Soru harfi sprite’ının arkasına yarı saydam / beyaz bubbly çerçeve (art ekibinden çerçeve varsa onu kullan; yoksa geçici Image panel).
 5. Game view’da en az iki en-boy oranı dene: dar mobil (ör. 1080×1920) ve geniş tahta (ör. 1920×1080 veya daha geniş).
 
+
+
 ## 4.C — Kod (gerekirse)
 
 - `sureYazisi` Inspector’dan atansın; runtime Canvas üretimini kaldır veya yalnızca yedek bırak.
 - Renk / punto sabitlerini abartılı “sistem UI”den uzak tut; sahnedeki Canvas’a bırakmayı tercih et.
 - Plan Mode: yalnızca yönetici UI bağları değişecekse kısa plan + onay.
+
+
 
 ## Tamamlandı kontrol listesi
 
@@ -236,6 +265,8 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 
 ---
 
+
+
 # Faz 5 — Balon (şık) giriş animasyonu
 
 **Amaç:** Yeni turda seçenekler birden belirmez; **ekranın altından** hedef slot pozisyonuna yükselir. Hızlar **hafif rastgele** farklarla (çok uçurmadan) daha doğal görünür.
@@ -247,9 +278,13 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 3. Yükseliş bitene kadar tıklama kilidi (`islemYapiliyor` veya ayrı `girisAnimasyonu`) — animasyon ortasında yanlış tıklama olmasın.
 4. Animasyon bitince tıklama açılır.
 
+
+
 ## 5.B — Cursor (Plan Mode önerilir)
 
 > `HarfSecmeYoneticisi` içinde yeni soru seçeneklerini anında teleport etmek yerine aşağıdan yukarı coroutine/lerp ile yükselt. Her balona hafif rastgele hız farkı ver. Animasyon süresince tıklamayı kilitle. AGENTS.md + MUSTAFA_UZ planına uy. Kod yazmadan önce kısa plan anlat / onay sonrası uygula.
+
+
 
 ## Tamamlandı kontrol listesi
 
@@ -263,6 +298,8 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 
 ---
 
+
+
 # Faz 6 — Paket 3 checkpoint (kod yazma yok)
 
 **Amaç:** Ortak sistemler gelmeden entegrasyon fazına geçme. **Bu fazda yeni oyun kodu yazılmaz.**
@@ -271,10 +308,14 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen checklist doldurursun; eksikse bekle / hat
 
 ## Kontrol edilecekler
 
+
+
 ### 6.1 Veri
 
 - [ ] `HarfObjeVerisi` ScriptableObject var
 - [ ] Harf asset’leri (hedef: A, E, I, İ, O, Ö, U, Ü) ve `dogruObjeler` listeleri
+
+
 
 ### 6.2 Script API’leri (isimler kılavuza uymalı)
 
@@ -283,9 +324,13 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen checklist doldurursun; eksikse bekle / hat
 - [ ] `GeriBildirimYoneticisi` — `DogruGoster()`, `YanlisGoster()` (ikon + **partikül** + **ses** alanları)
 - [ ] `SesYoneticisi` — fon müzik; ayrıca soru/obje seslendirme için **ileride** kullanılacak public API’nin varlığı / taslak imza mutabakatı
 
+
+
 ### 6.3 Mutabakat
 
 - [ ] Yiğit ile “API kilitlendi” notu **veya** tüm kutular dolu
+
+
 
 ## Tamamlandı kontrol listesi
 
@@ -296,18 +341,24 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen checklist doldurursun; eksikse bekle / hat
 
 ---
 
+
+
 # Faz 7 — Ortak entegrasyon + ses kancaları
 
 **Amaç:** Paket 3 bileşenlerine bağlan; ses/partikül için **null-safe çağrı noktaları** bırak. Clip üretmek / Inspector’a ses dosyası doldurmak senin final işin değil (Paket 3 + 6).
 
 ## 7.A — Yöneticiye eklenecek / bağlanacak alanlar (hedef isimler)
 
-| Alan | Tip | Not |
-| ---- | --- | --- |
-| `soruSecici` | `SoruSecici` | Hardcode deste yerine |
-| `skorYoneticisi` | `SkorYoneticisi` | Yerel `dogruSayisi` yerine veya yanında |
-| `geriBildirim` | `GeriBildirimYoneticisi` | Tik/çarpı GO’larına ek / yerine `DogruGoster` / `YanlisGoster` |
-| `sesYoneticisi` | `SesYoneticisi` | Soru değişince + (isteğe) seçenek tıklanınca — **Instance/alan null ise no-op** |
+
+| Alan             | Tip                      | Not                                                                             |
+| ---------------- | ------------------------ | ------------------------------------------------------------------------------- |
+| `soruSecici`     | `SoruSecici`             | Hardcode deste yerine                                                           |
+| `skorYoneticisi` | `SkorYoneticisi`         | Yerel `dogruSayisi` yerine veya yanında                                         |
+| `geriBildirim`   | `GeriBildirimYoneticisi` | Tik/çarpı GO’larına ek / yerine `DogruGoster` / `YanlisGoster`                  |
+| `sesYoneticisi`  | `SesYoneticisi`          | Soru değişince + (isteğe) seçenek tıklanınca — **Instance/alan null ise no-op** |
+
+
+
 
 ## 7.B — Ses kancası sözleşmesi (Paket 5 tarafı)
 
@@ -317,10 +368,14 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen checklist doldurursun; eksikse bekle / hat
 2. İsteğe bağlı: seçenek tıklanınca obje adı sesi — geri bildirimden önce veya birlikte; Yiğit’in API’sine uy.
 3. Gerçek AI TTS clip dosyalarını **sen üretme**; sadece çağrıyı hazır tut.
 
+
+
 ## 7.C — Geri bildirim
 
 - Doğru/yanlışta `geriBildirim.DogruGoster()` / `YanlisGoster()` çağır (null kontrolü).
 - Sahne içi tik/çarpı ile çakışmayı planda seç: ya ortaka devret ya da ikisini kısa süre birlikte kullan (tercihen tek kaynak).
+
+
 
 ## 7.D — Cursor
 
@@ -330,6 +385,8 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen checklist doldurursun; eksikse bekle / hat
 
 1. Sahneye Paket 3 objelerini ekle / referansları sürükle.
 2. Play: skor artıyor; doğru/yanlışta partikül+ses (clip’ler doluysa); clip boşsa hata fırlatmadan çalışıyor olmalı.
+
+
 
 ## Tamamlandı kontrol listesi
 
@@ -343,6 +400,8 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen checklist doldurursun; eksikse bekle / hat
 **Çıkış:** Ortak sistemlere bağlı oynanış. → Faz 8
 
 ---
+
+
 
 # Faz 8 — Teslim (Paket 6’ya)
 
@@ -368,6 +427,8 @@ Paket 6’dan beklenenler:
 - [ ] Mobil + tahta çözünürlük smoke test
 ```
 
+
+
 ## Tamamlandı kontrol listesi
 
 - [ ] Faz 0–7 ilgili maddeler bu dosyada işaretli
@@ -380,29 +441,38 @@ Paket 6’dan beklenenler:
 
 ---
 
+
+
 ## Hızlı referans — dosya yolları
 
-| Ne | Yol |
-| -- | --- |
-| Yönetici | `Assets/_Scripts/HarfSecmeOyunu/HarfSecmeYoneticisi.cs` |
-| Seçenek | `Assets/_Scripts/HarfSecmeOyunu/SecenekBalonu.cs` |
-| Sahne | `Assets/Scenes/HarfSecmeOyunu.unity` |
-| Art | `Assets/_Art/HarfSecmeOyunu/` |
-| Prefab (hedef) | `Assets/_Prefabs/HarfSecmeOyunu/` |
-| Ekip kuralları | `AGENTS.md` |
-| Bu plan | `MUSTAFA_UZ_MINI_OYUN_2.md` |
+
+| Ne             | Yol                                                     |
+| -------------- | ------------------------------------------------------- |
+| Yönetici       | `Assets/_Scripts/HarfSecmeOyunu/HarfSecmeYoneticisi.cs` |
+| Seçenek        | `Assets/_Scripts/HarfSecmeOyunu/SecenekBalonu.cs`       |
+| Sahne          | `Assets/Scenes/HarfSecmeOyunu.unity`                    |
+| Art            | `Assets/_Art/HarfSecmeOyunu/`                           |
+| Prefab (hedef) | `Assets/_Prefabs/HarfSecmeOyunu/`                       |
+| Ekip kuralları | `AGENTS.md`                                             |
+| Bu plan        | `MUSTAFA_UZ_MINI_OYUN_2.md`                             |
+
 
 ---
 
+
+
 ## Kapsam dışı (bu pakette yapılmaz)
 
-| İş | Sahip paket |
-| -- | ----------- |
-| `HarfObjeVerisi` / `SoruSecici` / `SkorYoneticisi` script gövdesi | Paket 3 |
-| AI ile soru/obje ses dosyası üretimi + `SesYoneticisi` çalma mantığı | Paket 3 |
-| `GeriBildirimYoneticisi` partikül/ses component gövdesi | Paket 3 |
-| Proje genel font atlas / tüm sahnelerde font unify | Paket 6 |
-| Menü ↔ oyun `SahneGecisi` buton ağı finali | Paket 6 |
-| Avatar’ın bu sahnede zorunlu görünmesi | Paket 1 + 6 (şu an zorunlu değil) |
+
+| İş                                                                   | Sahip paket                       |
+| -------------------------------------------------------------------- | --------------------------------- |
+| `HarfObjeVerisi` / `SoruSecici` / `SkorYoneticisi` script gövdesi    | Paket 3                           |
+| AI ile soru/obje ses dosyası üretimi + `SesYoneticisi` çalma mantığı | Paket 3                           |
+| `GeriBildirimYoneticisi` partikül/ses component gövdesi              | Paket 3                           |
+| Proje genel font atlas / tüm sahnelerde font unify                   | Paket 6                           |
+| Menü ↔ oyun `SahneGecisi` buton ağı finali                           | Paket 6                           |
+| Avatar’ın bu sahnede zorunlu görünmesi                               | Paket 1 + 6 (şu an zorunlu değil) |
+
 
 > Plan notu (paket planı yazılırken): Paket 3’e “harf sorusu + obje adı seslendirme API’si”; Paket 6’ya “clip bağlama + çoklu çözünürlük smoke test” maddeleri eklenmeli.
+

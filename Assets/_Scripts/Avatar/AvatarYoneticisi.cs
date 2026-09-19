@@ -18,7 +18,7 @@ public class AvatarYoneticisi : MonoBehaviour
     private const string PrefRenkA = "Avatar_Renk_A";
     private const string PrefAksesuar = "Avatar_Aksesuar";
 
-    // 0=Kedi, 1=Tavşan, 2=Köpek, 3=Rakun
+    // 0=Kedi, 1=Tavşan, 2=Kuş, 3=Rakun
     public int seciliHayvanIndex = 0;
 
     // Gövdeye uygulanacak renk (varsayılan beyaz = orijinal renk)

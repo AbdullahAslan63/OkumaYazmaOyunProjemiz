@@ -33,8 +33,8 @@ Assets/_Scripts/
 │   ├── GeriBildirimYoneticisi.cs (doğru/yanlış ikon+ses+avatar ifadesi değiştirme)
 │   └── SesYoneticisi.cs         (fon müziği + ses efektleri)
 ├── SepetOyunu/
-│   ├── SepetHareketi.cs         (balonu sürükleyerek/dokunarak hareket ettirme)
-│   └── SepetOyunYoneticisi.cs   (obje düşürme, yakalama kontrolü, süre, harf rozeti)
+│   ├── ObjeSurukleme.cs         (objeyi sürükleyip sabit balona bırakma — SepetHareketi IPTAL)
+│   └── SepetOyunYoneticisi.cs   (tur, süre, skor; Paket 3 ile)
 └── HarfSecmeOyunu/
     ├── HarfSecmeYoneticisi.cs   (büyük harf gösterme, 4 seçenek oluşturma)
     └── SecenekBalonu.cs         (tek bir seçenek balonuna tıklanınca ne olacağı)
@@ -85,7 +85,7 @@ Assets/_Scripts/
 
 ### Mini Oyun 1 — Sepetle Toplama
 
-**`SepetHareketi.cs`** — Sadece hareket: parmakla/fare ile sürükleme, balonu yatayda sağa-sola götürme.
+**`ObjeSurukleme.cs`** — Objeyi sürükleyip sabit balona bırakma (eski `SepetHareketi` iptal).
 
 **`SepetOyunYoneticisi.cs`** — Bu oyunun "beyni":
 - Süre sayacı (örn. 60-90 saniye — kesin sayıyı sen belirle)
@@ -142,7 +142,7 @@ Paketler, birbirine mümkün olduğunca az bağımlı ve farklı sahnelerde çal
 
 ### 📦 Paket 4 — Mini Oyun 1: Sepetle Toplama
 **Sorumlu:** Enes Barış
-**Dosyalar:** `SepetHareketi.cs`, `SepetOyunYoneticisi.cs`
+**Dosyalar:** `ObjeSurukleme.cs`, `SepetOyunYoneticisi.cs`
 **Bağımlılık:** Paket 1 (avatarın sepette görünmesi) ve Paket 3 (harf/obje verisi) bitmiş olmalı
 **Bilmesi gerekenler:** Collider2D/trigger, `Instantiate`/`Destroy`, basit zamanlayıcı
 **Kullanacağı asset:** Adım 4 (arkaplan), Adım 5 (balon), Adım 7 (objeler)

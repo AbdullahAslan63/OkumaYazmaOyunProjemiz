@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c748740c869462db75dd9d8f6cb474f, type: 3}
+  m_Name: Harf_I
+  m_EditorClassIdentifier: 
+  harf: 73
+  dogruObjeler:
+  - {fileID: -71054137782703823, guid: 86e3a1d707bd8446b8dcece8357cd98b, type: 3}
+  - {fileID: 7073260176537713582, guid: 98a36f7d5911046fb91898e2736eb0b5, type: 3}
+  - {fileID: 1859656379952452130, guid: 7a1b56f9692b44ec38df7d11cdae1109, type: 3}
+  - {fileID: -4367482579208348860, guid: e06041f05acfb4988ab65933a516fff7, type: 3}
+  - {fileID: -5501325579296700104, guid: 2b2043503300842cc9fd8efa9bf03dae, type: 3}

@@ -2,111 +2,164 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Tek seçenek balonu: tıklanınca doğru/yanlış sonucunu yöneticiye bildirir.
-/// Hem world-space SpriteRenderer hem (isteğe bağlı) UI Image destekler.
+/// UI seçenek balonu: obje resmi + tıklanınca doğru/yanlış bildirir.
+/// Parent slot boyutunu alır; objeyi balon sepetinde merkezli ve orantılı gösterir.
 /// </summary>
 public class SecenekBalonu : MonoBehaviour
 {
-    // Bu balonun obje adı (araba, elma, ...)
-    public string objeAdi;
-
-    // Kılavuz alanı: UI seçenek kullanılıyorsa obje görseli buraya atanır
     public Image objeResmi;
 
-    // Bu objenin baş harfi
     private char dogruHarf;
-
-    // Şu an sorulan harf
     private char aktifSoruHarfi;
+    private Button buton;
 
-    // Harf numarası (1..8) — sonuç ekranı için
-    public int harfId { get; private set; }
+    [Header("İç yerleşim — balon ZARFI (sepet değil)")]
+    [Tooltip("Balon genişliğine göre obje kutusu (taşmayı önlemek için düşük tut)")]
+    [Range(0.25f, 0.7f)]
+    public float objeGenislikOrani = 0.46f;
+    [Range(0.2f, 0.65f)]
+    public float objeYukseklikOrani = 0.40f;
+    [Tooltip("Pozitif = yukarı (zarf merkezi); negatif = sepete doğru")]
+    [Range(-0.2f, 0.35f)]
+    public float objeDikeyKayma = 0.14f;
 
-    // Doğru / yanlış görsel geri bildirimi
-    public GameObject dogruFeedback;
-    public GameObject yanlisFeedback;
-
-    // Bu turun slot dünya pozisyonu (uçuş sonrası dönüş)
-    public Vector3 slotPozisyonu;
-
-    // Collider hazırla; varsa UI Button'u kapat (world tıklama kullanılır)
-    public void TiklanabilirYap()
+    private void Awake()
     {
-        Button[] butonlar = GetComponentsInChildren<Button>(true);
-        for (int i = 0; i < butonlar.Length; i++)
-            butonlar[i].enabled = false;
-
-        BoxCollider2D box = GetComponent<BoxCollider2D>();
-        if (box == null)
-            box = gameObject.AddComponent<BoxCollider2D>();
-
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        if (sr != null && sr.sprite != null)
-            box.size = sr.sprite.bounds.size;
-        else
-            box.size = new Vector2(7f, 12f);
+        buton = GetComponent<Button>();
+        if (objeResmi == null)
+        {
+            Transform child = transform.Find("ObjeResmi");
+            if (child != null)
+                objeResmi = child.GetComponent<Image>();
+        }
+        YerlesimiDuzenle(false);
     }
 
-    // Yönetici: kimlik, harf, feedback ve slot pozisyonu
-    public void Ayarla(string adi, char objeHarfi, int id, GameObject dogruFb, GameObject yanlisFb, Vector3 slotPos)
+    private void OnRectTransformDimensionsChange()
     {
-        objeAdi = adi;
-        dogruHarf = objeHarfi;
-        harfId = id;
-        dogruFeedback = dogruFb;
-        yanlisFeedback = yanlisFb;
-        slotPozisyonu = slotPos;
+        if (isActiveAndEnabled)
+            YerlesimiDuzenle(false);
     }
 
-    // Kılavuz imzası: sprite + harfler (UI Image veya SpriteRenderer)
+    /// <summary>Sprite ve harf bilgisini ayarlar; tıklamayı bağlar.</summary>
     public void Ayarla(Sprite resim, char objeHarfi, char soruHarfi)
     {
-        if (resim != null)
-        {
-            if (objeResmi != null)
-                objeResmi.sprite = resim;
-
-            SpriteRenderer sr = GetComponent<SpriteRenderer>();
-            if (sr != null)
-                sr.sprite = resim;
-        }
-
         dogruHarf = objeHarfi;
         aktifSoruHarfi = soruHarfi;
+
+        if (objeResmi != null && resim != null)
+        {
+            objeResmi.sprite = resim;
+            objeResmi.preserveAspect = true;
+            objeResmi.type = Image.Type.Simple;
+            objeResmi.raycastTarget = false;
+        }
+
+        // Sprite atandıktan sonra zarf kutusuna sığdır
+        YerlesimiDuzenle(false);
+
+        if (buton == null)
+            buton = GetComponent<Button>();
+
+        if (buton != null)
+        {
+            buton.onClick.RemoveAllListeners();
+            buton.onClick.AddListener(Tiklandi);
+            buton.interactable = true;
+        }
     }
 
-    // Sadece soru harfini yenile
+    /// <summary>
+    /// Balon boyutunu slot ile eşler; objeyi sepet bölgesinde ortalar.
+    /// pozisyonuSifirla=false iken yükseliş animasyonunun Y’sine dokunmaz.
+    /// </summary>
+    public void YerlesimiDuzenle(bool pozisyonuSifirla = false)
+    {
+        RectTransform kok = transform as RectTransform;
+        if (kok == null) return;
+
+        RectTransform slot = kok.parent as RectTransform;
+        float alanW = 360f;
+        float alanH = 430f;
+
+        if (slot != null)
+        {
+            Canvas.ForceUpdateCanvases();
+            Rect sr = slot.rect;
+            if (sr.width > 1f) alanW = sr.width;
+            if (sr.height > 1f) alanH = sr.height;
+
+            kok.anchorMin = new Vector2(0.5f, 0.5f);
+            kok.anchorMax = new Vector2(0.5f, 0.5f);
+            kok.pivot = new Vector2(0.5f, 0.5f);
+            kok.sizeDelta = new Vector2(alanW, alanH);
+            kok.localScale = Vector3.one;
+            if (pozisyonuSifirla)
+                kok.anchoredPosition = Vector2.zero;
+        }
+
+        if (objeResmi == null) return;
+
+        RectTransform objeRt = objeResmi.rectTransform;
+        objeRt.anchorMin = new Vector2(0.5f, 0.5f);
+        objeRt.anchorMax = new Vector2(0.5f, 0.5f);
+        objeRt.pivot = new Vector2(0.5f, 0.5f);
+        objeRt.localScale = Vector3.one;
+        objeRt.localRotation = Quaternion.identity;
+
+        // Zarf içi kutu — sprite preserveAspect ile bu kutuya sığar, taşmaz
+        float kutuW = alanW * objeGenislikOrani;
+        float kutuH = alanH * objeYukseklikOrani;
+        objeRt.sizeDelta = new Vector2(kutuW, kutuH);
+        objeRt.anchoredPosition = new Vector2(0f, alanH * objeDikeyKayma);
+
+        objeResmi.preserveAspect = true;
+        objeResmi.type = Image.Type.Simple;
+        objeResmi.raycastTarget = false;
+
+        // Sprite en-boy oranı kutuyu aşmasın: kutu içinde Fit
+        if (objeResmi.sprite != null)
+        {
+            Sprite s = objeResmi.sprite;
+            float sw = s.rect.width;
+            float sh = s.rect.height;
+            if (sw > 0.01f && sh > 0.01f)
+            {
+                float spriteOran = sw / sh;
+                float kutuOran = kutuW / kutuH;
+                if (spriteOran > kutuOran)
+                {
+                    // Geniş sprite: genişliği sabitle, yüksekliği oranla
+                    objeRt.sizeDelta = new Vector2(kutuW, kutuW / spriteOran);
+                }
+                else
+                {
+                    // Uzun sprite: yüksekliği sabitle, genişliği oranla
+                    objeRt.sizeDelta = new Vector2(kutuH * spriteOran, kutuH);
+                }
+            }
+        }
+    }
+
     public void SoruHarfiniGuncelle(char soruHarfi)
     {
         aktifSoruHarfi = soruHarfi;
     }
 
-    // Slot pozisyonunu güncelle
-    public void SlotPozisyonunuGuncelle(Vector3 pos)
-    {
-        slotPozisyonu = pos;
-    }
-
-    // Tıklanınca doğru mu kontrol et ve yöneticiye bildir
     public void Tiklandi()
     {
         if (HarfSecmeYoneticisi.Instance == null)
             return;
 
         bool dogruMu = dogruHarf == aktifSoruHarfi;
-        HarfSecmeYoneticisi.Instance.SecenekSecildi(dogruMu, this);
+        HarfSecmeYoneticisi.Instance.SecenekSecildi(dogruMu);
     }
 
-    // Dünya noktasının sprite sınırında olup olmadığı
-    public bool NoktaSpriteIcinde(Vector2 dunya2D)
+    public void TiklamayiAyarla(bool acik)
     {
-        if (!gameObject.activeInHierarchy)
-            return false;
-
-        SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        if (sr == null || !sr.enabled || sr.sprite == null)
-            return false;
-
-        return sr.bounds.Contains(new Vector3(dunya2D.x, dunya2D.y, sr.bounds.center.z));
+        if (buton == null)
+            buton = GetComponent<Button>();
+        if (buton != null)
+            buton.interactable = acik;
     }
 }

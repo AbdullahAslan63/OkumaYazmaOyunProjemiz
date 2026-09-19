@@ -67,7 +67,7 @@ Assets/
 │   ├── Ortak/
 │   ├── SepetOyunu/
 │   └── HarfSecmeOyunu/
-└── _Scenes/              # Oyun sahneleri (bazı sahneler geçici olarak Assets/Scenes/ altında olabilir)
+└── _Scenes/              # Güncel yol: Assets/Scenes/ (AvatarOlusturmaEkrani, HarfSecmeOyunu, SepetOyunu)
 ```
 
 Yeni scripti doğru paket klasörüne koyun. Rastgele `Assets/` köküne script atmayın.
@@ -78,10 +78,10 @@ Yeni scripti doğru paket klasörüne koyun. Rastgele `Assets/` köküne script 
 
 | Paket | Sorumlu | Ana dosyalar / plan |
 | ----- | ------- | ------------------- |
-| 1 — Avatar | Mustafa Said Bayram | `AvatarYoneticisi`, `AvatarGorunumu`, `AvatarSecimEkrani`, `RenkSecici`, `AksesuarSecici` |
+| 1 — Avatar | Mustafa Said Bayram | `AvatarYoneticisi`, `AvatarGorunumu`, `AvatarSecimEkrani`, `RenkSecici`, `AksesuarSecici` (+ `AvatarSahneKurucu`) |
 | 3 — Ortak sistemler | Mustafa Yiğit Avan | `HarfObjeVerisi`, `SoruSecici`, `SkorYoneticisi`, `GeriBildirimYoneticisi`, `SesYoneticisi` |
 | 4 — Mini Oyun 1 | Enes Barış | `ObjeSurukleme`, `SepetOyunYoneticisi` — detay: `ENES_MINI_OYUN_1.md` |
-| 5 — Mini Oyun 2 | Mustafa Üz | `HarfSecmeYoneticisi`, `SecenekBalonu` — detay: `MUSTAFA_UZ_MINI_OYUN_2.md` |
+| 5 — Mini Oyun 2 | Mustafa Üz | `HarfSecmeYoneticisi`, `SecenekBalonu` (+ `HarfSecmeSahneKurucu`) — UI prefab + SO; detay: `MUSTAFA_UZ_MINI_OYUN_2.md` |
 | 6 — UI / font / entegrasyon | Süleyman Öz | `SahneGecisi`, font, ses/efekt Inspector bağlama, genel test |
 
 Başkasının paket klasörüne izinsiz script eklemeyin; API ihtiyacı varsa sahip kişiyle konuşun.

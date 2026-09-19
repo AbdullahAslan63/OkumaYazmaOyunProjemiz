@@ -3,8 +3,8 @@ guid: 8e3b3a03a6a5c4c4e8cfc3ff5462ec96
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3742365394461109945
-    second: Avatar_tavsan_mutlu_0
+      213: 5869272504414987646
+    second: avatar_tavsan_mutlu_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Avatar_tavsan_mutlu_0
+      name: avatar_tavsan_mutlu_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1254
-        height: 1254
+        x: 132
+        y: 42
+        width: 248
+        height: 432
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7415e6b6082701cc0800000000000000
-      internalID: -3742365394461109945
+      spriteID: e756f9bfe38d37150800000000000000
+      internalID: 5869272504414987646
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Avatar_tavsan_mutlu_0: -3742365394461109945
+      avatar_tavsan_mutlu_0: 5869272504414987646
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

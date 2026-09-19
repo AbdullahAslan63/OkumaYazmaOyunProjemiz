@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Tek bir hayvanın Inspector'da doldurulan sprite seti.
+/// Tek bir hayvanın Inspector'da doldurulan sprite seti ve ince ayarları.
 /// </summary>
 [System.Serializable]
 public class HayvanGorseli
@@ -10,21 +10,49 @@ public class HayvanGorseli
     public Sprite normalPoz;
     public Sprite mutluPoz;
     public Sprite uzgunPoz;
+
+    // Hedef yüksekliğe ek çarpan (1 = olduğu gibi)
+    public float govdeOlcekCarpani = 1f;
+
+    // Bu hayvanın kafa bağlama noktası (Avatar yerel birimi)
+    public Vector2 aksesuarOfset = new Vector2(0f, 1.8f);
+}
+
+/// <summary>
+/// Tek bir aksesuarın sprite'ı ile ölçek / konum ayarı.
+/// </summary>
+[System.Serializable]
+public class AksesuarGorseli
+{
+    public Sprite sprite;
+
+    // Gövde ölçeğine göre çarpan (şapka ~0.45, gözlük ~0.28)
+    public float olcek = 0.45f;
+
+    // Hayvan aksesuarOfset'ine eklenen ince kaydırma
+    public Vector2 yerelOfset = Vector2.zero;
 }
 
 /// <summary>
 /// AvatarYoneticisi'ndeki seçime göre gövde ve aksesuar sprite'larını gösterir.
+/// Farklı sprite rect'leri hedef yüksekliğe normalize eder.
 /// </summary>
 public class AvatarGorunumu : MonoBehaviour
 {
-    // 4 hayvan: Kedi, Tavşan, Köpek, Rakun — Inspector'dan doldurulur
+    // 4 hayvan: Kedi, Tavşan, Kuş, Rakun — Inspector'dan doldurulur
     public HayvanGorseli[] hayvanlar;
 
-    // Aksesuar index → sprite eşlemesi — Inspector'dan doldurulur
-    public Sprite[] aksesuarlar;
+    // Aksesuar index → sprite + ölçek/ofset — Inspector'dan doldurulur
+    public AksesuarGorseli[] aksesuarlar;
 
     public SpriteRenderer govdeRenderer;
     public SpriteRenderer aksesuarRenderer;
+
+    // Tüm hayvanlar bu yüksekliğe (dünya birimi) çekilir
+    public float hedefGovdeYuksekligi = 4.5f;
+
+    // Gövde alt kenarının hizalanacağı Y (ayaklar UI'dan uzak)
+    public float hedefZeminY = -1.5f;
 
     private void Awake()
     {
@@ -117,6 +145,9 @@ public class AvatarGorunumu : MonoBehaviour
         govdeRenderer.sprite = govdeSprite;
         govdeRenderer.color = yonetici.seciliRenk;
 
+        // Farklı rect'leri aynı hedef yüksekliğe çek
+        float govdeOlcek = GovdeyiNormalizeEt(govdeSprite, hayvan.govdeOlcekCarpani);
+
         // Aksesuar katmanı
         if (aksesuarRenderer == null)
             return;
@@ -126,18 +157,54 @@ public class AvatarGorunumu : MonoBehaviour
             aksesuarIndex >= 0 &&
             aksesuarlar != null &&
             aksesuarIndex < aksesuarlar.Length &&
-            aksesuarlar[aksesuarIndex] != null;
+            aksesuarlar[aksesuarIndex] != null &&
+            aksesuarlar[aksesuarIndex].sprite != null;
 
         if (aksesuarVar)
         {
-            aksesuarRenderer.sprite = aksesuarlar[aksesuarIndex];
+            AksesuarGorseli aks = aksesuarlar[aksesuarIndex];
+            aksesuarRenderer.sprite = aks.sprite;
             aksesuarRenderer.enabled = true;
+
+            // Aksesuar gövde ile orantılı kalsın
+            float aksOlcek = govdeOlcek * aks.olcek;
+            aksesuarRenderer.transform.localScale = new Vector3(aksOlcek, aksOlcek, 1f);
+
+            // Kafa noktası = hayvan ofseti + aksesuar ince ayarı
+            Vector2 pos = hayvan.aksesuarOfset + aks.yerelOfset;
+            aksesuarRenderer.transform.localPosition = new Vector3(pos.x, pos.y, 0f);
         }
         else
         {
             aksesuarRenderer.sprite = null;
             aksesuarRenderer.enabled = false;
         }
+    }
+
+    /// <summary>
+    /// Gövdeyi hedef yüksekliğe ölçekler ve alt kenarı hedefZeminY'ye hizalar.
+    /// Dönen değer uygulanan yerel ölçek (aksesuar için).
+    /// </summary>
+    private float GovdeyiNormalizeEt(Sprite govdeSprite, float carpani)
+    {
+        Transform govdeT = govdeRenderer.transform;
+
+        // Ham sprite yüksekliği (ölçeksiz yerel bounds)
+        float hamYukseklik = govdeSprite.bounds.size.y;
+        if (hamYukseklik < 0.001f)
+            hamYukseklik = 0.001f;
+
+        // Hedef boyuta çek; hayvan çarpanı ince ayar
+        float olcek = hedefGovdeYuksekligi / hamYukseklik * carpani;
+        govdeT.localScale = new Vector3(olcek, olcek, 1f);
+
+        // Alt kenar hedef zemine gelsin (ayak hizası)
+        Vector3 yerelPos = govdeT.localPosition;
+        yerelPos.x = 0f;
+        yerelPos.y = hedefZeminY - govdeSprite.bounds.min.y * olcek;
+        govdeT.localPosition = yerelPos;
+
+        return olcek;
     }
 
     /// <summary>govdeRenderer / aksesuarRenderer boşsa child'lardan bulur.</summary>
