@@ -38,6 +38,8 @@ Balon **sabit duruyor**. Objeler ekranın alt kısmında sabit duruyor, oyuncu i
 
 ## 📦 PAKET 1 — MUSTAFA SAİD BAYRAM — Avatar Sistemi ve Seçim Ekranı
 
+**Branch:** `said/avatar` · **Faz planı:** `SAID_AVATAR.md` · Ortak kurallar: `AGENTS.md`
+
 Bu paket eski **Paket 1 (Avatar Sistemi)** ile **Paket 2 (Avatar Seçim Ekranı)** görevlerini birleştirir. Önce temel avatar hafıza/görünüm sistemi (Adım 1.x), ardından seçim ekranı UI ve butonlar (Adım 2.x) yapılır.
 
 ### Adım 1.1 — Yönetici Objesini Oluştur (Unity Editöründe)
@@ -164,6 +166,8 @@ Play'e bas, tüm butonları dene.
 
 ## 📦 PAKET 3 — MUSTAFA YİĞİT AVAN — Ortak Sistemler
 
+**Branch:** `mustafayigit/efektler` · **Faz planı:** `MUSTAFA_YIGIT_EFEKTLER.md` · Kapı: diğer üç paket `main`’e girdikten + Abdullah clip’lerinden sonra ses/partikül.
+
 ### Adım 3.1 — Harf Verisi (ScriptableObject)
 
 **Unity Editöründe script oluşturma yolu aynı**, ama içerik Cursor'a yazdırılacak:
@@ -255,6 +259,8 @@ Play'e bas, tüm butonları dene.
 
 ## 📦 PAKET 4 — ENES BARIŞ — Mini Oyun 1: Sepetle Toplama
 
+**Branch:** `enes/level1` · **Faz planı:** `ENES_MINI_OYUN_1.md` · `enes/minigame1` geçersiz.
+
 ### Adım 4.1-4.3 — Sahne Kurulumu (Unity Editöründe, kod gerektirmez)
 
 1. Yeni sahne `SepetOyunu`. Arkaplanı sürükle (`Order in Layer -10`).
@@ -317,6 +323,8 @@ Boş obje `OyunYoneticisi` oluştur, scripti ekle, tüm `public` alanları Inspe
 ---
 
 ## 📦 PAKET 5 — MUSTAFA ÜZ — Mini Oyun 2: Hangisinin Baş Harfi
+
+**Branch:** `mustafauz/level2` · **Faz planı:** `MUSTAFA_UZ_MINI_OYUN_2.md`
 
 **Basitleştirme:** Seçenekler için ayrı bir "balon" görseli istenmedi — Adım 2.4'teki renk seçim çerçevesi görseli tekrar kullanılacak, içine obje resmi konacak.
 
