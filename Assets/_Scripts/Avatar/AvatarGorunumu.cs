@@ -1,6 +1,23 @@
 using UnityEngine;
 
 /// <summary>
+/// Bu hayvanda tek bir aksesuarın duracağı yer.
+/// Şapka ve gözlük ayrı ayarlanır; birbirini ezmez.
+/// </summary>
+[System.Serializable]
+public class HayvanAksesuarAyari
+{
+    // Inspector'da hangi aksesuar olduğu görünsün
+    public string aksesuarAdi;
+
+    // Bu hayvanda bu aksesuarın yerel konumu (şapka kafa, gözlük yüz)
+    public Vector2 ofset;
+
+    // Bu hayvanda bu aksesuarın boyutu (1 = normal, 0.7 küçük, 1.4 büyük)
+    public float olcekCarpani = 1f;
+}
+
+/// <summary>
 /// Tek bir hayvanın Inspector'da doldurulan sprite seti ve ince ayarları.
 /// </summary>
 [System.Serializable]
@@ -14,8 +31,11 @@ public class HayvanGorseli
     // Hedef yüksekliğe ek çarpan (1 = olduğu gibi)
     public float govdeOlcekCarpani = 1f;
 
-    // Bu hayvanın kafa bağlama noktası (Avatar yerel birimi)
+    // Varsayılan kafa noktası — yeni aksesuar satırı eklenince buradan doldurulur
     public Vector2 aksesuarOfset = new Vector2(0f, 1.8f);
+
+    // Her aksesuar için bu hayvana özel konum (aksesuarlar dizisi ile aynı sıra)
+    public HayvanAksesuarAyari[] aksesuarAyarlari;
 }
 
 /// <summary>
@@ -58,6 +78,18 @@ public class AvatarGorunumu : MonoBehaviour
     {
         // Inspector boş kaldıysa child isimlerinden otomatik bul
         RendererlariOtomatikBul();
+        // Her hayvana tüm aksesuar satırlarını ekle (eksikse)
+        AksesuarAyarlariniSenkronizeEt();
+    }
+
+    /// <summary>
+    /// Inspector'da değer değişince aksesuar listesini hayvanlara yazar.
+    /// </summary>
+    private void OnValidate()
+    {
+        AksesuarAyarlariniSenkronizeEt();
+        if (Application.isPlaying)
+            Guncelle();
     }
 
     private void Start()
@@ -166,12 +198,13 @@ public class AvatarGorunumu : MonoBehaviour
             aksesuarRenderer.sprite = aks.sprite;
             aksesuarRenderer.enabled = true;
 
-            // Aksesuar gövde ile orantılı kalsın
-            float aksOlcek = govdeOlcek * aks.olcek;
+            // Aksesuar gövde ile orantılı kalsın; karakter-aksesuar boyutu ayrı çarpan
+            float karakterOlcek = AksesuarOlcekCarpaniniAl(hayvan, aksesuarIndex);
+            float aksOlcek = govdeOlcek * aks.olcek * karakterOlcek;
             aksesuarRenderer.transform.localScale = new Vector3(aksOlcek, aksOlcek, 1f);
 
-            // Kafa noktası = hayvan ofseti + aksesuar ince ayarı
-            Vector2 pos = hayvan.aksesuarOfset + aks.yerelOfset;
+            // Bu hayvana özel şapka/gözlük konumu (yoksa eski ofset formülü)
+            Vector2 pos = AksesuarPozisyonunuAl(hayvan, aks, aksesuarIndex);
             aksesuarRenderer.transform.localPosition = new Vector3(pos.x, pos.y, 0f);
         }
         else
@@ -205,6 +238,104 @@ public class AvatarGorunumu : MonoBehaviour
         govdeT.localPosition = yerelPos;
 
         return olcek;
+    }
+
+    /// <summary>
+    /// Bu hayvanda bu aksesuarın yerini döndürür.
+    /// Karakter-aksesuar satırı varsa onu kullanır; yoksa eski ortak ofset.
+    /// </summary>
+    private Vector2 AksesuarPozisyonunuAl(HayvanGorseli hayvan, AksesuarGorseli aks, int aksesuarIndex)
+    {
+        if (hayvan.aksesuarAyarlari != null &&
+            aksesuarIndex >= 0 &&
+            aksesuarIndex < hayvan.aksesuarAyarlari.Length &&
+            hayvan.aksesuarAyarlari[aksesuarIndex] != null)
+        {
+            return hayvan.aksesuarAyarlari[aksesuarIndex].ofset;
+        }
+
+        return hayvan.aksesuarOfset + aks.yerelOfset;
+    }
+
+    /// <summary>
+    /// Bu hayvanda bu aksesuarın boyut çarpanını döndürür (1 = olduğu gibi).
+    /// Eski kayıtlarda 0 gelirse 1 kabul edilir.
+    /// </summary>
+    private float AksesuarOlcekCarpaniniAl(HayvanGorseli hayvan, int aksesuarIndex)
+    {
+        if (hayvan.aksesuarAyarlari != null &&
+            aksesuarIndex >= 0 &&
+            aksesuarIndex < hayvan.aksesuarAyarlari.Length &&
+            hayvan.aksesuarAyarlari[aksesuarIndex] != null)
+        {
+            float carpani = hayvan.aksesuarAyarlari[aksesuarIndex].olcekCarpani;
+            if (carpani > 0.001f)
+                return carpani;
+        }
+
+        return 1f;
+    }
+
+    /// <summary>
+    /// Her karaktere aksesuarlar listesindeki TÜM aksesuarlar için satır açar.
+    /// Şapka ve gözlük yerleri böyle ayrı ayrı düzenlenir. Mevcut ofsetleri silmez.
+    /// </summary>
+    public void AksesuarAyarlariniSenkronizeEt()
+    {
+        if (hayvanlar == null || aksesuarlar == null)
+            return;
+
+        int aksSayi = aksesuarlar.Length;
+        for (int h = 0; h < hayvanlar.Length; h++)
+        {
+            HayvanGorseli hayvan = hayvanlar[h];
+            if (hayvan == null)
+                continue;
+
+            HayvanAksesuarAyari[] eski = hayvan.aksesuarAyarlari;
+            bool uzunlukAyni = eski != null && eski.Length == aksSayi;
+            HayvanAksesuarAyari[] hedef = uzunlukAyni ? eski : new HayvanAksesuarAyari[aksSayi];
+
+            for (int i = 0; i < aksSayi; i++)
+            {
+                string ad = AksesuarAdiAl(i);
+                HayvanAksesuarAyari kayit = (eski != null && i < eski.Length) ? eski[i] : null;
+
+                if (kayit == null)
+                    kayit = new HayvanAksesuarAyari();
+
+                kayit.aksesuarAdi = ad;
+
+                // Yeni satırsa mevcut kafa + aksesuar ofsetini varsayılan yap
+                bool yeniSatir = eski == null || i >= eski.Length || eski[i] == null;
+                if (yeniSatir)
+                {
+                    Vector2 varsayilan = hayvan.aksesuarOfset;
+                    if (aksesuarlar[i] != null)
+                        varsayilan += aksesuarlar[i].yerelOfset;
+                    kayit.ofset = varsayilan;
+                    kayit.olcekCarpani = 1f;
+                }
+
+                // Eski satırda boyut alanı 0 kaldıysa (yeni alandı) 1 yap
+                if (kayit.olcekCarpani <= 0.001f)
+                    kayit.olcekCarpani = 1f;
+
+                hedef[i] = kayit;
+            }
+
+            hayvan.aksesuarAyarlari = hedef;
+        }
+    }
+
+    /// <summary>Aksesuar dizisinden okunabilir ad üretir.</summary>
+    private string AksesuarAdiAl(int index)
+    {
+        if (aksesuarlar == null || index < 0 || index >= aksesuarlar.Length || aksesuarlar[index] == null)
+            return "Aksesuar " + index;
+        if (aksesuarlar[index].sprite != null)
+            return aksesuarlar[index].sprite.name;
+        return "Aksesuar " + index;
     }
 
     /// <summary>govdeRenderer / aksesuarRenderer boşsa child'lardan bulur.</summary>

@@ -23,6 +23,9 @@ public class AvatarSecimEkrani : MonoBehaviour
     public Button renkSekmeButon;
     public Button aksesuarSekmeButon;
 
+    // Play'de UI bir kez kurulunca tekrar yıkılmasın
+    [System.NonSerialized] public bool playDuzeniKuruldu;
+
     // Hayvan sayısı (Kedi, Tavşan, Kuş, Rakun)
     private const int HayvanSayisi = 4;
 
@@ -32,7 +35,12 @@ public class AvatarSecimEkrani : MonoBehaviour
 
     private void Awake()
     {
-        // Eski alt-bar düzeni varsa Roblox tipi dolap düzenine çevir
+        AvatarSahneKurucu.MevcutCanvasaDolapUygula(this);
+    }
+
+    private void Start()
+    {
+        // Awake atlanırsa (scene reload kapalı vb.) eski oklar kalmasın
         AvatarSahneKurucu.MevcutCanvasaDolapUygula(this);
     }
 
