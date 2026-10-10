@@ -125,32 +125,51 @@ Assets/_Scripts/
 
 Paketler, birbirine mümkün olduğunca az bağımlı ve farklı sahnelerde çalışacak şekilde ayrıldı — çakışma riski düşük. Eski Paket 1 (Avatar Sistemi) ile Paket 2 (Avatar Seçim Ekranı) birleştirildi; Mini Oyun 1 görevi Enes Barış'a verildi.
 
+### Branch’ler (2026-09)
+
+| Branch | Sahip | Plan dosyası |
+| ------ | ----- | ------------ |
+| `said/avatar` | Mustafa Said Bayram | `SAID_AVATAR.md` |
+| `enes/level1` | Enes Barış | `ENES_MINI_OYUN_1.md` |
+| `mustafauz/level2` | Mustafa Üz | `MUSTAFA_UZ_MINI_OYUN_2.md` |
+| `mustafayigit/efektler` | Mustafa Yiğit Avan | `MUSTAFA_YIGIT_EFEKTLER.md` |
+
+**Geçersiz:** `enes/minigame1` — yerine `enes/level1`.
+
+### Merge sırası
+
+1. Said / Enes / Mustafa Üz **paralel** → her biri bitince `main`’e PR.
+2. Mustafa Yiğit **ancak** üçü `main`’deyken + Abdullah ses clip’leri gelince `mustafayigit/efektler` üzerinde çalışır.
+3. Sonra Paket 6 (Süleyman) Inspector / font / sahne geçişi finali.
+
+Detay: `AGENTS.md` → Branch sahipleri + Merge / bağımlılık sırası. Her faz çıkışında commit + push hatırlatması zorunlu.
+
 ### 📦 Paket 1 — Avatar Sistemi ve Seçim Ekranı
-**Sorumlu:** Mustafa Said Bayram
+**Sorumlu:** Mustafa Said Bayram · **Branch:** `said/avatar` · **Plan:** `SAID_AVATAR.md`
 **Dosyalar:** `AvatarYoneticisi.cs`, `AvatarGorunumu.cs`, `AvatarSecimEkrani.cs`, `RenkSecici.cs`, `AksesuarSecici.cs`
 **Bağımlılık:** Yok, ilk başlar. Paket 4 ve 5 buna bağımlı olduğu için erken bitmesi önemli.
 **Bilmesi gerekenler:** `public` değişken, Inspector'dan resim/renk atama, `SpriteRenderer.color`, `DontDestroyOnLoad`, `PlayerPrefs`, UI Button, `OnClick`, `if/else`
 **Kullanacağı asset:** Adım 1 (avatar), Adım 2 (aksesuar), Adım 3 (arayüz parçaları)
 
-### 📦 Paket 3 — Ortak Sistemler
-**Sorumlu:** Mustafa Yiğit Avan
+### 📦 Paket 3 — Ortak Sistemler (+ efektler)
+**Sorumlu:** Mustafa Yiğit Avan · **Branch:** `mustafayigit/efektler` · **Plan:** `MUSTAFA_YIGIT_EFEKTLER.md`
 **Dosyalar:** `HarfObjeVerisi.cs`, `SoruSecici.cs`, `SkorYoneticisi.cs`, `GeriBildirimYoneticisi.cs`, `SesYoneticisi.cs`
-**Bağımlılık:** Yok, Paket 1 ile paralel başlar. Paket 4 ve 5 buna bağımlı, öncelikli bitmeli.
-**Bilmesi gerekenler:** ScriptableObject (veri kartı) kavramı, `List<>`, `Random.Range`, `AudioSource`
-**Kullanacağı asset:** Adım 7 (objeler), Adım 8 (efekt)
+**Bağımlılık:** Çekirdek skor/soru API’leri erken; **ses + partikül** Said/Enes/Üz `main` merge’ünden sonra.
+**Bilmesi gerekenler:** ScriptableObject (veri kartı) kavramı, `List<>`, `Random.Range`, `AudioSource`, ParticleSystem
+**Kullanacağı asset:** Adım 7 (objeler), Adım 8 (efekt), Abdullah harf/kelime clip’leri
 **Not:** Bu paketi en sistemli düşünen çocuğa vermen faydalı olur — çünkü hem Mini Oyun 1 hem 2 buna dayanıyor.
 
 ### 📦 Paket 4 — Mini Oyun 1: Sepetle Toplama
-**Sorumlu:** Enes Barış
+**Sorumlu:** Enes Barış · **Branch:** `enes/level1` · **Plan:** `ENES_MINI_OYUN_1.md`
 **Dosyalar:** `ObjeSurukleme.cs`, `SepetOyunYoneticisi.cs`
-**Bağımlılık:** Paket 1 (avatarın sepette görünmesi) ve Paket 3 (harf/obje verisi) bitmiş olmalı
+**Bağımlılık:** Paket 3 çekirdek (harf/obje verisi) yönetici için gerekli; avatar bu sahnede yok
 **Bilmesi gerekenler:** Collider2D/trigger, `Instantiate`/`Destroy`, basit zamanlayıcı
 **Kullanacağı asset:** Adım 4 (arkaplan), Adım 5 (balon), Adım 7 (objeler)
 
 ### 📦 Paket 5 — Mini Oyun 2: Hangisinin Baş Harfi
-**Sorumlu:** Mustafa Üz
+**Sorumlu:** Mustafa Üz · **Branch:** `mustafauz/level2` · **Plan:** `MUSTAFA_UZ_MINI_OYUN_2.md`
 **Dosyalar:** `HarfSecmeYoneticisi.cs`, `SecenekBalonu.cs`
-**Bağımlılık:** Paket 3 (harf/obje verisi) bitmiş olmalı
+**Bağımlılık:** Paket 3 (harf/obje verisi) bitmiş olmalı; tema + Yeniden Dene Faz 4b
 **Bilmesi gerekenler:** Prefab + `Instantiate`, `OnMouseDown`, liste karıştırma
 **Kullanacağı asset:** Adım 7 (objeler) — arkaplan için Adım 4'ü paylaşabilir ya da ayrı istenebilir (netleştir)
 
@@ -167,11 +186,18 @@ Paketler, birbirine mümkün olduğunca az bağımlı ve farklı sahnelerde çal
 ## 🗓️ Önerilen Sıra
 
 ```
-1. Hafta:  Paket 1 (avatar temeli) + Paket 3 paralel başlar
-           Paket 6'nın font kurulumu paralel başlayabilir
-2. Hafta:  Paket 1 devam (seçim ekranı) → Paket 4, 5 başlar
-3. Hafta:  Paket 4, 5 devam eder
-4. Hafta:  Paket 4, 5 biter → Paket 6 tam entegrasyon + test
+Paralel:  said/avatar + enes/level1 + mustafauz/level2  →  her biri main’e merge
+Sonra:    mustafayigit/efektler (kapı: üç merge + Abdullah clip’leri)  →  main
+Son:      Paket 6 (Süleyman) font / clip bağlama / SahneGecisi / test
+```
+
+Eski haftalık taslak (hâlâ fikir verir):
+
+```
+1. Hafta:  Paket 1 (avatar temeli) + Paket 3 çekirdek paralel
+2. Hafta:  Paket 1 devam → Paket 4, 5
+3. Hafta:  Paket 4, 5 devam → main merge’ler
+4. Hafta:  Paket 3 efektler → Paket 6 tam entegrasyon + test
 ```
 
 ---
