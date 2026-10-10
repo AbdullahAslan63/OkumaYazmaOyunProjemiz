@@ -1,3 +1,4 @@
+
 # MUSTAFA_YIGIT_EFEKTLER.md — Mustafa Yiğit Avan · Paket 3 (Ses + Partikül)
 
 Bu dosya **sadece Mustafa Yiğit Avan** için faz kapılı çalışma planıdır. Kod yazmadan önce `AGENTS.md` okuyun. Genel özet: `DETAYLI GÖREV DAĞILIMI VE KILAVUZ.md` → Paket 3.
