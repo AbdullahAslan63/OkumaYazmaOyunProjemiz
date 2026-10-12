@@ -34,7 +34,9 @@ Bu dosya **sadece Mustafa Üz** için faz kapılı çalışma planıdır. Kod ya
 | Sahne (güncel yol) | `Assets/Scenes/HarfSecmeOyunu.unity`                                                                                           |
 | Giriş              | Fare + touch/parmak (`Input System`)                                                                                           |
 | Yanlış cevap       | Geri bildirim; **aynı soru kalır**                                                                                             |
-| Doğru cevap        | Kısa uçuş / tik; sonra yeni soru                                                                                               |
+| Doğru cevap        | Tıklanan balonun üstünde `correct_check.png`; sonra yeni soru                                                                  |
+| Yanlış ikon        | Tıklanan balonun üstünde `wrong_x.png` (`Assets/_Art/Bolum2/UI/`)                                                               |
+| Ses                | Üz ses çalmaz. Yalnızca null-safe çağrı bırakır; yanlış SFX ve obje klibi **Paket 3**                                          |
 | Süre               | Varsayılan **60** saniye (`kalanSure`)                                                                                         |
 | Bitiş ekranı       | Sade: tebrik + 1–3 yıldız + `Doğru: N` + **Yeniden Dene** (`TekrarOyna`) + Ana Menü — harf rapor listesi **yok**               |
 | Tema               | Arka plan, yazı renkleri, yazı boyut/konum **Inspector’dan değiştirilebilir**; runtime hardcode ezmesin                        |
@@ -61,7 +63,8 @@ Bu dosya **sadece Mustafa Üz** için faz kapılı çalışma planıdır. Kod ya
 **Eksik / sonraki:**
 
 - Faz 4 UI polish (punto / panel) + runtime hardcode kaldırma
-- **Faz 4b:** değiştirilebilir arka plan / yazı renk-boyut-konum + bitişte Yeniden Dene
+- **Faz 4b:** değiştirilebilir arka plan / yazı renk-boyut-konum + bitişte Yeniden Dene (`Tekrar_Dene_Mavi.png`)
+- **Faz 4c:** tıklanan balonun üstünde tik (`correct_check.png`) / çarpı (`wrong_x.png`) — ses yok, null-safe çağrı
 - Play smoke test (mobil + tahta)
 - Ses clip bağlama (Paket 3/6)
 
@@ -84,10 +87,11 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
       → Faz 3 (Yönetici temel + bitiş)    [tamam]
         → Faz 4 (UI okunabilirlik + ölçek)        ← sıradaki odak
           → Faz 4b (Tema + Yeniden Dene)
-            → Faz 5 (Balon yükseliş animasyonu)
-              → Faz 6 (Paket 3 checkpoint)
-                → Faz 7 (Ortak entegrasyon + ses kancaları)
-                  → Faz 8 (Teslim → main)
+            → Faz 4c (Balon üstü tik / çarpı)
+              → Faz 5 (Balon yükseliş animasyonu)
+                → Faz 6 (Paket 3 checkpoint)
+                  → Faz 7 (Ortak entegrasyon + ses kancaları)
+                    → Faz 8 (Teslim → main)
 ```
 
 ---
@@ -302,9 +306,10 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 ## 4b.C — Yeniden Dene butonu
 
 1. Bitiş panelinde Ana Menü yanına **Yeniden Dene** Button.
-2. Public metot: `TekrarOyna()` — `oyunBitti` temizle, skoru sıfırla (`SkoruSifirla` varsa), süreyi resetle, bitiş panelini kapat, `YeniSoru()` çağır.
-3. Button OnClick → `TekrarOyna`.
-4. Play: süre bitir → Yeniden Dene → oyun yeniden başlar.
+2. Buton görseli: `Assets/_Art/Bolum2/UI/Tekrar_Dene_Mavi.png` (yedek: `Tekrar_Dene_Turuncu.png`).
+3. Public metot: `TekrarOyna()` — `oyunBitti` temizle, skoru sıfırla (`SkoruSifirla` varsa), süreyi resetle, bitiş panelini kapat, `YeniSoru()` çağır.
+4. Button OnClick → `TekrarOyna`.
+5. Play: süre bitir → Yeniden Dene → oyun yeniden başlar.
 
 ## Tamamlandı kontrol listesi
 
@@ -315,7 +320,41 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 - [ ] Play: Yeniden Dene akışı çalışıyor
 - [ ] Commit + push yapıldı
 
-**Çıkış:** Tema + yeniden dene hazır. → Faz 5
+**Çıkış:** Tema + yeniden dene hazır. → Faz 4c
+
+---
+
+
+
+# Faz 4c — Balon üstü tik / çarpı
+
+**Amaç:** Doğru ve yanlış ikon tıklanan balonun üstünde görünsün. Ses çalma bu fazda yok.
+
+**Dosyalar:** `HarfSecmeYoneticisi.cs` (`DogruCevapSureci` / `YanlisCevapSureci`), `SecenekBalonu.cs`
+
+Şu an geri bildirim ekran ortasındaki `GeriBildirimYoneticisi` panelidir. Bu fazda ikon, tıklanan `SecenekBalonu` üzerine gelir.
+
+## 4c.A — Görseller
+
+1. Yanlış balon: `Assets/_Art/Bolum2/UI/wrong_x.png`
+2. Doğru balon: `Assets/_Art/Bolum2/UI/correct_check.png`
+3. İkon kısa süre görünüp gizlenir. Yanlışta aynı soru kalır; doğruda yeni soru (mevcut akış).
+
+## 4c.B — Ses (yalnızca kanca)
+
+1. `geriBildirim` null değilse `YanlisGoster()` / doğru tarafta obje sesi için Paket 3 API’sine null-safe çağrı bırak.
+2. Clip üretme, `PlayOneShot` gövdesi yazma, `SesYoneticisi` doldurma. Bunlar Mustafa Yiğit (Paket 3).
+3. Clip yokken Console’da kırmızı hata olmasın.
+
+## Tamamlandı kontrol listesi
+
+- [ ] Yanlış tıklamada çarpı, tıklanan balonun üstünde
+- [ ] Doğru tıklamada tik, tıklanan balonun üstünde
+- [ ] Ses dosyası bu fazda bağlanmadı; çağrı null-safe
+- [ ] Play: yanlışta soru aynı kalıyor, doğruda yeni soru geliyor
+- [ ] Commit + push yapıldı
+
+**Çıkış:** Tik / çarpı balonun üstünde. → Faz 5
 
 ---
 
@@ -529,6 +568,7 @@ Paket 6’dan beklenenler:
 | -------------------------------------------------------------------- | --------------------------------- |
 | `HarfObjeVerisi` / `SoruSecici` / `SkorYoneticisi` script gövdesi    | Paket 3                           |
 | AI ile soru/obje ses dosyası üretimi + `SesYoneticisi` çalma mantığı | Paket 3                           |
+| Yanlış cevap SFX ve doğru objenin klibini çalma (`_Audio/Objeler/`)  | Paket 3 (Mustafa Yiğit)           |
 | `GeriBildirimYoneticisi` partikül/ses component gövdesi              | Paket 3                           |
 | Proje genel font atlas / tüm sahnelerde font unify                   | Paket 6                           |
 | Menü ↔ oyun `SahneGecisi` buton ağı finali                           | Paket 6                           |

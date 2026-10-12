@@ -29,8 +29,10 @@ Bu dosya **sadece Mustafa Yiğit Avan** için faz kapılı çalışma planıdır
 | Buton SFX | Tek tıklama sesi |
 | Müzik | Karakter (hayvan) değişince müzik değişir; oyun sahnelerinde müzik sürer (DDOL) |
 | MO2 harf | Soru çıkar çıkmaz harf sesi **bir kez** |
-| Doğru/yanlış | Her iki mini oyunda başarı / yanlış SFX |
-| Kelime | Doğruda başarı SFX + kelime sesi bir kez (örn. “EEE-Elma”) |
+| Yanlış SFX | Her iki mini oyunda yanlış cevap sesi (`yanlisSes`) |
+| Doğru obje sesi | Doğruda tıklanan / bırakılan objenin klibi: `Assets/_Audio/Objeler/<Harf>/<ad>.wav` |
+| Tik / çarpı görseli | Mustafa Üz koyar (`correct_check.png` / `wrong_x.png`). Bu pakette sprite konumu yok |
+| SesliHarfler | Yalnızca harf adı (Faz 4). Klasör şu an boş; obje klipleri burada değil |
 | Partikül | Tik arkasında patlama; **1.5 saniye** |
 | Final clip bağlama | Paket 6 ile koordineli |
 
@@ -60,8 +62,8 @@ Faz −1 (Kapı: main + clip’ler)          ← beklemede
       → Faz 2 (Buton tıklama SFX)
         → Faz 3 (Karakter değişince müzik)
           → Faz 4 (MO2 harf seslendirme)
-            → Faz 5 (Doğru/yanlış SFX her iki oyun)
-              → Faz 6 (Kelime seslendirme)
+            → Faz 5 (Yanlış SFX her iki oyun)
+              → Faz 6 (Doğru obje klibi)
                 → Faz 7 (Müzik sürekliliği)
                   → Faz 8 (Partikül 1.5 sn)
                     → Faz 9 (Teslim → main)
@@ -79,7 +81,7 @@ Faz −1 (Kapı: main + clip’ler)          ← beklemede
 - [ ] `enes/level1` `main`’e merge edildi
 - [ ] `mustafauz/level2` `main`’e merge edildi
 - [ ] Abdullah harf ses clip’lerini verdi (`_Audio/SesliHarfler/` veya kararlaştırılan yol)
-- [ ] Abdullah kelime ses clip’lerini verdi (doğru cevap seslendirmesi)
+- [ ] Abdullah kelime ses clip’lerini verdi (`Assets/_Audio/Objeler/` — doğru obje sesi)
 - [ ] `mustafayigit/efektler` branch’i güncel `main`’den çekildi / rebase edildi
 - [ ] Kapı notu bu dosyaya yazıldı (tarih)
 
@@ -163,6 +165,8 @@ Faz −1 (Kapı: main + clip’ler)          ← beklemede
 
 **Amaç:** Soru çıkar çıkmaz istenen harf sesi **bir kez**.
 
+Harf klipleri `Assets/_Audio/SesliHarfler/` altındadır. Bu klasör şu an boş. Obje sesleri burada aranmaz; onlar `Assets/_Audio/Objeler/` (Faz 6).
+
 ## Entegrasyon noktası
 
 - `HarfSecmeYoneticisi.YeniSoru()` sonrası null-safe çağrı.
@@ -177,37 +181,45 @@ Faz −1 (Kapı: main + clip’ler)          ← beklemede
 
 ---
 
-# Faz 5 — Doğru / yanlış SFX (Mini Oyun 1 + 2)
+# Faz 5 — Yanlış cevap SFX (Mini Oyun 1 + 2)
 
-**Amaç:** Doğruda başarı, yanlışta yanlış sesi.
+**Amaç:** Yanlış cevapta yanlış sesi. Tik ve çarpı görsellerini bu faz koymaz; onları Mustafa Üz yerleştirir.
 
 ## Entegrasyon
 
-- `GeriBildirimYoneticisi.DogruGoster` / `YanlisGoster` clip alanları
-- Mini Oyun 1 `ObjeBirakildi` / Mini Oyun 2 doğru-yanlış süreçleri zaten çağırıyorsa clip doldur; yoksa bağla
+- `GeriBildirimYoneticisi.yanlisSes` + `YanlisGoster`
+- `dogruSes` alanı durur; doğru cevabın sesi Faz 6’daki obje klibidir
+- Mini Oyun 1 `ObjeBirakildi` ve Mini Oyun 2 yanlış süreci null-safe bağlanır
 
 ## Tamamlandı kontrol listesi
 
-- [ ] `dogruSes` / `yanlisSes` alanları dolu veya API hazır
-- [ ] Her iki oyunda tetikleniyor
+- [ ] `yanlisSes` API hazır; yanlışta çalıyor
+- [ ] `dogruSes` alanı duruyor (obje klibi Faz 6)
+- [ ] Her iki oyunda yanlış tetikleniyor
+- [ ] `correct_check.png` / `wrong_x.png` konumuna dokunulmadı
 - [ ] Commit + push yapıldı
 
 **Çıkış:** → Faz 6
 
 ---
 
-# Faz 6 — Doğru kelime seslendirmesi
+# Faz 6 — Doğru obje sesi
 
-**Amaç:** Doğru cevapta başarı SFX + kelime sesi bir kez (örn. elma → “EEE-Elma”).
+**Amaç:** Doğru cevapta tıklanan veya bırakılan objenin kendi klibi bir kez çalar.
+
+Klip yolu: `Assets/_Audio/Objeler/<Harf>/<ad>.wav` (ör. `Objeler/E/elma.wav`). `SesliHarfler` kullanılmaz.
 
 ## Not
 
-- Gerekirse `HarfObjeVerisi` veya obje verisine `AudioClip` alanı ekle (Türkçe public isim; Plan Mode).
+- Eşleme sprite / obje adına göre. Gerekirse `HarfObjeVerisi` veya `SesYoneticisi` üzerinde Türkçe public API (Plan Mode).
+- Mini Oyun 2: doğru balon. Mini Oyun 1: doğru bırakılan obje.
+- Görsel tik Mustafa Üz’ün işi.
 
 ## Tamamlandı kontrol listesi
 
-- [ ] Kelime clip eşlemesi var
-- [ ] Doğruda bir kez çalıyor (başarı sesi ile birlikte veya hemen sonra)
+- [ ] Obje klibi `Assets/_Audio/Objeler/` yolundan eşleniyor
+- [ ] Doğruda bir kez çalıyor
+- [ ] `SesliHarfler` obje sesi için kullanılmıyor
 - [ ] Commit + push yapıldı
 
 **Çıkış:** → Faz 7
@@ -256,8 +268,9 @@ Faz −1 (Kapı: main + clip’ler)          ← beklemede
 ```
 Paket 3 efektler (Mustafa Yiğit) teslim
 - Branch: mustafayigit/efektler → main PR
-- SesYoneticisi: müzik + SFX + harf/kelime API
-- GeriBildirim: doğru/yanlış ses + partikül 1.5 sn
+- SesYoneticisi: müzik + yanlış SFX + harf API + obje klibi (`_Audio/Objeler/`)
+- GeriBildirim: yanlış ses + partikül 1.5 sn
+- Tik/çarpı görseli: Mustafa Üz (`correct_check.png` / `wrong_x.png`)
 - Clip bağlama final kontrolü: Paket 6 (Süleyman)
 ```
 
@@ -280,6 +293,6 @@ Paket 3 efektler (Mustafa Yiğit) teslim
 | -- | --- |
 | Branch | `mustafayigit/efektler` |
 | Ortak scriptler | `Assets/_Scripts/Ortak/` |
-| Audio | `Assets/_Audio/{Muzik,SFX,SesliHarfler}/` |
+| Audio | `Assets/_Audio/{Muzik,SFX,SesliHarfler,Objeler}/` |
 | Plan | `MUSTAFA_YIGIT_EFEKTLER.md` |
 | Kurallar | `AGENTS.md` |

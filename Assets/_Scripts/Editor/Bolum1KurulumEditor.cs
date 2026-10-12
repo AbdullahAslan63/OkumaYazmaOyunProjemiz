@@ -602,8 +602,8 @@ public static class Bolum1KurulumEditor
         baslik.color = Color.white;
 
         // Geri bildirim görselleri
-        GameObject dogruFb = FeedbackImage(canvasGo.transform, "DogruGeriBildirim", "Assets/_Art/Bolum2/UI/Dogru_Onay.png");
-        GameObject yanlisFb = FeedbackImage(canvasGo.transform, "YanlisGeriBildirim", "Assets/_Art/Bolum2/UI/Tekrar_Dene_Mesaj.png");
+        GameObject dogruFb = FeedbackImage(canvasGo.transform, "DogruGeriBildirim", "Assets/_Art/Bolum2/UI/correct_check.png");
+        GameObject yanlisFb = FeedbackImage(canvasGo.transform, "YanlisGeriBildirim", "Assets/_Art/Bolum2/UI/wrong_x.png");
         dogruFb.SetActive(false);
         yanlisFb.SetActive(false);
         geri.dogruGorsel = dogruFb;

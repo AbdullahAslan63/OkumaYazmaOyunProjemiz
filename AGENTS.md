@@ -194,7 +194,9 @@ Eski planda geçen `SepetHareketi.cs` (balonu hareket ettirme) **geçerli değil
 - Ekranda büyük **soru harfi** gösterilir; oyuncu 4 seçenekten doğru objeyi **tıklar**.
 - Her tur: **1 doğru + 3 çeldirici**, karıştırılmış 4 slot.
 - Yanlışta soru değişmez; doğruda yeni soru.
-- Süre varsayılan **60** sn; bitiş ekranı **sade** (tebrik + yıldız + doğru sayısı + **Yeniden Dene** + Ana Menü) — uzun harf raporu yok.
+- Yanlış balonun üstünde `wrong_x.png`, doğru balonun üstünde `correct_check.png` (`Assets/_Art/Bolum2/UI/`). Görseli **Paket 5** koyar.
+- Yanlış cevap sesi ve tıklanan objenin klibi (`Assets/_Audio/Objeler/`) **Paket 3**. Paket 5 yalnızca null-safe çağrı bırakır.
+- Süre varsayılan **60** sn; bitiş ekranı **sade** (tebrik + yıldız + doğru sayısı + **Yeniden Dene** + Ana Menü) — uzun harf raporu yok. Yeniden Dene butonu **Paket 5** (`Tekrar_Dene_Mavi.png`).
 - Seçenek balonları tur başında **aşağıdan yukarı** yükselerek gelir (hafif rastgele hız farkı); birden belirmez.
 - Soru harfi ve üst UI, meşgul arka plan üzerinde **okunaklı** ve **büyük** olmalı (mobil + akıllı tahta).
 - Arka plan sprite’ı, yazı renkleri / boyutları / konumları **Inspector’dan değiştirilebilir** olmalı (runtime hardcode ezmesin).
