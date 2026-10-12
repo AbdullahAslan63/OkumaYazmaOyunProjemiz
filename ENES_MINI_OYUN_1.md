@@ -2,18 +2,22 @@
 
 Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod yazmadan önce proje kökündeki `AGENTS.md` dosyasını okuyun. Genel görev özeti: `DETAYLI GÖREV DAĞILIMI VE KILAVUZ.md` → Paket 4.
 
+**Branch:** `enes/level1`  
+**Geçersiz:** `enes/minigame1` — kullanma; silindi / taşındı.
+
 ---
 
 ## Katı kurallar
 
 1. Bir fazın **Tamamlandı kontrol listesi** tamamen işaretlenmeden sonraki faza geçme.
 2. Kod üretildikten sonra o fazın **Unity Editor** bölümünü bitirmeden fazı kapatma.
-3. Paket 3 (Mustafa Yiğit Avan) bitmeden **Faz 4’e** (`SepetOyunYoneticisi`) geçme.
+3. Paket 3 çekirdek API’leri (`SoruSecici` / `SkorYoneticisi` / `GeriBildirimYoneticisi`) olmadan **Faz 4’e** (`SepetOyunYoneticisi`) geçme. Ses/partikül finali Yiğit’in `mustafayigit/efektler` kapısından sonra gelebilir; yöneticiyi skor/geri bildirim ile yazabilirsin.
 4. `SepetHareketi.cs` yazma — iptal edildi; yerine `ObjeSurukleme.cs`.
 5. Bu sahnede avatar gösterme (avatar entegrasyonu yok).
 6. Cursor’a bir seferde tek script ver; yönetici için önce Plan Mode.
 7. Checklist’i çocuğun tek başına doldurmasını bekleme — `AGENTS.md` → **İlerleme takibi**: sık durum bildir, olgu sor, onaylara göre bu dosyadaki `[ ]` kutularını agent günceller.
 8. “Ne durumdayım?” sorusuna `AGENTS.md` → **yönlendirici cevap** şablonuyla yanıt ver; karar aldırma, plandaki sıradaki **tek işi** yaptır.
+9. Her faz çıkışında agent **commit + push** hatırlatır (`AGENTS.md` → Commit + push). Branch: `enes/level1`.
 
 ---
 
@@ -24,14 +28,29 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 
 | Konu           | Karar                                                    |
 | -------------- | -------------------------------------------------------- |
+| Branch         | `enes/level1`                                            |
 | Mekanik        | Balon sabit; altta 4 pozisyon; objeler balona sürüklenir |
 | Scriptler      | `ObjeSurukleme.cs` + `SepetOyunYoneticisi.cs`            |
 | Giriş          | Fare + touch/parmak                                      |
 | Yanlış bırakma | Geri bildirim + obje başlangıç pozisyonuna döner         |
 | Süre           | Varsayılan **60** saniye (`kalanSure`)                   |
 | Doğru puan     | Varsayılan **+10** (`dogruPuan`)                         |
-| Paket 3        | Bitmeden oyun yöneticisi yazılmaz                        |
+| Sahne yolu     | Güncel: `Assets/Scenes/SepetOyunu.unity` (eski `_Scenes` notu geçersiz) |
+| Paket 3        | Skor/soru/geri bildirim olmadan yönetici yazılmaz        |
 
+
+---
+
+
+
+## Mevcut durum özeti (2026-09)
+
+- **Faz 0–1:** Sahne iskeleti + Balon tag + pozisyonlar + `Obje.prefab` branch’te hazır (Play görsel teyidi açık bırakılabilir).
+- **Faz 2:** `ObjeSurukleme.cs` **kod yazıldı** (log-only bırakma). Prefab’a component ekleme + Play test **sıradaki iş**.
+- **Faz 3–6:** Bekliyor. `SepetOyunYoneticisi` yok.
+- `main`’deki Paket 3 scriptlerini branch’e almak için güncel `main` ile merge/rebase önerilir (Faz 3 öncesi).
+
+**Sıradaki tek iş:** Prefab’a `ObjeSurukleme` ekle → Play’de sürükle/bırak doğrula → commit + push.
 
 ---
 
@@ -40,13 +59,13 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 ## Faz akışı
 
 ```
-Faz 0 (Hazırlık)
-  → Faz 1 (Sahne — kod yok)
-    → Faz 2 (ObjeSurukleme + touch)
+Faz 0 (Hazırlık)                         [büyük ölçüde tamam]
+  → Faz 1 (Sahne — kod yok)              [büyük ölçüde tamam]
+    → Faz 2 (ObjeSurukleme + touch)              ← sıradaki (Editor/Play)
       → Faz 3 (Paket 3 checkpoint)
         → Faz 4 (SepetOyunYoneticisi)
           → Faz 5 (Bağlama + entegrasyon)
-            → Faz 6 (Teslim)
+            → Faz 6 (Teslim → main)
 ```
 
 ---
@@ -67,17 +86,18 @@ Faz 0 (Hazırlık)
 3. Unity Project penceresinde klasörleri oluştur (yoksa):
   - `Assets/_Scripts/SepetOyunu/`
   - `Assets/_Prefabs/SepetOyunu/`
-  - `Assets/_Scenes/` (yoksa)
+  - Sahne klasörü: **`Assets/Scenes/`** (AGENTS güncel yol; `_Scenes` zorunlu değil)
 
 
 
 ## Tamamlandı kontrol listesi
 
 - [x] `AGENTS.md` okundu
-- [ ] Asset envanteri not edildi (var / eksik)
 - [x] `Assets/_Scripts/SepetOyunu/` var
-- [ ] `Assets/_Prefabs/SepetOyunu/` var
-- [ ] `Assets/_Scenes/` var
+- [x] `Assets/_Prefabs/SepetOyunu/` var (`enes/level1` branch)
+- [x] Sahne yolu: `Assets/Scenes/SepetOyunu.unity` (branch’te)
+- [ ] Asset envanteri bu dosyaya kısaca not edildi (var / eksik)
+- [ ] Commit + push yapıldı (`enes/level1`)
 
 **Çıkış:** Klasörler hazır; eksik asset’ler yazılı. → Faz 1
 
@@ -96,7 +116,7 @@ Faz 0 (Hazırlık)
 ### 1.1 Yeni sahne
 
 1. Menü: **File > New Scene** (2D şablon varsa onu seç).
-2. **File > Save As…** → yol: `Assets/_Scenes/SepetOyunu.unity`
+2. **File > Save As…** → yol: `Assets/Scenes/SepetOyunu.unity` (güncel AGENTS yolu)
 3. Hierarchy’de **Main Camera** seçili olsun; Projection **Orthographic** olsun.
 
 
@@ -172,15 +192,16 @@ Faz 0 (Hazırlık)
 
 ## Tamamlandı kontrol listesi
 
-- [x] `Assets/_Scenes/SepetOyunu.unity` kayıtlı
+- [x] `Assets/Scenes/SepetOyunu.unity` kayıtlı (`enes/level1`)
 - [x] Arkaplan `Order in Layer = -10`
-- [ ] `Balon` üzerinde Box Collider 2D + **Is Trigger**
-- [ ] Tag `Balon` atanmış
-- [ ] Child `HarfRozeti` (TMP) var
-- [ ] Prefab `Assets/_Prefabs/SepetOyunu/Obje.prefab` var
-- [ ] Prefab’da Box Collider 2D **trigger değil**
-- [ ] `ObjePozisyon1`…`4` altta yerleştirildi
-- [ ] Play’de görsel kontrol yapıldı
+- [x] `Balon` üzerinde Box Collider 2D + **Is Trigger** (branch sahnesi)
+- [x] Tag `Balon` atanmış
+- [x] Child `HarfRozeti` (TMP) var
+- [x] Prefab `Assets/_Prefabs/SepetOyunu/Obje.prefab` var
+- [x] Prefab’da Box Collider 2D **trigger değil**
+- [x] `ObjePozisyon1`…`4` altta yerleştirildi
+- [ ] Play’de görsel kontrol yapıldı (çocuk teyidi)
+- [ ] Commit + push yapıldı
 
 **Çıkış:** Sahne iskeleti hazır. → Faz 2
 
@@ -255,12 +276,13 @@ Faz 4’te bu satırı `SepetOyunYoneticisi.Instance.ObjeBirakildi(this);` ile d
 
 ## Tamamlandı kontrol listesi
 
-- [ ] `ObjeSurukleme.cs` compile oluyor
+- [x] `ObjeSurukleme.cs` yazıldı / compile oluyor (`enes/level1`)
+- [x] Touch veya mousePosition yolu kodda mevcut
 - [ ] Prefab’a script ekli; public alanlar dolu
 - [ ] Play: sürükleme çalışıyor
 - [ ] Play: uzak bırakınca geri dönüyor
 - [ ] Play: balona yakın bırakınca Console log geliyor
-- [ ] Touch veya en azından mousePosition yolu kodda mevcut
+- [ ] Commit + push yapıldı
 
 **Çıkış:** Sürükle-bırak tek başına doğrulandı. → Faz 3
 
@@ -304,6 +326,10 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen sadece checklist’i doldurursun; eksikse 
 
 - [ ] Yukarıdaki tüm maddeler işaretli **veya** Yiğit ile “API kilitlendi, asset’ler yakında” yazılı mutabakat var ve sen en azından boş `HarfObjeVerisi` + çalışan `SoruSecici` iskeletine sahipsin
 - [ ] Eksik kalanlar bu dosyaya not edildi
+- [ ] `enes/level1` güncel `main` ile merge/rebase edildi (Paket 3 dosyaları geldi)
+- [ ] Commit + push yapıldı
+
+**Not (2026-09):** `main` üzerinde `HarfObjeVerisi` / `SoruSecici` / `SkorYoneticisi` / `GeriBildirimYoneticisi` mevcut. Branch’e çekince 3.1–3.2 büyük ölçüde yeşile dönebilir — yine de Inspector’da asset listesini kontrol et.
 
 **Çıkış şartı:** Checklist yeşil olmadan Faz 4’e geçme. → Faz 4
 
@@ -388,6 +414,7 @@ Sadece compile kontrolü yeterli olabilir; tam bağlama **Faz 5**. En azından:
 - [ ] `kalanSure` varsayılan 60, `dogruPuan` 10
 - [ ] `ObjeSurukleme` yöneticiyi çağıracak şekilde güncellendi
 - [ ] Avatar referansı yok
+- [ ] Commit + push yapıldı
 
 **Çıkış:** Kod hazır. → Faz 5
 
@@ -472,6 +499,7 @@ Play’e bas ve sırayla dene:
 - [ ] Play test checklist’inin tamamı geçti
 - [ ] Sahne kayıtlı
 - [ ] Build Settings’te `SepetOyunu` var
+- [ ] Commit + push yapıldı
 
 **Çıkış:** Mini Oyun 1 oynanabilir. → Faz 6
 
@@ -487,7 +515,8 @@ Play’e bas ve sırayla dene:
 
 ```
 Mini Oyun 1 (Enes) teslim
-- Sahne: Assets/_Scenes/SepetOyunu.unity
+- Branch: enes/level1 → main PR
+- Sahne: Assets/Scenes/SepetOyunu.unity
 - Scriptler: ObjeSurukleme.cs, SepetOyunYoneticisi.cs
 - Prefab: Assets/_Prefabs/SepetOyunu/Obje.prefab
 - Süre varsayılan 60 sn, doğru +10
@@ -507,6 +536,7 @@ Paket 6’dan beklenenler:
 
 - [ ] Faz 0–5 listeleri bu dosyada işaretli
 - [ ] Teslim notu Süleyman’a iletildi (chat / dosya / sözlü)
+- [ ] Commit + push + `main` PR açıldı
 - [ ] Bilinen bug’lar varsa bu bölüme yazıldı:
 
 **Bilinen sorunlar:**
@@ -525,7 +555,8 @@ Paket 6’dan beklenenler:
 | Sürükleme      | `Assets/_Scripts/SepetOyunu/ObjeSurukleme.cs`       |
 | Yönetici       | `Assets/_Scripts/SepetOyunu/SepetOyunYoneticisi.cs` |
 | Prefab         | `Assets/_Prefabs/SepetOyunu/Obje.prefab`            |
-| Sahne          | `Assets/_Scenes/SepetOyunu.unity`                   |
+| Sahne          | `Assets/Scenes/SepetOyunu.unity`                    |
+| Branch         | `enes/level1`                                       |
 | Ekip kuralları | `AGENTS.md`                                         |
 
 
