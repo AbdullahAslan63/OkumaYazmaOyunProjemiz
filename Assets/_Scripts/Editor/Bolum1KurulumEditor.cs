@@ -71,6 +71,33 @@ public static class Bolum1KurulumEditor
         };
     }
 
+    /// <summary>
+    /// Sahnedeki eski ok/renk barını silip Roblox tipi dolap UI'sini kaydeder.
+    /// Hayvan ve aksesuar listesine dokunmaz.
+    /// </summary>
+    [MenuItem("Oyun/Avatar Dolap Ekranini Kur")]
+    public static void AvatarDolapEkraniniKur()
+    {
+        if (!File.Exists(AvatarSahne))
+        {
+            Debug.LogError("Avatar sahnesi yok: " + AvatarSahne);
+            return;
+        }
+
+        Scene scene = EditorSceneManager.OpenScene(AvatarSahne, OpenSceneMode.Single);
+        AvatarSecimEkrani secim = Object.FindAnyObjectByType<AvatarSecimEkrani>();
+        if (secim == null)
+        {
+            Debug.LogError("AvatarCanvas üzerinde AvatarSecimEkrani yok.");
+            return;
+        }
+
+        AvatarSahneKurucu.MevcutCanvasaDolapUygula(secim);
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene, AvatarSahne);
+        Debug.Log("Avatar dolap UI sahneye kaydedildi. Karakter/aksesuar ofsetleri aynı kaldı.");
+    }
+
     private static void KlasorleriGarantiEt()
     {
         string[] klasorler =
