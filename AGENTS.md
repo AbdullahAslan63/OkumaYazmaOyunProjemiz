@@ -119,22 +119,20 @@ Başkasının paket klasörüne izinsiz script eklemeyin; API ihtiyacı varsa sa
 
 ```
 said/avatar  ──┐
-enes/level1  ──┼──► main  ──► mustafayigit/efektler  ──► main  ──► Paket 6 (Süleyman)
-mustafauz/level2 ─┘         ▲
-                            │
-              Abdullah harf/kelime clip’leri
+enes/level1  ──┼──► main  ──► Paket 6 (Süleyman)
+mustafauz/level2 ─┘
+mustafayigit/efektler ──► main   (sahneler branch’te; main merge’i beklemeden ses işi başlar)
 ```
 
 1. Said, Enes, Mustafa Üz **paralel** çalışır; bitince kendi branch’ini `main`’e PR/merge eder.
-2. Mustafa Yiğit **ancak** üçü `main`’deyken **ve** Abdullah harf + kelime ses clip’lerini verdikten sonra `mustafayigit/efektler` üzerinde çalışır. Kapı detayı: `MUSTAFA_YIGIT_EFEKTLER.md` Faz −1.
+2. Mustafa Yiğit ses ve partikül işine `mustafayigit/efektler` üzerinde başlar. Avatar, level ve harf seçme sahneleri bu branch’e alınmıştır; Said ve Mustafa Üz’ün sonraki `main` push’u beklenmez. Enes’in SepetOyunu ses kancaları oyun bitene kadar planda ertelenir. Ayrıntı: `MUSTAFA_YIGIT_EFEKTLER.md` Faz −1.
 3. Ses/partikül **Inspector clip bağlama finali** Paket 6’da kalır.
 4. Paket 4, Paket 3’teki `SoruSecici` / `SkorYoneticisi` / `GeriBildirimYoneticisi` olmadan oyun yöneticisini tamamlamaz. Detay: `ENES_MINI_OYUN_1.md` Faz 3.
 5. Paket 5 çekirdek oynanışı Paket 3’süz ilerleyebilir; **ortak skor / soru seçici / geri bildirim / seslendirme entegrasyonu** checkpoint’ten sonra. Detay: `MUSTAFA_UZ_MINI_OYUN_2.md` Faz 6–7.
 
-Eski özet (hâlâ geçerli mantık):
-
 ```
-Paket 1 + Paket 3 çekirdek  →  Paket 4 ve 5  →  Paket 3 efektler (Yiğit)  →  Paket 6
+Paket 3 çekirdek (main’de) + sahneler (efektler branch)  →  Yiğit ses/partikül  →  main  →  Paket 6
+SepetOyunu ses kancası Enes oyunu bitince
 ```
 
 ---
