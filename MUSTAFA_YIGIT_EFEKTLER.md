@@ -38,7 +38,9 @@ Bu dosya **sadece Mustafa Yiğit Avan** için faz kapılı çalışma planıdır
 
 ---
 
-## Mevcut durum özeti (2026-09)
+## Mevcut durum özeti (2026-10-13)
+
+`mustafayigit/efektler` güncel `main` ile aynı (`0958895`). Efekt koduna hâlâ kapı (Faz −1) yeşil olmadan başlanmaz.
 
 | Script | Durum |
 | ------ | ----- |
@@ -82,7 +84,7 @@ Faz −1 (Kapı: main + clip’ler)          ← beklemede
 - [ ] `mustafauz/level2` `main`’e merge edildi
 - [ ] Abdullah harf ses clip’lerini verdi (`_Audio/SesliHarfler/` veya kararlaştırılan yol)
 - [ ] Abdullah kelime ses clip’lerini verdi (`Assets/_Audio/Objeler/` — doğru obje sesi)
-- [ ] `mustafayigit/efektler` branch’i güncel `main`’den çekildi / rebase edildi
+- [x] `mustafayigit/efektler` branch’i güncel `main`’den çekildi / rebase edildi (2026-10-13, `0958895`)
 - [ ] Kapı notu bu dosyaya yazıldı (tarih)
 
 **Çıkış şartı:** Hepsi yeşil olmadan Faz 1’e geçme.
