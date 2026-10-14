@@ -43,14 +43,15 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 
 
 
-## Mevcut durum özeti (2026-09)
+## Mevcut durum özeti (2026-10-14)
 
-- **Faz 0–1:** Sahne iskeleti + Balon tag + pozisyonlar + `Obje.prefab` branch’te hazır (Play görsel teyidi açık bırakılabilir).
-- **Faz 2:** `ObjeSurukleme.cs` **kod yazıldı** (log-only bırakma). Prefab’a component ekleme + Play test **sıradaki iş**.
-- **Faz 3–6:** Bekliyor. `SepetOyunYoneticisi` yok.
-- `main`’deki Paket 3 scriptlerini branch’e almak için güncel `main` ile merge/rebase önerilir (Faz 3 öncesi).
+- Çalışma **`main`** üzerinde. `enes/level1` geride (eski iskelet); son sepet işi `main`’de, **origin’e push edilmedi** (2 commit önde).
+- **Faz 0–2:** Sahne + `ObjeSurukleme` + `SepetDemoKurucu` var. Play: harf balonda, 4 obje altta, sürükleme ve balon bırakma düzeltildi (commit notu).
+- Prefab `Obje.prefab` ve sahnedeki `ObjePozisyon1`…`4` **yok**. Objeler, harf rozeti ve balon şekli Play’de `SepetDemoKurucu` ile kuruluyor.
+- **Faz 3:** `HarfObjeVerisi`, `SoruSecici`, `SkorYoneticisi`, `GeriBildirimYoneticisi` ve 8 harf kartı repoda var. Bu bileşenler `SepetOyunu` sahnesine henüz konmadı.
+- **Faz 4–6:** `SepetOyunYoneticisi` yok. Süre, skor ve doğru/yanlış turu yok.
 
-**Sıradaki tek iş:** Prefab’a `ObjeSurukleme` ekle → Play’de sürükle/bırak doğrula → commit + push.
+**Sıradaki tek iş:** `SepetOyunu` sahnesine `SoruSecici` + `SkorYoneticisi` + `GeriBildirimYoneticisi` koy, `tumHarfler` dizisini doldur.
 
 ---
 
@@ -59,10 +60,10 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 ## Faz akışı
 
 ```
-Faz 0 (Hazırlık)                         [büyük ölçüde tamam]
-  → Faz 1 (Sahne — kod yok)              [büyük ölçüde tamam]
-    → Faz 2 (ObjeSurukleme + touch)              ← sıradaki (Editor/Play)
-      → Faz 3 (Paket 3 checkpoint)
+Faz 0 (Hazırlık)                         [tamam, push hariç]
+  → Faz 1 (Sahne)                        [demo ile tamam, prefab/pozisyon boş]
+    → Faz 2 (ObjeSurukleme + touch)      [Play doğrulandı, push hariç]
+      → Faz 3 (Paket 3 checkpoint)               ← sıradaki (sahneye koy)
         → Faz 4 (SepetOyunYoneticisi)
           → Faz 5 (Bağlama + entegrasyon)
             → Faz 6 (Teslim → main)
@@ -93,11 +94,13 @@ Faz 0 (Hazırlık)                         [büyük ölçüde tamam]
 ## Tamamlandı kontrol listesi
 
 - [x] `AGENTS.md` okundu
-- [x] `Assets/_Scripts/SepetOyunu/` var
-- [x] `Assets/_Prefabs/SepetOyunu/` var (`enes/level1` branch)
-- [x] Sahne yolu: `Assets/Scenes/SepetOyunu.unity` (branch’te)
-- [ ] Asset envanteri bu dosyaya kısaca not edildi (var / eksik)
-- [ ] Commit + push yapıldı (`enes/level1`)
+- [x] `Assets/_Scripts/SepetOyunu/` var (`ObjeSurukleme.cs`, `SepetDemoKurucu.cs`)
+- [ ] `Assets/_Prefabs/SepetOyunu/` var (main’de yok; objeler kodla üretiliyor)
+- [x] Sahne yolu: `Assets/Scenes/SepetOyunu.unity`
+- [x] Asset envanteri bu dosyaya kısaca not edildi (var / eksik)
+- [ ] Commit + push yapıldı (`main` 2 commit önde; `enes/level1` bu işi taşımıyor)
+
+**Asset notu (2026-10-14):** Var — arkaplan `Assets/_Art/Bolum1/Arkaplan/arkaplan_adiyaman.png`, balon `Assets/_Art/Bolum1/Balon/`, obje sprite’ları `Assets/_Art/Bolum1/Objeler/` (A, E, I, İ, O, Ö, U, Ü). Eksik — `Obje.prefab`.
 
 **Çıkış:** Klasörler hazır; eksik asset’ler yazılı. → Faz 1
 
@@ -192,15 +195,15 @@ Faz 0 (Hazırlık)                         [büyük ölçüde tamam]
 
 ## Tamamlandı kontrol listesi
 
-- [x] `Assets/Scenes/SepetOyunu.unity` kayıtlı (`enes/level1`)
+- [x] `Assets/Scenes/SepetOyunu.unity` kayıtlı (`main`)
 - [x] Arkaplan `Order in Layer = -10`
-- [x] `Balon` üzerinde Box Collider 2D + **Is Trigger** (branch sahnesi)
+- [x] Balon çarpışması: sahnede kutu yok; Play’de `SepetDemoKurucu` PolygonCollider2D + **Is Trigger** ekliyor
 - [x] Tag `Balon` atanmış
-- [x] Child `HarfRozeti` (TMP) var
-- [x] Prefab `Assets/_Prefabs/SepetOyunu/Obje.prefab` var
-- [x] Prefab’da Box Collider 2D **trigger değil**
-- [x] `ObjePozisyon1`…`4` altta yerleştirildi
-- [ ] Play’de görsel kontrol yapıldı (çocuk teyidi)
+- [x] `HarfRozeti` Play’de oluşuyor (`SepetDemoKurucu`; sahnede child değil). Commit: harf balonun üzerinde
+- [ ] Prefab `Assets/_Prefabs/SepetOyunu/Obje.prefab` var
+- [x] Üretilen objede Box Collider 2D **trigger değil** (`SepetDemoKurucu.ObjeOlustur`)
+- [ ] `ObjePozisyon1`…`4` sahnede duruyor (yerine kod alt sıraya diziyor; Play’de 4 obje görüldü)
+- [x] Play’de görsel kontrol yapıldı (commit: sahne düzeni hazır, objeler altta)
 - [ ] Commit + push yapıldı
 
 **Çıkış:** Sahne iskeleti hazır. → Faz 2
@@ -276,12 +279,12 @@ Faz 4’te bu satırı `SepetOyunYoneticisi.Instance.ObjeBirakildi(this);` ile d
 
 ## Tamamlandı kontrol listesi
 
-- [x] `ObjeSurukleme.cs` yazıldı / compile oluyor (`enes/level1`)
-- [x] Touch veya mousePosition yolu kodda mevcut
-- [ ] Prefab’a script ekli; public alanlar dolu
-- [ ] Play: sürükleme çalışıyor
-- [ ] Play: uzak bırakınca geri dönüyor
-- [ ] Play: balona yakın bırakınca Console log geliyor
+- [x] `ObjeSurukleme.cs` yazıldı (`main`; fare + dokunmatik, Input System)
+- [x] Touch veya mouse yolu kodda mevcut (`GetIsaretDunyaPozisyonu`)
+- [ ] Prefab’a script ekli (prefab yok). Alanlar Play’de `SepetDemoKurucu` dolduruyor: `objeAdi`, `dogruHarf`
+- [x] Play: sürükleme çalışıyor (commit: objeler hareket ettirilebiliyor)
+- [x] Play: balon çiziminin dışına bırakınca başa dönüyor (commit: erken “bırakıldı” sayılması düzeltildi)
+- [x] Play: balonun üstüne bırakınca `Debug.Log("Balona birakildi: ...")` yolu duruyor
 - [ ] Commit + push yapıldı
 
 **Çıkış:** Sürükle-bırak tek başına doğrulandı. → Faz 3
@@ -302,17 +305,17 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen sadece checklist’i doldurursun; eksikse 
 
 ### 3.1 Veri
 
-- [ ] `HarfObjeVerisi` ScriptableObject script’i var (`Assets/_Scripts/Ortak/` veya kılavuza uygun yer)
-- [ ] `Assets/_Data/Harfler/` (veya benzeri) altında en az birkaç harf asset’i (hedef: A, E, I, İ, O, Ö, U, Ü)
-- [ ] Her asset’te `harf` + `dogruObjeler` sprite listesi dolu (test için en az 1 harfte 2+ obje)
+- [x] `HarfObjeVerisi` ScriptableObject script’i var (`Assets/_Scripts/Ortak/HarfObjeVerisi.cs`)
+- [x] `Assets/_Data/Harfler/` altında A, E, I, İ, O, Ö, U, Ü kartları var
+- [x] Her asset’te `harf` + `dogruObjeler` sprite listesi dolu (kart başına birden fazla obje)
 
 
 
 ### 3.2 Script API’leri (public isimler kılavuza uymalı)
 
-- [ ] `SoruSecici` — `HarfObjeVerisi[] tumHarfler`, `YeniHarfSec()`
-- [ ] `SkorYoneticisi` — `SkorEkle(int miktar)`, skor yazısı alanı
-- [ ] `GeriBildirimYoneticisi` — `DogruGoster()`, `YanlisGoster()`
+- [x] `SoruSecici` — `HarfObjeVerisi[] tumHarfler`, `YeniHarfSec()`
+- [x] `SkorYoneticisi` — `SkorEkle(int miktar)`, skor yazısı alanı
+- [x] `GeriBildirimYoneticisi` — `DogruGoster()`, `YanlisGoster()`
 
 
 
@@ -329,7 +332,7 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen sadece checklist’i doldurursun; eksikse 
 - [ ] `enes/level1` güncel `main` ile merge/rebase edildi (Paket 3 dosyaları geldi)
 - [ ] Commit + push yapıldı
 
-**Not (2026-09):** `main` üzerinde `HarfObjeVerisi` / `SoruSecici` / `SkorYoneticisi` / `GeriBildirimYoneticisi` mevcut. Branch’e çekince 3.1–3.2 büyük ölçüde yeşile dönebilir — yine de Inspector’da asset listesini kontrol et.
+**Not (2026-10-14):** 3.1 ve 3.2 repoda yeşil. Eksik: bu üç bileşen `SepetOyunu` sahnesinde yok; `SepetDemoKurucu` harf kartlarını kendisi yüklüyor, skor ve geri bildirim çağırmıyor. `enes/level1` güncel `main` ile birleşik değil.
 
 **Çıkış şartı:** Checklist yeşil olmadan Faz 4’e geçme. → Faz 4
 
