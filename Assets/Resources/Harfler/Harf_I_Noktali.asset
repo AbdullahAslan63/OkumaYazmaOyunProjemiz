@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c748740c869462db75dd9d8f6cb474f, type: 3}
+  m_Name: Harf_I_Noktali
+  m_EditorClassIdentifier: 
+  harf: 304
+  dogruObjeler:
+  - {fileID: -6702952856030507407, guid: bb01546d10a814e5598b2e34cfda733a, type: 3}
+  - {fileID: -5303637218336142030, guid: d9eed24d27adf49d59bfe8031a70afa6, type: 3}
+  - {fileID: 2695879796904887792, guid: f3d7459fad4d0455a8aacebf48aac305, type: 3}
+  - {fileID: 6249710394759629945, guid: 7c1e88da8152d422b9fbd73e6bb09b37, type: 3}
+  - {fileID: 3791701007687177788, guid: b2d3b0e2b951c42eca5800035d5d1d33, type: 3}
