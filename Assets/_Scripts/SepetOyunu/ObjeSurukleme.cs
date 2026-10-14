@@ -13,8 +13,8 @@ public class ObjeSurukleme : MonoBehaviour
     // Bu objenin baş harfi
     public char dogruHarf;
 
-    // Balon kenarının dışında kabul edilen ek mesafe
-    public float birakmaMesafesi = 1.5f;
+    // Yakın çevre kabul edilmez; merkez balon çiziminin içinde olmalı
+    public float birakmaMesafesi = 0f;
 
     // Tur başındaki dünya konumu
     private Vector3 baslangicPozisyonu;
@@ -142,27 +142,43 @@ public class ObjeSurukleme : MonoBehaviour
             return;
         }
 
-        // Varsayılan mesafe: obje merkezi ile balon merkezi
-        float mesafe = Vector3.Distance(transform.position, balon.transform.position);
-        // Balonun collider'ı varsa kenara olan mesafeyi kullan
-        Collider2D kutu = balon.GetComponent<Collider2D>();
-        if (kutu != null)
+        // Açık çarpışma alanını al
+        Collider2D alan = null;
+        // Balondaki tüm collider'lar
+        Collider2D[] parcalar = balon.GetComponents<Collider2D>();
+        // İlk açık olanı kullan
+        for (int i = 0; i < parcalar.Length; i++)
         {
-            // Collider üzerindeki en yakın nokta (içerdeyse mesafe 0)
-            Vector2 yakin = kutu.ClosestPoint(transform.position);
-            // Obje merkezi ile o nokta arası
-            mesafe = Vector2.Distance(transform.position, yakin);
+            // Kapalı kutuysa atla
+            if (parcalar[i] != null && parcalar[i].enabled)
+            {
+                // Balon şekli
+                alan = parcalar[i];
+                // Bulundu
+                break;
+            }
         }
 
-        // Kabul mesafesi içindeyse balona bırakıldı say
-        if (mesafe <= birakmaMesafesi)
+        // Obje merkezi balon çiziminin içinde mi
+        bool ustunde = alan != null && alan.OverlapPoint(transform.position);
+        // İçerde değilse, çok küçük bir pay varsa kenara bak
+        if (!ustunde && alan != null && birakmaMesafesi > 0f)
+        {
+            // Şekle en yakın nokta
+            Vector2 yakin = alan.ClosestPoint(transform.position);
+            // Pay kadar dışarısı da üstünde sayılsın
+            ustunde = Vector2.Distance(transform.position, yakin) <= birakmaMesafesi;
+        }
+
+        // Merkez balonun üstündeyse bırakıldı say
+        if (ustunde)
         {
             // Demo: yönetici yok, sadece log
             Debug.Log("Balona birakildi: " + objeAdi);
         }
         else
         {
-            // Boşluğa bırakıldıysa eski konuma dön
+            // Yakın ama üstünde değilse yuvasına dön
             transform.position = baslangicPozisyonu;
         }
     }

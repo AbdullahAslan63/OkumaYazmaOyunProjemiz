@@ -201,25 +201,8 @@ public class SepetDemoKurucu : MonoBehaviour
 
         // Objelerin altında, arkaplanın üstünde
         cizici.sortingOrder = 1;
-
-        // Collider'ı al veya ekle
-        BoxCollider2D kutu = balon.GetComponent<BoxCollider2D>();
-        if (kutu == null)
-        {
-            // Kutu collider ekle
-            kutu = balon.AddComponent<BoxCollider2D>();
-        }
-
-        // Bırakma alanı çarpışarak itmesin
-        kutu.isTrigger = true;
-        // Sprite varsa kutuyu görsele oturt
-        if (cizici.sprite != null)
-        {
-            // Yerel genişlik ve yükseklik
-            kutu.size = cizici.sprite.bounds.size;
-            // Pivot kaymasını dengele
-            kutu.offset = cizici.sprite.bounds.center;
-        }
+        // Bırakma alanı görselin kendisi olsun, boş dikdörtgen olmasın
+        BalonSeklineOturt(balon, cizici.sprite);
 
         // Sprite yoksa konumlama yapma
         if (cizici.sprite == null)
@@ -280,6 +263,66 @@ public class SepetDemoKurucu : MonoBehaviour
 
         // Sahnede balon yok
         return null;
+    }
+
+    // Balonun çarpışmasını sprite kenarına oturtur; boş çevre kabul edilmez
+    private void BalonSeklineOturt(GameObject balon, Sprite sprite)
+    {
+        // Eski geniş kutu varsa kapat
+        BoxCollider2D kutu = balon.GetComponent<BoxCollider2D>();
+        if (kutu != null)
+        {
+            // Bu karede de çarpmasın
+            kutu.enabled = false;
+            // Kaldır
+            Destroy(kutu);
+        }
+
+        // Şekil collider'ı
+        PolygonCollider2D cokgen = balon.GetComponent<PolygonCollider2D>();
+        // Yoksa ekle
+        if (cokgen == null)
+        {
+            // Balon çizimine göre çokgen
+            cokgen = balon.AddComponent<PolygonCollider2D>();
+        }
+
+        // Objeyi itmesin
+        cokgen.isTrigger = true;
+        // Sprite yoksa şekil kurulamaz
+        if (sprite == null)
+        {
+            // Çık
+            return;
+        }
+
+        // Alfa kenarından üretilmiş parça sayısı
+        int adet = sprite.GetPhysicsShapeCount();
+        // Kenar yoksa çokgeni kapat
+        if (adet <= 0)
+        {
+            // Boş alan kabul etmesin
+            cokgen.enabled = false;
+            // Şekil üretilmemiş
+            Debug.LogWarning("SepetDemoKurucu: Balon sprite sekli yok.");
+            // Çık
+            return;
+        }
+
+        // Her parçayı aktar
+        cokgen.pathCount = adet;
+        // Nokta listesi
+        List<Vector2> yol = new List<Vector2>();
+        // Parçaları dolaş
+        for (int i = 0; i < adet; i++)
+        {
+            // Önceki yolu sil
+            yol.Clear();
+            // Sprite yerel noktaları
+            sprite.GetPhysicsShape(i, yol);
+            // Çokgene yaz
+            cokgen.SetPath(i, yol);
+        }
     }
 
     // İçinde sprite olan harf kartlarını yükler
