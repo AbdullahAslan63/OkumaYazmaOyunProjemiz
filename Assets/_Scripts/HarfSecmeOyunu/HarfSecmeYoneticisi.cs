@@ -78,6 +78,11 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         if (bitisPaneli != null)
             bitisPaneli.SetActive(false);
 
+        // Oyun müziği (Sesli Harfler şarkısı) — clip yoksa sessiz
+        SesYoneticisi ses = SesYoneticisi.GarantiEt();
+        if (ses != null)
+            ses.OyunMuziginiCal();
+
         SoruUiHazirla();
         SlotlariEkranaGoreAyarla();
         SureYazisiniGuncelle();
@@ -339,21 +344,25 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         if (soruBaslikYazisi != null)
             soruBaslikYazisi.text = soruBaslikMetni;
 
+        // Soru harfi sesi bir kez (clip yoksa sessiz)
+        if (SesYoneticisi.Instance != null)
+            SesYoneticisi.Instance.HarfSesiCal(aktifHarf.harf);
+
         StartCoroutine(SecenekleriYerlestir());
     }
 
-    /// <summary>Seçenek tıklanınca çağrılır.</summary>
-    public void SecenekSecildi(bool dogruMu)
+    /// <summary>Seçenek tıklanınca çağrılır; doğruysa obje sprite'ı ses için iletilir.</summary>
+    public void SecenekSecildi(bool dogruMu, Sprite secilenResim = null)
     {
         if (oyunBitti || islemYapiliyor || kalanSure <= 0f) return;
 
         if (dogruMu)
-            StartCoroutine(DogruCevapSureci());
+            StartCoroutine(DogruCevapSureci(secilenResim));
         else
             StartCoroutine(YanlisCevapSureci());
     }
 
-    /// <summary>Ana menü sahnesine döner.</summary>
+    /// <summary>Ana menü sahnesine döner; menü müziği sceneLoaded ile gelir.</summary>
     public void AnaMenuyeDon()
     {
         if (string.IsNullOrEmpty(anaMenuSahneAdi)) return;
@@ -487,13 +496,17 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         return sonuc;
     }
 
-    IEnumerator DogruCevapSureci()
+    IEnumerator DogruCevapSureci(Sprite secilenResim)
     {
         islemYapiliyor = true;
         dogruSayisi++;
 
         if (skorYoneticisi != null)
             skorYoneticisi.DogruPuanEkle();
+
+        // Doğru obje adı sesi (eşleşme yoksa sessiz)
+        if (SesYoneticisi.Instance != null && secilenResim != null)
+            SesYoneticisi.Instance.ObjeSesiCal(secilenResim);
 
         if (geriBildirim != null)
         {

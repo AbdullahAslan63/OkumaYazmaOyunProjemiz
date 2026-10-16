@@ -152,7 +152,9 @@ public class SecenekBalonu : MonoBehaviour
             return;
 
         bool dogruMu = dogruHarf == aktifSoruHarfi;
-        HarfSecmeYoneticisi.Instance.SecenekSecildi(dogruMu);
+        // Doğruysa obje adı sesi için sprite iletilir
+        Sprite resim = objeResmi != null ? objeResmi.sprite : null;
+        HarfSecmeYoneticisi.Instance.SecenekSecildi(dogruMu, resim);
     }
 
     public void TiklamayiAyarla(bool acik)

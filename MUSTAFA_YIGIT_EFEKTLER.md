@@ -27,7 +27,7 @@ Bu dosya **sadece Mustafa Yiğit Avan** için faz kapılı çalışma planıdır
 | Branch | `mustafayigit/efektler` |
 | Kapı (2026-10-13) | Sahneler bu branch’te. Said / Mustafa Üz `main` push’u beklenmez. SepetOyunu sesi ertelenir |
 | Buton SFX | Tek clip + `TiklamaSesiCal()`. Karakter, level ve ana menü aynı bileşeni kullanır |
-| Müzik | Karakter (hayvan) değişince müzik değişir; oyun sahnelerinde müzik sürer (DDOL) |
+| Müzik | Menüde hayvan değişince `hayvanMuzikleri` swap; oyun sahnelerinde `oyunMuzigi` (Sesli Harfler şarkısı). DDOL |
 | MO2 harf | Soru çıkar çıkmaz harf sesi **bir kez** |
 | Yanlış SFX | Şimdilik Mini Oyun 2 (`yanlisSes`). SepetOyunu sonra |
 | Doğru obje sesi | Şimdilik Mini Oyun 2’de doğru balon. Klip: `Assets/_Audio/Objeler/<Harf>/<ad>.wav`. Sepet bırakması sonra |
@@ -38,39 +38,31 @@ Bu dosya **sadece Mustafa Yiğit Avan** için faz kapılı çalışma planıdır
 
 ---
 
-## Mevcut durum özeti (2026-10-13)
+## Mevcut durum özeti (2026-10-16)
 
-`mustafayigit/efektler` üzerinde avatar, level (`LevelEkranı`) ve harf seçme sahneleri var. Said ve Mustafa Üz’ün sonraki sahne işleri ses API’sini değiştirmez. SepetOyunu ses kancası yazılmaz.
+Kod fazları (1–8) tamamlandı. Clip bağlama finali Paket 6 / Abdullah. SepetOyunu ses kancası yazılmaz.
 
-**Sıradaki odak:** Faz 1 — `SesYoneticisi`, ardından Faz 2’de ortak tıklama sesi.
+**Sıradaki odak:** Inspector clip bağlama + Play testi + commit/push + `main` PR (Faz 9).
 
 | Script | Durum |
 | ------ | ----- |
-| `HarfObjeVerisi` | Var (harf + sprite; kelime/harf clip alanı henüz yok / eksik) |
+| `HarfObjeVerisi` | Var |
 | `SoruSecici` | Var |
 | `SkorYoneticisi` | Var |
-| `GeriBildirimYoneticisi` | Var (ikon + isteğe bağlı ses; **partikül alanı eksik / süre 0.8**) |
-| `SesYoneticisi` | **Yok** — Faz 1 |
-| `ButonTiklamaSesi` | **Yok** — Faz 2 |
-| `_Audio/Objeler/` | Kelime klipleri duruyor |
-| `_Audio/SesliHarfler/` | Harf klipleri henüz yok (Faz 4 null-safe bekler) |
+| `GeriBildirimYoneticisi` | Var (`parlıltıEfekti`, süre 1.5; yanlış → SesYoneticisi) |
+| `SesYoneticisi` | Var — DDOL, menü/oyun müziği, SFX API, null-safe |
+| `ButonTiklamaSesi` | Var — Avatar kurucu + menü auto + Ana Menü |
+| `_Audio/Objeler/` | Kelime klipleri duruyor (Inspector `objeSesleri` doldurulmalı) |
+| `_Audio/SesliHarfler/` | Harf klipleri henüz yok (null-safe) |
+| `_Audio/Muzik/` | Hayvan + oyun şarkısı bekleniyor |
 
 ---
 
 ## Faz akışı
 
 ```
-Faz −1 (Kapı: sahneler branch’te, Sepet sesi ertelendi)  [karar yazıldı]
-  → Faz 0 (Ortak çekirdek)              [tamam — SesYoneticisi hariç]
-    → Faz 1 (SesYoneticisi)             ← sıradaki
-      → Faz 2 (Ortak tıklama SFX: karakter + level + ana menü)
-        → Faz 3 (Karakter değişince müzik)
-          → Faz 4 (MO2 harf seslendirme)
-            → Faz 5 (Yanlış SFX — yalnızca MO2)
-              → Faz 6 (Doğru obje klibi — yalnızca MO2)
-                → Faz 7 (Müzik sürekliliği: avatar, level, harf seçme)
-                  → Faz 8 (Partikül 1.5 sn)
-                    → Faz 9 (Teslim → main)
+Faz −1 … 8  [kod tamam — 2026-10-16]
+  → Faz 9 (Teslim → main)  ← sıradaki (clip + Play + PR)
 SepetOyunu ses kancaları → oyun bitince, bu akışın dışında
 ```
 
@@ -125,16 +117,17 @@ Vefa: Said ve Mustafa Üz sahneleri `mustafayigit/efektler` üzerine alındı. O
 | ---------- | --- |
 | `muzikKaynagi` | `AudioSource`, `loop = true` |
 | `efektKaynagi` | Ayrı `AudioSource`. Müzik kaynağında `PlayOneShot` kullanılmaz |
-| `hayvanMuzikleri` | `AudioClip[]` (4) |
+| `hayvanMuzikleri` | `AudioClip[]` (4) — menü |
+| `oyunMuzigi` | Sesli Harfler şarkısı — oyun sahneleri |
 | `tiklamaSesi` | Tek tıklama klibi. Sahne başına kopyalanmaz |
-| `TiklamaSesiCal()` | Null-safe. Clip veya kaynak yoksa sessiz |
-| Harf / kelime / yanlış SFX yardımcıları | Hepsi `efektKaynagi` üzerinden, null-safe |
+| `TiklamaSesiCal()` / `HayvanMuziginiCal` / `OyunMuziginiCal` | Null-safe |
+| `YanlisSesiCal` / `HarfSesiCal` / `ObjeSesiCal` | Hepsi `efektKaynagi`, null-safe |
 
 ## Tamamlandı kontrol listesi
 
-- [ ] Plan Mode (gerekirse) onaylandı
-- [ ] `SesYoneticisi.cs` compile
-- [ ] Singleton veya sahne-bağımsız yaşam (DDOL) net
+- [x] Plan Mode (gerekirse) onaylandı
+- [x] `SesYoneticisi.cs` compile
+- [x] Singleton veya sahne-bağımsız yaşam (DDOL) net
 - [ ] Commit + push yapıldı
 
 **Çıkış:** → Faz 2
@@ -156,11 +149,11 @@ Ana menü sahnesi henüz ayrı durmuyorsa API ve bileşen hazır olur; sahne gel
 
 ## Tamamlandı kontrol listesi
 
-- [ ] `tiklamaSesi` + `TiklamaSesiCal()` (clip yokken sessiz)
-- [ ] `ButonTiklamaSesi` herhangi bir `Button`’a takılınca aynı sesi çalıyor
-- [ ] Karakter ekranı butonlarında bileşen var
-- [ ] `LevelEkranı` butonlarında aynı bileşen var
-- [ ] Harf seçme ana menü butonunda aynı bileşen var
+- [x] `tiklamaSesi` + `TiklamaSesiCal()` (clip yokken sessiz)
+- [x] `ButonTiklamaSesi` herhangi bir `Button`’a takılınca aynı sesi çalıyor
+- [x] Karakter ekranı butonlarında bileşen var
+- [x] `LevelEkranı` butonlarında aynı bileşen var (sahne yüklenince auto)
+- [x] Harf seçme ana menü butonunda aynı bileşen var
 - [ ] Commit + push yapıldı
 
 **Çıkış:** → Faz 3
@@ -173,7 +166,7 @@ Ana menü sahnesi henüz ayrı durmuyorsa API ve bileşen hazır olur; sahne gel
 
 ## Tamamlandı kontrol listesi
 
-- [ ] Hayvan değişiminde müzik swap
+- [x] Hayvan değişiminde müzik swap
 - [ ] Play’de 4 hayvanda müzik değişimi duyuluyor (clip doluysa)
 - [ ] Commit + push yapıldı
 
@@ -193,8 +186,8 @@ Harf klipleri `Assets/_Audio/SesliHarfler/` altındadır. Bu klasör şu an boş
 
 ## Tamamlandı kontrol listesi
 
-- [ ] Harf clip eşlemesi (SO veya dizi)
-- [ ] `YeniSoru` sonrası bir kez çalıyor
+- [x] Harf clip eşlemesi (SO veya dizi)
+- [x] `YeniSoru` sonrası bir kez çalıyor
 - [ ] Commit + push yapıldı
 
 **Çıkış:** → Faz 5
@@ -213,10 +206,10 @@ Harf klipleri `Assets/_Audio/SesliHarfler/` altındadır. Bu klasör şu an boş
 
 ## Tamamlandı kontrol listesi
 
-- [ ] `yanlisSes` API hazır; harf seçmede yanlışta bir kez çalıyor
-- [ ] `dogruSes` obje klibinin yerine geçmiyor
-- [ ] SepetOyunu scriptlerine dokunulmadı
-- [ ] `correct_check.png` / `wrong_x.png` konumuna dokunulmadı
+- [x] `yanlisSes` API hazır; harf seçmede yanlışta bir kez çalıyor
+- [x] `dogruSes` obje klibinin yerine geçmiyor
+- [x] SepetOyunu scriptlerine dokunulmadı
+- [x] `correct_check.png` / `wrong_x.png` konumuna dokunulmadı
 - [ ] Commit + push yapıldı
 
 **Çıkış:** → Faz 6
@@ -231,16 +224,16 @@ Klip yolu: `Assets/_Audio/Objeler/<Harf>/<ad>.wav` (ör. `Objeler/E/elma.wav`). 
 
 ## Not
 
-- Eşleme sprite / obje adına göre. Gerekirse `HarfObjeVerisi` veya `SesYoneticisi` üzerinde Türkçe public API (Plan Mode).
+- Eşleme sprite / obje adına göre (`SesYoneticisi.ObjeSesiCal` + `objeSesleri` dizisi).
 - Bu fazda yalnızca Mini Oyun 2: doğru balon.
 - Görsel tik Mustafa Üz’ün işi.
 
 ## Tamamlandı kontrol listesi
 
-- [ ] Obje klibi `Assets/_Audio/Objeler/` yolundan eşleniyor
-- [ ] Harf seçmede doğruda bir kez çalıyor
-- [ ] `SesliHarfler` obje sesi için kullanılmıyor
-- [ ] SepetOyunu scriptlerine dokunulmadı
+- [x] Obje klibi `Assets/_Audio/Objeler/` yolundan eşleniyor (Inspector `objeSesleri` + isim)
+- [x] Harf seçmede doğruda bir kez çalıyor
+- [x] `SesliHarfler` obje sesi için kullanılmıyor
+- [x] SepetOyunu scriptlerine dokunulmadı
 - [ ] Commit + push yapıldı
 
 **Çıkış:** → Faz 7
@@ -249,12 +242,13 @@ Klip yolu: `Assets/_Audio/Objeler/<Harf>/<ad>.wav` (ör. `Objeler/E/elma.wav`). 
 
 # Faz 7 — Ekranlar arasında müzik sürekliliği
 
-**Amaç:** Avatar → level → harf seçme geçişinde müzik kesilmesin. Sepet sahnesi gelince aynı DDOL kaynak onu da taşır; bu fazda SepetOyunu’na girilmez.
+**Amaç:** Menüde hayvan müziği; HarfSecmeOyunu’nda `oyunMuzigi` (Sesli Harfler şarkısı). DDOL kaynak sahne değişiminde yaşar. SepetOyunu’na bu fazda girilmez.
 
 ## Tamamlandı kontrol listesi
 
-- [ ] DDOL müzik kaynağı sahne değişiminde yaşıyor
-- [ ] Play’de avatar, level ve harf seçme arasında müzik devam ediyor
+- [x] DDOL müzik kaynağı sahne değişiminde yaşıyor
+- [x] Avatar/Level → hayvan müziği; HarfSecme → oyun şarkısı (kod)
+- [ ] Play’de clip doluyken geçiş duyuluyor
 - [ ] Commit + push yapıldı
 
 **Çıkış:** → Faz 8
@@ -273,9 +267,9 @@ Klip yolu: `Assets/_Audio/Objeler/<Harf>/<ad>.wav` (ör. `Objeler/E/elma.wav`). 
 
 ## Tamamlandı kontrol listesi
 
-- [ ] `parlıltıEfekti` alanı ve Play çağrısı
-- [ ] Süre 1.5 sn
-- [ ] Play’de tik + partikül görünüyor
+- [x] `parlıltıEfekti` alanı ve Play çağrısı
+- [x] Süre 1.5 sn
+- [ ] Play’de tik + partikül görünüyor (Editor: Particle System bağla)
 - [ ] Commit + push yapıldı
 
 **Çıkış:** → Faz 9
@@ -289,8 +283,8 @@ Klip yolu: `Assets/_Audio/Objeler/<Harf>/<ad>.wav` (ör. `Objeler/E/elma.wav`). 
 ```
 Paket 3 efektler (Mustafa Yiğit) teslim
 - Branch: mustafayigit/efektler → main PR
-- SesYoneticisi: müzik + ortak TiklamaSesiCal + yanlış SFX + harf API + obje klibi (`_Audio/Objeler/`)
-- ButonTiklamaSesi: karakter, level, ana menü / harf seçme ana menü butonu
+- SesYoneticisi: hayvan menü müziği + oyunMuzigi (Sesli Harfler şarkısı) + TiklamaSesiCal + yanlış SFX + harf API + obje klibi
+- ButonTiklamaSesi: karakter, level (auto), harf seçme ana menü
 - GeriBildirim: yanlış ses + partikül 1.5 sn (harf seçme)
 - Tik/çarpı görseli: Mustafa Üz (`correct_check.png` / `wrong_x.png`)
 - SepetOyunu ses kancaları: ertelendi
@@ -299,14 +293,16 @@ Paket 3 efektler (Mustafa Yiğit) teslim
 
 ## Tamamlandı kontrol listesi
 
-- [ ] Faz −1 … 8 ilgili maddeler işaretli
+- [x] Faz −1 … 8 kod maddeleri işaretli
 - [ ] Commit + push + `main` PR
 - [ ] Paket 6’ya clip/Inspector notu iletildi
-- [ ] Bilinen sorunlar:
+- [x] Bilinen sorunlar:
 
 **Bilinen sorunlar:**
 
-- (yoksa “yok” yaz)
+- Müzik / SFX / harf clip’leri henüz klasörde yok veya Inspector’a bağlanmadı — null-safe, sessiz geçer
+- `objeSesleri` dizisine `_Audio/Objeler/` wav’ları Inspector’dan sürüklenmeli
+- Partikül Particle System sahneye elle bağlanmalı
 
 ---
 

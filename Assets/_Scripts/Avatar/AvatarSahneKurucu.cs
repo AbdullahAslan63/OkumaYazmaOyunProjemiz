@@ -29,6 +29,9 @@ public class AvatarSahneKurucu : MonoBehaviour
         if (avatarGorunumu == null)
             avatarGorunumu = Object.FindAnyObjectByType<AvatarGorunumu>();
 
+        // Ses yöneticisi yoksa oluştur (clip'ler Inspector / Paket 6)
+        SesYoneticisi.GarantiEt();
+
         EventSystemiGarantiEt();
 
         AvatarSecimEkrani mevcut = Object.FindAnyObjectByType<AvatarSecimEkrani>();
@@ -530,6 +533,8 @@ public class AvatarSahneKurucu : MonoBehaviour
         go.transform.SetParent(parent, false);
         Image img = go.GetComponent<Image>();
         img.color = Color.white;
+        // Ortak tıklama sesi — seçim mantığına dokunmaz
+        go.AddComponent<ButonTiklamaSesi>();
         return go;
     }
 
@@ -583,6 +588,8 @@ public class AvatarSahneKurucu : MonoBehaviour
         Image img = go.GetComponent<Image>();
         img.color = renk;
         img.sprite = KareSpriteAl();
+        // Ortak tıklama sesi — OnClick işine karışmaz
+        go.AddComponent<ButonTiklamaSesi>();
         return go.GetComponent<Button>();
     }
 

@@ -65,6 +65,10 @@ public class AvatarYoneticisi : MonoBehaviour
         PlayerPrefs.SetInt(PrefHayvan, seciliHayvanIndex);
         PlayerPrefs.Save();
         GorunumuYenile();
+
+        // Menüde seçili hayvana göre müzik (clip yoksa sessiz)
+        if (SesYoneticisi.Instance != null)
+            SesYoneticisi.Instance.HayvanMuziginiCal(seciliHayvanIndex);
     }
 
     /// <summary>Renk seçer ve cihaza kaydeder.</summary>
