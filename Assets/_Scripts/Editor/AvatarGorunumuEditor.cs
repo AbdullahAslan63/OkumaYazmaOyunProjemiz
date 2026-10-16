@@ -20,8 +20,8 @@ public class AvatarGorunumuEditor : Editor
         EditorGUILayout.Space(8);
         EditorGUILayout.LabelField("Karakter × Aksesuar Yerleri", EditorStyles.boldLabel);
         EditorGUILayout.HelpBox(
-            "Her karakter için her aksesuarın yerini ve boyutunu ayrı ayarla. " +
-            "Olcek Carpani: 1 normal, 0.7 küçük, 1.5 büyük. Şapka boyutu gözlüğü değiştirmez.",
+            "Her karakter için sprite, yer ve boyut ayrı. " +
+            "Otomatik hizala: gözlük→göz, şapka→taç, kulaklık→kulak; olcekCarpani kafa genişliğine göre.",
             MessageType.Info);
 
         if (GUILayout.Button("Tüm aksesuar satırlarını karakterlere ekle"))
@@ -29,6 +29,14 @@ public class AvatarGorunumuEditor : Editor
             Undo.RecordObject(gorunum, "Aksesuar ayarlarını senkronize et");
             gorunum.AksesuarAyarlariniSenkronizeEt();
             EditorUtility.SetDirty(gorunum);
+        }
+
+        if (GUILayout.Button("Otomatik hizala (gözlük / şapka / kulaklık + ölçek)"))
+        {
+            Undo.RecordObject(gorunum, "Aksesuar otomatik hizala");
+            int n = AvatarAksesuarOtomatikHizala.Hizala(gorunum);
+            EditorUtility.SetDirty(gorunum);
+            Debug.Log($"Otomatik hizala: {n} satır güncellendi.");
         }
 
         if (gorunum.hayvanlar == null || gorunum.aksesuarlar == null)
@@ -64,6 +72,7 @@ public class AvatarGorunumuEditor : Editor
             {
                 SerializedProperty satir = ayarlarProp.GetArrayElementAtIndex(i);
                 SerializedProperty adProp = satir.FindPropertyRelative("aksesuarAdi");
+                SerializedProperty spriteProp = satir.FindPropertyRelative("sprite");
                 SerializedProperty ofsetProp = satir.FindPropertyRelative("ofset");
                 SerializedProperty olcekProp = satir.FindPropertyRelative("olcekCarpani");
                 string aksAd = adProp != null ? adProp.stringValue : ("Aksesuar " + i);
@@ -71,12 +80,17 @@ public class AvatarGorunumuEditor : Editor
                     aksAd = "Aksesuar " + i;
 
                 EditorGUILayout.BeginHorizontal();
-                Sprite spr = gorunum.aksesuarlar[i] != null ? gorunum.aksesuarlar[i].sprite : null;
+                // Önizleme: bu hayvana özel sprite; yoksa katalog
+                Sprite spr = spriteProp != null ? spriteProp.objectReferenceValue as Sprite : null;
+                if (spr == null && gorunum.aksesuarlar[i] != null)
+                    spr = gorunum.aksesuarlar[i].sprite;
                 if (spr != null)
                 {
                     GUILayout.Label(AssetPreview.GetAssetPreview(spr) ?? spr.texture, GUILayout.Width(36), GUILayout.Height(36));
                 }
                 EditorGUILayout.BeginVertical();
+                if (spriteProp != null)
+                    EditorGUILayout.PropertyField(spriteProp, new GUIContent(aksAd + " sprite"));
                 EditorGUILayout.PropertyField(ofsetProp, new GUIContent(aksAd + " yer"));
                 if (olcekProp != null)
                     EditorGUILayout.Slider(olcekProp, 0.2f, 2.5f, new GUIContent(aksAd + " boyut"));

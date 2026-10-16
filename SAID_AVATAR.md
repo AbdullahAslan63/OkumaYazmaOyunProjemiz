@@ -38,14 +38,15 @@ Bu dosya **sadece Mustafa Said Bayram** için faz kapılı çalışma planıdır
 
 
 
-## Mevcut durum özeti (2026-09)
+## Mevcut durum özeti (2026-10-17)
 
 - Çekirdek scriptler + renk + aksesuar seçimi **kodda hazır**; sahne kısmen bağlı.
-- `govdeOlcekCarpani` değerleri çoğunlukla **1** — karakter bazlı ince ayar Faz 6.
-- Arka plan sprite / sahne cilası Faz 4; UI düzeni Faz 5.
-- Aksesuar butonlarında index 8–10 eksik olabilir → Faz 5.
+- Karakter PNG’leri 512px + yüz merkezli kırpım; meta/GUID onarımı yapıldı.
+- Aksesuarlar **karaktere özel** (`Aksesuar/{kedi,kus,tavsan,rakun}/`) + otomatik hizala (gözlük/şapka/kulaklık). **Play’de oturdu** (bir-iki gözlük ince ayarı sonra).
+- `govdeOlcekCarpani` çoğunlukla **1** (normalize yeterli); isterse sonra ayrı çarpan.
+- Arka plan / sahne cilası Faz 4; UI düzeni Faz 5; aksesuar buton index 8–10 Faz 5.
 
-**Sıradaki odak:** Faz 4 — arka plan + sahne tasarımı.
+**Sıradaki odak:** Faz 4 — arka plan + sahne tasarımı (veya commit + push bu art adımı için).
 
 ---
 
@@ -209,8 +210,8 @@ Faz 0 (Hazırlık)                         [tamam]
 
 ## Tamamlandı kontrol listesi
 
-- [ ] Her hayvan için ayrı ölçek değeri girildi
-- [ ] Play’de dört hayvan da ekranda dengeli duruyor
+- [ ] Her hayvan için ayrı ölçek değeri girildi (`govdeOlcekCarpani` hâlâ 1; normalize ile dengeli)
+- [x] Play’de dört hayvan da ekranda dengeli duruyor
 - [ ] Commit + push yapıldı
 
 **Çıkış:** → Faz 7
@@ -233,8 +234,8 @@ Faz 0 (Hazırlık)                         [tamam]
 
 ## Tamamlandı kontrol listesi
 
-- [ ] Şapka / gözlük vb. her hayvanda kabul edilebilir konumda
-- [ ] Ölçek aşırı büyük/küçük değil
+- [x] Şapka / gözlük vb. her hayvanda kabul edilebilir konumda (bir-iki gözlük sonra ince ayar)
+- [x] Ölçek aşırı büyük/küçük değil
 - [ ] Commit + push yapıldı
 
 **Çıkış:** → Faz 8
