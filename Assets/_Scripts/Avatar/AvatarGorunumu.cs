@@ -10,6 +10,9 @@ public class HayvanAksesuarAyari
     // Inspector'da hangi aksesuar olduğu görünsün
     public string aksesuarAdi;
 
+    // Bu hayvana özel sprite (Aksesuar/kedi|kus|tavsan|rakun/)
+    public Sprite sprite;
+
     // Bu hayvanda bu aksesuarın yerel konumu (şapka kafa, gözlük yüz)
     public Vector2 ofset;
 
@@ -74,12 +77,33 @@ public class AvatarGorunumu : MonoBehaviour
     // Gövde alt kenarının hizalanacağı Y (ayaklar UI'dan uzak)
     public float hedefZeminY = -1.5f;
 
+    // Karakter ekranından doldurulur; SepetOyunu balon karakteri için yaşar
+    public static HayvanGorseli[] SablonHayvanlar;
+    public static AksesuarGorseli[] SablonAksesuarlar;
+
+    /// <summary>Şablon sprite listeleri hazır mı?</summary>
+    public static bool SablonHazir
+    {
+        get { return SablonHayvanlar != null && SablonHayvanlar.Length > 0; }
+    }
+
+    /// <summary>Bu görünümün listelerini statik şablona yazar (sahne değişince kaybolmasın).</summary>
+    public void SablonOlarakKaydet()
+    {
+        if (hayvanlar == null || hayvanlar.Length == 0)
+            return;
+        SablonHayvanlar = hayvanlar;
+        SablonAksesuarlar = aksesuarlar;
+    }
+
     private void Awake()
     {
         // Inspector boş kaldıysa child isimlerinden otomatik bul
         RendererlariOtomatikBul();
         // Her hayvana tüm aksesuar satırlarını ekle (eksikse)
         AksesuarAyarlariniSenkronizeEt();
+        // Sepet / diğer sahneler için şablon
+        SablonOlarakKaydet();
     }
 
     /// <summary>
@@ -94,6 +118,8 @@ public class AvatarGorunumu : MonoBehaviour
 
     private void Start()
     {
+        // Şablon güncel kalsın
+        SablonOlarakKaydet();
         // Sahne açılınca seçili görünüme göre çiz
         Guncelle();
     }
@@ -185,25 +211,25 @@ public class AvatarGorunumu : MonoBehaviour
             return;
 
         int aksesuarIndex = yonetici.seciliAksesuarIndex;
-        bool aksesuarVar =
-            aksesuarIndex >= 0 &&
-            aksesuarlar != null &&
-            aksesuarIndex < aksesuarlar.Length &&
-            aksesuarlar[aksesuarIndex] != null &&
-            aksesuarlar[aksesuarIndex].sprite != null;
+        // Önce bu hayvana özel sprite; yoksa katalog (UI) sprite'ına düş
+        Sprite aksSprite = AksesuarSpriteAl(hayvan, aksesuarIndex);
+        bool aksesuarVar = aksSprite != null;
 
         if (aksesuarVar)
         {
-            AksesuarGorseli aks = aksesuarlar[aksesuarIndex];
-            aksesuarRenderer.sprite = aks.sprite;
+            AksesuarGorseli aks = AksesuarKatalogSatiriAl(aksesuarIndex);
+            aksesuarRenderer.sprite = aksSprite;
             aksesuarRenderer.enabled = true;
 
-            // Aksesuar gövde ile orantılı kalsın; karakter-aksesuar boyutu ayrı çarpan
+            // Art karaktere göre boyutlu; katalog olcek genelde 1
+            float katalogOlcek = aks != null ? aks.olcek : 1f;
+            if (katalogOlcek <= 0.001f)
+                katalogOlcek = 1f;
             float karakterOlcek = AksesuarOlcekCarpaniniAl(hayvan, aksesuarIndex);
-            float aksOlcek = govdeOlcek * aks.olcek * karakterOlcek;
+            float aksOlcek = govdeOlcek * katalogOlcek * karakterOlcek;
             aksesuarRenderer.transform.localScale = new Vector3(aksOlcek, aksOlcek, 1f);
 
-            // Bu hayvana özel şapka/gözlük konumu (yoksa eski ofset formülü)
+            // Bu hayvana özel şapka/gözlük konumu
             Vector2 pos = AksesuarPozisyonunuAl(hayvan, aks, aksesuarIndex);
             aksesuarRenderer.transform.localPosition = new Vector3(pos.x, pos.y, 0f);
         }
@@ -241,6 +267,35 @@ public class AvatarGorunumu : MonoBehaviour
     }
 
     /// <summary>
+    /// Seçili hayvana özel aksesuar sprite'ını döndürür; yoksa katalog sprite'ı.
+    /// </summary>
+    private Sprite AksesuarSpriteAl(HayvanGorseli hayvan, int aksesuarIndex)
+    {
+        if (aksesuarIndex < 0)
+            return null;
+
+        if (hayvan != null &&
+            hayvan.aksesuarAyarlari != null &&
+            aksesuarIndex < hayvan.aksesuarAyarlari.Length &&
+            hayvan.aksesuarAyarlari[aksesuarIndex] != null &&
+            hayvan.aksesuarAyarlari[aksesuarIndex].sprite != null)
+        {
+            return hayvan.aksesuarAyarlari[aksesuarIndex].sprite;
+        }
+
+        AksesuarGorseli katalog = AksesuarKatalogSatiriAl(aksesuarIndex);
+        return katalog != null ? katalog.sprite : null;
+    }
+
+    /// <summary>UI katalog satırını güvenli döndürür.</summary>
+    private AksesuarGorseli AksesuarKatalogSatiriAl(int aksesuarIndex)
+    {
+        if (aksesuarlar == null || aksesuarIndex < 0 || aksesuarIndex >= aksesuarlar.Length)
+            return null;
+        return aksesuarlar[aksesuarIndex];
+    }
+
+    /// <summary>
     /// Bu hayvanda bu aksesuarın yerini döndürür.
     /// Karakter-aksesuar satırı varsa onu kullanır; yoksa eski ortak ofset.
     /// </summary>
@@ -254,7 +309,8 @@ public class AvatarGorunumu : MonoBehaviour
             return hayvan.aksesuarAyarlari[aksesuarIndex].ofset;
         }
 
-        return hayvan.aksesuarOfset + aks.yerelOfset;
+        Vector2 yerel = aks != null ? aks.yerelOfset : Vector2.zero;
+        return hayvan.aksesuarOfset + yerel;
     }
 
     /// <summary>
@@ -315,11 +371,16 @@ public class AvatarGorunumu : MonoBehaviour
                         varsayilan += aksesuarlar[i].yerelOfset;
                     kayit.ofset = varsayilan;
                     kayit.olcekCarpani = 1f;
+                    // Sprite editor yükleyici / Inspector doldurur; burada ezme
                 }
 
                 // Eski satırda boyut alanı 0 kaldıysa (yeni alandı) 1 yap
                 if (kayit.olcekCarpani <= 0.001f)
                     kayit.olcekCarpani = 1f;
+
+                // Uzunluk değişirken eski sprite referansını koru
+                if (!yeniSatir && eski != null && i < eski.Length && eski[i] != null && kayit.sprite == null)
+                    kayit.sprite = eski[i].sprite;
 
                 hedef[i] = kayit;
             }

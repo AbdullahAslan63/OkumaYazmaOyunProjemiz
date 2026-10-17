@@ -29,6 +29,9 @@ public class AvatarSahneKurucu : MonoBehaviour
         if (avatarGorunumu == null)
             avatarGorunumu = Object.FindAnyObjectByType<AvatarGorunumu>();
 
+        // Ses yöneticisi yoksa oluştur (clip'ler Inspector / Paket 6)
+        SesYoneticisi.GarantiEt();
+
         EventSystemiGarantiEt();
 
         AvatarSecimEkrani mevcut = Object.FindAnyObjectByType<AvatarSecimEkrani>();
@@ -45,14 +48,16 @@ public class AvatarSahneKurucu : MonoBehaviour
         Canvas canvas = canvasGo.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         CanvasScaler scaler = canvasGo.AddComponent<CanvasScaler>();
+        // Mobil + akıllı tahta: genişlik/yükseklik ortası
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1920, 1080);
+        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
         scaler.matchWidthOrHeight = 0.5f;
         canvasGo.AddComponent<GraphicRaycaster>();
 
         AvatarSecimEkrani secim = canvasGo.AddComponent<AvatarSecimEkrani>();
         secim.avatarGorunumu = avatarGorunumu;
-        secim.sonrakiSahneAdi = "HarfSecmeOyunu";
+        secim.sonrakiSahneAdi = "LevelEkranı";
 
         SolPaneliKur(secim, avatarGorunumu);
         DolapArkaPlaniniKur();
@@ -90,7 +95,12 @@ public class AvatarSahneKurucu : MonoBehaviour
 
         CanvasScaler scaler = secim.GetComponent<CanvasScaler>();
         if (scaler != null)
+        {
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920, 1080);
+            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
             scaler.matchWidthOrHeight = 0.5f;
+        }
 
         AvatarGorunumu gorunum = secim.avatarGorunumu;
         if (gorunum == null)
@@ -243,9 +253,10 @@ public class AvatarSahneKurucu : MonoBehaviour
         icerik.transform.SetParent(sol.transform, false);
         Stretch(icerik.GetComponent<RectTransform>(), new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(20f, 140f), new Vector2(-20f, -120f));
 
-        GameObject karakterPaneli = IzgaraPanel(icerik.transform, "KarakterPaneli", new Vector2(210f, 240f), 18f, 2);
-        GameObject renkPaneli = IzgaraPanel(icerik.transform, "RenkPaneli", new Vector2(86f, 86f), 16f, 4);
-        GameObject aksesuarKoku = ScrollIzgara(icerik.transform, "AksesuarPaneli", new Vector2(190f, 190f), 16f);
+        // Sol panel ~%48 genişlik: hücreler satırı doldursun, boş alan kalmasın
+        GameObject karakterPaneli = IzgaraPanel(icerik.transform, "KarakterPaneli", new Vector2(400f, 420f), 20f, 2);
+        GameObject renkPaneli = IzgaraPanel(icerik.transform, "RenkPaneli", new Vector2(190f, 190f), 18f, 4);
+        GameObject aksesuarKoku = ScrollIzgara(icerik.transform, "AksesuarPaneli", new Vector2(260f, 260f), 16f, 3);
         Transform aksesuarIcerikT = aksesuarKoku.transform.Find("Viewport/Icerik");
         Transform aksesuarParent = aksesuarIcerikT != null ? aksesuarIcerikT : aksesuarKoku.transform;
 
@@ -275,6 +286,9 @@ public class AvatarSahneKurucu : MonoBehaviour
 
         // Açılışta karakter sekmesi görünsün
         secim.KarakterSekmesiniAc();
+
+        // Kayıtlı seçime göre çerçeveleri boya
+        SecimVurgusu.HepsiniYenile();
     }
 
     /// <summary>Inspector'daki hayvan listesinden kart üretir; listeyi değiştirmez.</summary>
@@ -309,13 +323,15 @@ public class AvatarSahneKurucu : MonoBehaviour
             yaziGo.transform.SetParent(kart.transform, false);
             Stretch(yaziGo.GetComponent<RectTransform>(), new Vector2(0f, 0f), new Vector2(1f, 0.22f), Vector2.zero, Vector2.zero);
             string ad = string.IsNullOrEmpty(hayvan.hayvanAdi) ? ("Karakter " + (i + 1)) : hayvan.hayvanAdi;
-            TextEkle(yaziGo.transform, ad, 26, new Color(0.16f, 0.16f, 0.18f));
+            TextEkle(yaziGo.transform, ad, 34, new Color(0.16f, 0.16f, 0.18f));
 
             Button btn = kart.GetComponent<Button>();
             HayvanSecici secici = kart.AddComponent<HayvanSecici>();
             secici.avatarGorunumu = gorunum;
             secici.hayvanIndex = i;
             btn.onClick.AddListener(secici.BuHayvaniSec);
+
+            SecimVurgusuEkle(kart, SecimVurgusu.Tur.Hayvan, i);
         }
     }
 
@@ -344,7 +360,7 @@ public class AvatarSahneKurucu : MonoBehaviour
 
         for (int i = 0; i < renkler.Length; i++)
         {
-            Button rb = Buton(parent, "Renk" + i, Vector2.zero, new Vector2(86f, 86f), Color.white);
+            Button rb = Buton(parent, "Renk" + i, Vector2.zero, new Vector2(190f, 190f), Color.white);
             Image img = rb.GetComponent<Image>();
             img.sprite = DaireSpriteAl();
             img.color = renkler[i];
@@ -359,6 +375,8 @@ public class AvatarSahneKurucu : MonoBehaviour
             rs.avatarGorunumu = gorunum;
             rs.builtinRenk = renkler[i];
             rb.onClick.AddListener(rs.BuButonunRenginiSec);
+
+            SecimVurgusuEkle(rb.gameObject, SecimVurgusu.Tur.Renk, i, renkler[i]);
         }
     }
 
@@ -370,11 +388,12 @@ public class AvatarSahneKurucu : MonoBehaviour
         yokKart.GetComponent<Image>().color = new Color(0.93f, 0.94f, 0.96f, 1f);
         YuvarlakYap(yokKart.GetComponent<Image>(), true);
         KartGolgeEkle(yokKart);
-        TextEkle(yokKart.transform, "Yok", 32, new Color(0.2f, 0.2f, 0.22f));
+        TextEkle(yokKart.transform, "Yok", 40, new Color(0.2f, 0.2f, 0.22f));
         AksesuarSecici yokSec = yokKart.AddComponent<AksesuarSecici>();
         yokSec.avatarGorunumu = gorunum;
         yokSec.aksesuarIndex = -1;
         yokKart.GetComponent<Button>().onClick.AddListener(yokSec.BuAksesuariSec);
+        SecimVurgusuEkle(yokKart, SecimVurgusu.Tur.Aksesuar, -1);
 
         if (gorunum == null || gorunum.aksesuarlar == null)
             return;
@@ -403,7 +422,20 @@ public class AvatarSahneKurucu : MonoBehaviour
             asec.avatarGorunumu = gorunum;
             asec.aksesuarIndex = i;
             kart.GetComponent<Button>().onClick.AddListener(asec.BuAksesuariSec);
+            SecimVurgusuEkle(kart, SecimVurgusu.Tur.Aksesuar, i);
         }
+    }
+
+    /// <summary>Karta seçim çerçevesi + tik rozeti ekler.</summary>
+    static void SecimVurgusuEkle(GameObject kart, SecimVurgusu.Tur tur, int indeks, Color renk = default)
+    {
+        SecimVurgusu v = kart.GetComponent<SecimVurgusu>();
+        if (v == null)
+            v = kart.AddComponent<SecimVurgusu>();
+        v.tur = tur;
+        v.indeks = indeks;
+        v.renk = renk;
+        v.Kur();
     }
 
     static GameObject IzgaraPanel(Transform parent, string ad, Vector2 hucre, float bosluk, int sutun = 2)
@@ -418,14 +450,15 @@ public class AvatarSahneKurucu : MonoBehaviour
         GridLayoutGroup grid = go.AddComponent<GridLayoutGroup>();
         grid.cellSize = hucre;
         grid.spacing = new Vector2(bosluk, bosluk);
-        grid.padding = new RectOffset(10, 10, 10, 10);
-        grid.childAlignment = TextAnchor.UpperLeft;
+        grid.padding = new RectOffset(16, 16, 16, 16);
+        // Üst-orta: satır paneli yatayda doldurur
+        grid.childAlignment = TextAnchor.UpperCenter;
         grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
         grid.constraintCount = sutun;
         return go;
     }
 
-    static GameObject ScrollIzgara(Transform parent, string ad, Vector2 hucre, float bosluk)
+    static GameObject ScrollIzgara(Transform parent, string ad, Vector2 hucre, float bosluk, int sutun = 3)
     {
         GameObject scrollGo = new GameObject(ad, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(ScrollRect));
         scrollGo.transform.SetParent(parent, false);
@@ -453,10 +486,10 @@ public class AvatarSahneKurucu : MonoBehaviour
         GridLayoutGroup grid = icerik.GetComponent<GridLayoutGroup>();
         grid.cellSize = hucre;
         grid.spacing = new Vector2(bosluk, bosluk);
-        grid.padding = new RectOffset(8, 8, 8, 8);
-        grid.childAlignment = TextAnchor.UpperLeft;
+        grid.padding = new RectOffset(12, 12, 12, 12);
+        grid.childAlignment = TextAnchor.UpperCenter;
         grid.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-        grid.constraintCount = 2;
+        grid.constraintCount = sutun;
 
         ContentSizeFitter fitter = icerik.GetComponent<ContentSizeFitter>();
         fitter.horizontalFit = ContentSizeFitter.FitMode.Unconstrained;
@@ -530,6 +563,8 @@ public class AvatarSahneKurucu : MonoBehaviour
         go.transform.SetParent(parent, false);
         Image img = go.GetComponent<Image>();
         img.color = Color.white;
+        // Ortak tıklama sesi — seçim mantığına dokunmaz
+        go.AddComponent<ButonTiklamaSesi>();
         return go;
     }
 
@@ -583,6 +618,8 @@ public class AvatarSahneKurucu : MonoBehaviour
         Image img = go.GetComponent<Image>();
         img.color = renk;
         img.sprite = KareSpriteAl();
+        // Ortak tıklama sesi — OnClick işine karışmaz
+        go.AddComponent<ButonTiklamaSesi>();
         return go.GetComponent<Button>();
     }
 

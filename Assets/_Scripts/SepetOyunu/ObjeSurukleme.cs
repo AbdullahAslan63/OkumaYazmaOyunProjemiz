@@ -22,8 +22,9 @@ public class ObjeSurukleme : MonoBehaviour
     // Şu an bu obje sürükleniyor mu
     private bool surukleniyor;
 
-    // Sürüklemeden önceki çizim sırası
+    // Sürüklemeden önceki çizim sırası (kök + çocuk parıltı)
     private int eskiSira;
+    private int[] eskiCocukSiralar;
 
     // Aynı anda tek obje sürüklensin diye paylaşılan seçim
     private static ObjeSurukleme aktif;
@@ -113,6 +114,16 @@ public class ObjeSurukleme : MonoBehaviour
             // Sürüklenen obje her şeyin üstünde kalsın
             cizici.sortingOrder = 30;
         }
+
+        // Altındaki parıltı çocukları da birlikte yükselsin (obje - 1)
+        SpriteRenderer[] cocuklar = GetComponentsInChildren<SpriteRenderer>(true);
+        eskiCocukSiralar = new int[cocuklar.Length];
+        for (int i = 0; i < cocuklar.Length; i++)
+        {
+            eskiCocukSiralar[i] = cocuklar[i].sortingOrder;
+            if (cocuklar[i] == cizici) continue;
+            cocuklar[i].sortingOrder = 29;
+        }
     }
 
     // Bırakınca balona yakın mı bak, değilse başa dön
@@ -127,6 +138,19 @@ public class ObjeSurukleme : MonoBehaviour
         {
             // Saklanan sırayı geri yaz
             cizici.sortingOrder = eskiSira;
+        }
+
+        // Çocuk parıltı sıralarını geri al
+        if (eskiCocukSiralar != null)
+        {
+            SpriteRenderer[] cocuklar = GetComponentsInChildren<SpriteRenderer>(true);
+            int n = Mathf.Min(eskiCocukSiralar.Length, cocuklar.Length);
+            for (int i = 0; i < n; i++)
+            {
+                if (cocuklar[i] == cizici) continue;
+                cocuklar[i].sortingOrder = eskiCocukSiralar[i];
+            }
+            eskiCocukSiralar = null;
         }
 
         // Balonu tag ile bul

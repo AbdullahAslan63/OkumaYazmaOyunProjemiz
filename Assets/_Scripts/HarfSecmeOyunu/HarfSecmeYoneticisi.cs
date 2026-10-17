@@ -45,11 +45,17 @@ public class HarfSecmeYoneticisi : MonoBehaviour
     public float yukselmeSuresi = 0.45f;
     public float yukselmeOfsetY = 400f;
 
+    [Header("Ses aralığı")]
+    // İki konuşma klibi arası nefes / doğal durak (sn)
+    public float sesArasiBosluk = 0.85f;
+
     // Aktif tur harfi
     private HarfObjeVerisi aktifHarf;
     private readonly List<GameObject> aktifSecenekler = new List<GameObject>();
     private bool islemYapiliyor;
     private bool oyunBitti;
+    // Intro + animasyon bitene kadar süre durur
+    private bool sureAkiyor;
     private int dogruSayisi;
 
     void Awake()
@@ -72,6 +78,7 @@ public class HarfSecmeYoneticisi : MonoBehaviour
     {
         kalanSure = oyunSuresi;
         dogruSayisi = 0;
+        sureAkiyor = false;
         if (skorYoneticisi != null)
             skorYoneticisi.SkoruSifirla();
 
@@ -81,7 +88,32 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         SoruUiHazirla();
         SlotlariEkranaGoreAyarla();
         SureYazisiniGuncelle();
+        // Prompt → ilk soru → balonlar → sonra süre
+        StartCoroutine(OyunBaslat());
+    }
+
+    /// <summary>Önce Hangisinin prompt, sonra ilk harf; süre balonlar gelince başlar.</summary>
+    IEnumerator OyunBaslat()
+    {
+        islemYapiliyor = true;
+        sureAkiyor = false;
+
+        SesYoneticisi ses = SesYoneticisi.GarantiEt();
+        if (ses != null)
+            ses.OyunMuziginiCal();
+
+        // "Hangisinin baş harfi" bir kez, sonra kısa nefes, sonra harf
+        float promptSure = 0f;
+        if (ses != null)
+            promptSure = ses.SoruPromptSesiCal();
+        if (promptSure <= 0f)
+            promptSure = 1.2f;
+        yield return new WaitForSeconds(promptSure);
+        yield return new WaitForSeconds(sesArasiBosluk);
+
+        islemYapiliyor = false;
         YeniSoru();
+        // sureAkiyor, SecenekleriYerlestir bitince açılır
     }
 
     /// <summary>
@@ -293,6 +325,8 @@ public class HarfSecmeYoneticisi : MonoBehaviour
     void Update()
     {
         if (oyunBitti) return;
+        // Intro / balon animasyonu / cevap beklerken süre durur
+        if (!sureAkiyor || islemYapiliyor) return;
 
         kalanSure -= Time.deltaTime;
         if (kalanSure < 0f) kalanSure = 0f;
@@ -339,21 +373,25 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         if (soruBaslikYazisi != null)
             soruBaslikYazisi.text = soruBaslikMetni;
 
+        // Soru harfi sesi bir kez (clip yoksa sessiz)
+        if (SesYoneticisi.Instance != null)
+            SesYoneticisi.Instance.HarfSesiCal(aktifHarf.harf);
+
         StartCoroutine(SecenekleriYerlestir());
     }
 
-    /// <summary>Seçenek tıklanınca çağrılır.</summary>
-    public void SecenekSecildi(bool dogruMu)
+    /// <summary>Seçenek tıklanınca çağrılır; doğruysa obje sprite'ı ses için iletilir.</summary>
+    public void SecenekSecildi(bool dogruMu, Sprite secilenResim = null)
     {
         if (oyunBitti || islemYapiliyor || kalanSure <= 0f) return;
 
         if (dogruMu)
-            StartCoroutine(DogruCevapSureci());
+            StartCoroutine(DogruCevapSureci(secilenResim));
         else
             StartCoroutine(YanlisCevapSureci());
     }
 
-    /// <summary>Ana menü sahnesine döner.</summary>
+    /// <summary>Ana menü sahnesine döner; menü müziği sceneLoaded ile gelir.</summary>
     public void AnaMenuyeDon()
     {
         if (string.IsNullOrEmpty(anaMenuSahneAdi)) return;
@@ -448,6 +486,9 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         }
 
         islemYapiliyor = false;
+        // Balonlar hazır — süre artık aksın
+        if (!oyunBitti)
+            sureAkiyor = true;
     }
 
     List<SecenekVerisi> SecenekListesiOlustur()
@@ -487,22 +528,33 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         return sonuc;
     }
 
-    IEnumerator DogruCevapSureci()
+    IEnumerator DogruCevapSureci(Sprite secilenResim)
     {
         islemYapiliyor = true;
+        sureAkiyor = false;
         dogruSayisi++;
 
         if (skorYoneticisi != null)
             skorYoneticisi.DogruPuanEkle();
 
+        // Doğru obje adı sesi (elma_0 → elma eşleşir; yoksa sessiz)
+        float objeSure = 0f;
+        if (SesYoneticisi.Instance != null && secilenResim != null)
+            objeSure = SesYoneticisi.Instance.ObjeSesiCal(secilenResim);
+
+        float geriSure = 1.5f;
         if (geriBildirim != null)
         {
+            geriSure = geriBildirim.gosterimSuresi;
             geriBildirim.DogruGoster();
             geriBildirim.SkorYazisiniGuncelle(dogruSayisi);
         }
 
         SureYazisiniGuncelle();
-        yield return new WaitForSeconds(0.7f);
+        // 1) Obje / tik bitsin  2) Doğal nefes  3) Sonra yeni harf
+        float icerikBitis = Mathf.Max(objeSure, geriSure, 1.2f);
+        yield return new WaitForSeconds(icerikBitis);
+        yield return new WaitForSeconds(sesArasiBosluk);
 
         if (kalanSure <= 0f)
             OyunuBitir();
@@ -515,15 +567,22 @@ public class HarfSecmeYoneticisi : MonoBehaviour
     IEnumerator YanlisCevapSureci()
     {
         islemYapiliyor = true;
+        sureAkiyor = false;
 
+        float geriSure = 0.6f;
         if (geriBildirim != null)
+        {
+            geriSure = Mathf.Max(0.6f, geriBildirim.gosterimSuresi);
             geriBildirim.YanlisGoster();
+        }
 
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(geriSure);
 
         // Yanlışta aynı soru kalır — seçenekler yerinde
         if (kalanSure <= 0f)
             OyunuBitir();
+        else
+            sureAkiyor = true;
 
         islemYapiliyor = false;
     }
