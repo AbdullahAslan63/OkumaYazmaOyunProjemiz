@@ -3,7 +3,7 @@ guid: 033781ec27b7b4faab7508d0d6559122
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3802810221231629889
+      213: 7581705636811689891
     second: avatar_rakun_uzgun_0
   externalObjects: {}
   serializedVersion: 13
@@ -96,19 +96,6 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 4
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -116,9 +103,9 @@ TextureImporter:
       name: avatar_rakun_uzgun_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 143
         y: 0
-        width: 620
+        width: 477
         height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -128,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: fb9934f7044b93bc0800000000000000
-      internalID: -3802810221231629889
+      spriteID: 3afccb96b11a73960800000000000000
+      internalID: 7581705636811689891
       vertices: []
       indices: 
       edges: []
@@ -138,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -148,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      avatar_rakun_uzgun_0: -3802810221231629889
+      avatar_rakun_uzgun_0: 7581705636811689891
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
