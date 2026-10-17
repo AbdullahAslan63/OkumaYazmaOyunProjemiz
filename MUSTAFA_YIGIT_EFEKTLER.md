@@ -28,7 +28,8 @@ Bu dosya **sadece Mustafa Yiğit Avan** için faz kapılı çalışma planıdır
 | Kapı (2026-10-13) | Sahneler bu branch’te. Said / Mustafa Üz `main` push’u beklenmez. SepetOyunu sesi ertelenir |
 | Buton SFX | Tek clip + `TiklamaSesiCal()`. Karakter, level ve ana menü aynı bileşeni kullanır |
 | Müzik | Menüde hayvan değişince `hayvanMuzikleri` swap; oyun sahnelerinde `oyunMuzigi` (Sesli Harfler şarkısı). DDOL |
-| MO2 harf | Soru çıkar çıkmaz harf sesi **bir kez** |
+| MO2 harf | Oyun başında `soruPromptSesi` bir kez; her soruda harf sesi bir kez |
+| MO2 obje | Doğru balonda `ObjeSesiCal`; sprite `elma_0` → clip `elma` |
 | Yanlış SFX | Şimdilik Mini Oyun 2 (`yanlisSes`). SepetOyunu sonra |
 | Doğru obje sesi | Şimdilik Mini Oyun 2’de doğru balon. Klip: `Assets/_Audio/Objeler/<Harf>/<ad>.wav`. Sepet bırakması sonra |
 | Tik / çarpı görseli | Mustafa Üz koyar (`correct_check.png` / `wrong_x.png`). Bu pakette sprite konumu yok |
@@ -38,23 +39,28 @@ Bu dosya **sadece Mustafa Yiğit Avan** için faz kapılı çalışma planıdır
 
 ---
 
-## Mevcut durum özeti (2026-10-16)
+## Mevcut durum özeti (2026-10-17)
 
-Kod fazları (1–8) tamamlandı. Clip bağlama finali Paket 6 / Abdullah. SepetOyunu ses kancası yazılmaz.
+Kod fazları (1–8) + Unity clip/partikül + MO2 ses akışı düzeltmesi tamam. SepetOyunu ses kancası yazılmaz.
 
-**Sıradaki odak:** Inspector clip bağlama + Play testi + commit/push + `main` PR (Faz 9).
+**Sıradaki odak:** Play doğrulama → commit/push → `main` PR. Müzik/SFX gelince menüden yeniden bağla.
 
-| Script | Durum |
-| ------ | ----- |
+| Script / asset | Durum |
+| -------------- | ----- |
 | `HarfObjeVerisi` | Var |
 | `SoruSecici` | Var |
 | `SkorYoneticisi` | Var |
-| `GeriBildirimYoneticisi` | Var (`parlıltıEfekti`, süre 1.5; yanlış → SesYoneticisi) |
-| `SesYoneticisi` | Var — DDOL, menü/oyun müziği, SFX API, null-safe |
-| `ButonTiklamaSesi` | Var — Avatar kurucu + menü auto + Ana Menü |
-| `_Audio/Objeler/` | Kelime klipleri duruyor (Inspector `objeSesleri` doldurulmalı) |
-| `_Audio/SesliHarfler/` | Harf klipleri henüz yok (null-safe) |
-| `_Audio/Muzik/` | Hayvan + oyun şarkısı bekleniyor |
+| `GeriBildirimYoneticisi` | Var — `parlıltıEfekti` HarfSecme’de bağlı, `gosterimSuresi=1.5` |
+| `SesYoneticisi` | Prefab + Avatar DDOL; `soruPromptSesi` + harf 8 + obje 40; `elma_0`→`elma` eşleşmesi |
+| `HarfSecmeYoneticisi` | Intro: Hangisinin → harf; süre balonlar gelince; doğruda obje sesi bitene kadar bekle |
+| `ButonTiklamaSesi` | Avatar kurucu + LevelEkranı + HarfSecme Ana Menü |
+| Editor menü | `Oyun > Ses ve Efektleri Bagla (Faz 9)` |
+| `_Audio/Objeler/` | Bağlandı (40 wav) |
+| `_Audio/SesliHarfler/` | Harf 8 + `Hangisinin_baş_harfi!.wav` → `soruPromptSesi` |
+| `_Audio/Muzik/` | Boş — null-safe |
+| `_Audio/SFX/` | Boş — null-safe (Paket 6 / Abdullah) |
+
+**Play checklist (MO2):** Devam → “Hangisinin baş harfi” duyulur → süre o sırada durur → harf → doğru kelime duyulur → tik bitmeden yeni harf gelmez.
 
 ---
 
@@ -62,7 +68,8 @@ Kod fazları (1–8) tamamlandı. Clip bağlama finali Paket 6 / Abdullah. Sepet
 
 ```
 Faz −1 … 8  [kod tamam — 2026-10-16]
-  → Faz 9 (Teslim → main)  ← sıradaki (clip + Play + PR)
+Faz 9 Editor bağlama  [tamam — 2026-10-17]
+  → Play testi + commit/push + main PR  ← sıradaki
 SepetOyunu ses kancaları → oyun bitince, bu akışın dışında
 ```
 
@@ -121,7 +128,8 @@ Vefa: Said ve Mustafa Üz sahneleri `mustafayigit/efektler` üzerine alındı. O
 | `oyunMuzigi` | Sesli Harfler şarkısı — oyun sahneleri |
 | `tiklamaSesi` | Tek tıklama klibi. Sahne başına kopyalanmaz |
 | `TiklamaSesiCal()` / `HayvanMuziginiCal` / `OyunMuziginiCal` | Null-safe |
-| `YanlisSesiCal` / `HarfSesiCal` / `ObjeSesiCal` | Hepsi `efektKaynagi`, null-safe |
+| `soruPromptSesi` / `SoruPromptSesiCal()` | Hangisinin baş harfi (oyun başı) |
+| `YanlisSesiCal` / `HarfSesiCal` / `ObjeSesiCal` | Hepsi `efektKaynagi`, null-safe; süre döner |
 
 ## Tamamlandı kontrol listesi
 
@@ -269,7 +277,8 @@ Klip yolu: `Assets/_Audio/Objeler/<Harf>/<ad>.wav` (ör. `Objeler/E/elma.wav`). 
 
 - [x] `parlıltıEfekti` alanı ve Play çağrısı
 - [x] Süre 1.5 sn
-- [ ] Play’de tik + partikül görünüyor (Editor: Particle System bağla)
+- [x] Particle System sahneye bağlandı (`ParlıltıEfekti` → `dogruGorsel` altında)
+- [ ] Play’de tik + partikül görünüyor
 - [ ] Commit + push yapıldı
 
 **Çıkış:** → Faz 9
@@ -294,15 +303,26 @@ Paket 3 efektler (Mustafa Yiğit) teslim
 ## Tamamlandı kontrol listesi
 
 - [x] Faz −1 … 8 kod maddeleri işaretli
+- [x] Mevcut clip’ler bağlandı (`SesYoneticisi.prefab` + Avatar sahnesi; obje 40 + harf 8)
+- [x] HarfSecme `parlıltıEfekti` + `gosterimSuresi=1.5` sahneye kaydedildi
+- [x] LevelEkranı / HarfSecme butonlarına `ButonTiklamaSesi`
+- [x] Editor menü: `Oyun > Ses ve Efektleri Bagla (Faz 9)` (yeniden doldurma)
+- [ ] Play’de harf / obje / partikül doğrulandı (müzik-SFX clip gelince tekrar)
 - [ ] Commit + push + `main` PR
-- [ ] Paket 6’ya clip/Inspector notu iletildi
+- [x] Paket 6’ya clip/Inspector notu (aşağıda) yazıldı
 - [x] Bilinen sorunlar:
+
+**Paket 6 / Abdullah notu (clip finali):**
+
+1. `_Audio/Muzik/` içine 4 hayvan menü müziği + oyun şarkısı koy.
+2. `_Audio/SFX/` içine `tiklama` + `yanlis` (veya benzer ad) wav koy.
+3. Unity menü: **Oyun > Ses ve Efektleri Bagla (Faz 9)** — veya `SesYoneticisi` Inspector’da “Clip klasörlerini doldur”.
+4. Play: Avatar’da hayvan değişince müzik; HarfSecme’de harf + doğru obje + yanlış SFX + tik partikül.
 
 **Bilinen sorunlar:**
 
-- Müzik / SFX / harf clip’leri henüz klasörde yok veya Inspector’a bağlanmadı — null-safe, sessiz geçer
-- `objeSesleri` dizisine `_Audio/Objeler/` wav’ları Inspector’dan sürüklenmeli
-- Partikül Particle System sahneye elle bağlanmalı
+- `_Audio/Muzik/` ve `_Audio/SFX/` boş → menü müziği, oyun müziği, tıklama ve yanlış SFX henüz duyulmaz (null-safe)
+- Play doğrulaması çocuk/agent Editor’da dinleyince işaretlenecek
 
 ---
 
@@ -324,5 +344,7 @@ Oyun bitmeden bu maddeler yapılmaz. `ObjeSurukleme` ve sepet yöneticisine ses 
 | Branch | `mustafayigit/efektler` |
 | Ortak scriptler | `Assets/_Scripts/Ortak/` |
 | Audio | `Assets/_Audio/{Muzik,SFX,SesliHarfler,Objeler}/` |
+| Prefab | `Assets/_Prefabs/Ortak/SesYoneticisi.prefab` |
+| Editor kurulum | `Oyun > Ses ve Efektleri Bagla (Faz 9)` |
 | Plan | `MUSTAFA_YIGIT_EFEKTLER.md` |
 | Kurallar | `AGENTS.md` |

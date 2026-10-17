@@ -32,13 +32,15 @@ public class SesYoneticisi : MonoBehaviour
     public AudioClip tiklamaSesi;
     // Yanlış cevap
     public AudioClip yanlisSes;
+    // Oyun başı soru cümlesi ("Hangisinin baş harfi")
+    public AudioClip soruPromptSesi;
 
     [Header("Harf sesleri (soru çıkınca)")]
     // İsteğe bağlı; Inspector'dan harf adına göre doldurulur
     public AudioClip[] harfSesleri;
 
     [Header("Obje adı sesleri")]
-    // sprite.name ile eşleşir (örn. elma)
+    // sprite.name ile eşleşir (örn. elma; elma_0 de kabul)
     public AudioClip[] objeSesleri;
 
     // Oyun sahnelerinde hayvan müziği yerine oyun şarkısı
@@ -51,10 +53,19 @@ public class SesYoneticisi : MonoBehaviour
     // Obje clip sözlüğü (isim → clip)
     private Dictionary<string, AudioClip> objeSozlugu;
 
-    /// <summary>Sahnede yoksa boş bir SesYoneticisi oluşturur (clip'ler sonra bağlanır).</summary>
+    /// <summary>Sahnedeki / Instance kopyasını döner; yoksa oluşturur (clip'ler prefab / Editor kurulumunda).</summary>
     public static SesYoneticisi GarantiEt()
     {
         if (Instance != null) return Instance;
+
+        // Sahneye yerleştirilmiş prefab Awake olmadan da bulunabilsin
+        SesYoneticisi sahnede = Object.FindAnyObjectByType<SesYoneticisi>();
+        if (sahnede != null)
+        {
+            Instance = sahnede;
+            return sahnede;
+        }
+
         GameObject go = new GameObject("SesYoneticisi");
         return go.AddComponent<SesYoneticisi>();
     }
@@ -226,26 +237,55 @@ public class SesYoneticisi : MonoBehaviour
         EfektCal(yanlisSes);
     }
 
-    /// <summary>Soru harfinin adını bir kez seslendirir.</summary>
-    public void HarfSesiCal(char harf)
+    /// <summary>
+    /// "Hangisinin baş harfi" soru cümlesini bir kez çalar.
+    /// Dönüş: clip süresi (yoksa 0).
+    /// </summary>
+    public float SoruPromptSesiCal()
+    {
+        EfektCal(soruPromptSesi);
+        return soruPromptSesi != null ? soruPromptSesi.length : 0f;
+    }
+
+    /// <summary>Soru harfinin adını bir kez seslendirir; süre döner.</summary>
+    public float HarfSesiCal(char harf)
     {
         AudioClip clip = HarfClipiniBul(harf);
         EfektCal(clip);
+        return clip != null ? clip.length : 0f;
     }
 
-    /// <summary>Doğru objenin adını sprite ismine göre seslendirir.</summary>
-    public void ObjeSesiCal(Sprite resim)
+    /// <summary>Doğru objenin adını sprite ismine göre seslendirir; süre döner.</summary>
+    public float ObjeSesiCal(Sprite resim)
     {
-        if (resim == null) return;
+        AudioClip clip = ObjeClipiniBul(resim);
+        EfektCal(clip);
+        return clip != null ? clip.length : 0f;
+    }
+
+    /// <summary>Sprite adına uyan obje klibini bulur (elma_0 → elma).</summary>
+    public AudioClip ObjeClipiniBul(Sprite resim)
+    {
+        if (resim == null) return null;
         if (objeSozlugu == null || objeSozlugu.Count == 0)
             ObjeSozlugunuKur();
+        if (objeSozlugu == null || objeSozlugu.Count == 0) return null;
 
         string anahtar = IsmiNormalizeEt(resim.name);
-        if (string.IsNullOrEmpty(anahtar)) return;
+        while (!string.IsNullOrEmpty(anahtar))
+        {
+            AudioClip clip;
+            if (objeSozlugu.TryGetValue(anahtar, out clip))
+                return clip;
 
-        AudioClip clip;
-        if (objeSozlugu != null && objeSozlugu.TryGetValue(anahtar, out clip))
-            EfektCal(clip);
+            // elma_0 / isik,_1 gibi sonekleri soy
+            string kisaltilmis = SpriteSonekiniSoy(anahtar);
+            if (kisaltilmis == anahtar)
+                break;
+            anahtar = kisaltilmis;
+        }
+
+        return null;
     }
 
     /// <summary>Harf karakterine uyan clip'i bulur (adında harf geçen).</summary>
@@ -274,7 +314,7 @@ public class SesYoneticisi : MonoBehaviour
         efektKaynagi.PlayOneShot(clip);
     }
 
-    /// <summary>Karşılaştırma için küçük harf + trim.</summary>
+    /// <summary>Karşılaştırma için küçük harf + trim + Multiple sprite sonek temizliği.</summary>
     static string IsmiNormalizeEt(string ad)
     {
         if (string.IsNullOrEmpty(ad)) return string.Empty;
@@ -282,6 +322,27 @@ public class SesYoneticisi : MonoBehaviour
         int parantez = ad.IndexOf('(');
         if (parantez > 0)
             ad = ad.Substring(0, parantez);
-        return ad.Trim().ToLowerInvariant();
+        ad = ad.Trim().ToLowerInvariant();
+        // "isik," gibi sondaki noktalama
+        ad = ad.TrimEnd(',', '.', '!', '?', ' ', '_');
+        return ad;
+    }
+
+    /// <summary>elma_0 → elma; isik,_1 → isik,</summary>
+    static string SpriteSonekiniSoy(string anahtar)
+    {
+        if (string.IsNullOrEmpty(anahtar)) return anahtar;
+
+        // Sondaki _digit veya ,digit
+        int i = anahtar.Length - 1;
+        if (i < 0 || !char.IsDigit(anahtar[i]))
+            return anahtar.TrimEnd(',', '.', '!', '?', ' ', '_');
+
+        while (i >= 0 && char.IsDigit(anahtar[i]))
+            i--;
+        if (i >= 0 && (anahtar[i] == '_' || anahtar[i] == ','))
+            return anahtar.Substring(0, i).TrimEnd(',', '.', '!', '?', ' ', '_');
+
+        return anahtar;
     }
 }

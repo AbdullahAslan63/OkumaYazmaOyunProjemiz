@@ -463,6 +463,7 @@ GameObject:
   - component: {fileID: 1729068507}
   - component: {fileID: 1729068506}
   - component: {fileID: 1729068505}
+  - component: {fileID: 1729068508}
   m_Layer: 5
   m_Name: Sesli Harfler 1
   m_TagString: Untagged
@@ -572,6 +573,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1729068503}
   m_CullTransparentMesh: 1
+--- !u!114 &1729068508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1729068503}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2c3d4e5f6478901a2b3c4d5e6f70828, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButonTiklamaSesi
 --- !u!1 &2091349045
 GameObject:
   m_ObjectHideFlags: 0
