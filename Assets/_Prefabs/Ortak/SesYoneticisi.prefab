@@ -52,8 +52,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   oyunMuzigi: {fileID: 0}
-  tiklamaSesi: {fileID: 0}
-  yanlisSes: {fileID: 0}
+  tiklamaSesi: {fileID: 8300000, guid: f0ac71b62da441768253be64a1f8a0e2, type: 3}
+  dogruSes: {fileID: 8300000, guid: 96761e0315ad4692a84da8deae1be7a3, type: 3}
+  yanlisSes: {fileID: 8300000, guid: e795b498e13945e9bb4f34a04a4ebf30, type: 3}
   soruPromptSesi: {fileID: 8300000, guid: a4d94ded4245a0df392ad58ee8d2e3ce, type: 3}
   harfSesleri:
   - {fileID: 8300000, guid: 51e0ac9dacd6d2686a87a3039f48cd84, type: 3}

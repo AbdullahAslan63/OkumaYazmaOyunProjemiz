@@ -30,6 +30,8 @@ public class SesYoneticisi : MonoBehaviour
     [Header("SFX")]
     // Ortak buton tıklama
     public AudioClip tiklamaSesi;
+    // Doğru cevap kısa efekti (obje adı sesinin yanında)
+    public AudioClip dogruSes;
     // Yanlış cevap
     public AudioClip yanlisSes;
     // Oyun başı soru cümlesi ("Hangisinin baş harfi")
@@ -229,6 +231,12 @@ public class SesYoneticisi : MonoBehaviour
         muzikKaynagi.clip = oyunMuzigi;
         muzikKaynagi.loop = true;
         muzikKaynagi.Play();
+    }
+
+    /// <summary>Doğru cevap kısa SFX (obje adı sesinin yerine geçmez).</summary>
+    public void DogruSesiCal()
+    {
+        EfektCal(dogruSes);
     }
 
     /// <summary>Yanlış cevap sesi.</summary>

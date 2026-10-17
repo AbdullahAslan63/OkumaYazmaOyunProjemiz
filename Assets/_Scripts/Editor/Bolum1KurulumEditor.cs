@@ -363,7 +363,7 @@ public static class Bolum1KurulumEditor
 
             AvatarSecimEkrani secim = canvasGo.AddComponent<AvatarSecimEkrani>();
             secim.avatarGorunumu = gorunum;
-            secim.sonrakiSahneAdi = "HarfSecmeOyunu";
+            secim.sonrakiSahneAdi = "LevelEkranı";
 
             // Geri / İleri butonları
             Sprite okSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Art/Avatar/UI/ui_icon_sag_ok.png");
@@ -766,9 +766,12 @@ public static class Bolum1KurulumEditor
     {
         var scenes = new List<EditorBuildSettingsScene>
         {
-            new EditorBuildSettingsScene(AvatarSahne, true),
-            new EditorBuildSettingsScene(HarfSahne, true)
+            new EditorBuildSettingsScene(AvatarSahne, true)
         };
+        // Level seçim ekranı
+        if (File.Exists("Assets/Scenes/LevelEkranı.unity"))
+            scenes.Add(new EditorBuildSettingsScene("Assets/Scenes/LevelEkranı.unity", true));
+        scenes.Add(new EditorBuildSettingsScene(HarfSahne, true));
         // Sepet varsa ekle
         if (File.Exists("Assets/Scenes/SepetOyunu.unity"))
             scenes.Add(new EditorBuildSettingsScene("Assets/Scenes/SepetOyunu.unity", true));

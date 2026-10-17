@@ -881,7 +881,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AvatarSecimEkrani
   avatarGorunumu: {fileID: 1512242600}
-  sonrakiSahneAdi: HarfSecmeOyunu
+  sonrakiSahneAdi: "LevelEkran\u0131"
   karakterPaneli: {fileID: 426906829}
   renkPaneli: {fileID: 263103104}
   aksesuarPaneli: {fileID: 495180408}

@@ -11,7 +11,7 @@ public class AvatarSecimEkrani : MonoBehaviour
     public AvatarGorunumu avatarGorunumu;
 
     // Devam butonu hedef sahnesi
-    public string sonrakiSahneAdi = "HarfSecmeOyunu";
+    public string sonrakiSahneAdi = "LevelEkranı";
 
     // Sol paneldeki içerik panelleri (sekme ile aç/kapa)
     public GameObject karakterPaneli;

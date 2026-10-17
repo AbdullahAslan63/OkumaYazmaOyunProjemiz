@@ -57,7 +57,7 @@ public class AvatarSahneKurucu : MonoBehaviour
 
         AvatarSecimEkrani secim = canvasGo.AddComponent<AvatarSecimEkrani>();
         secim.avatarGorunumu = avatarGorunumu;
-        secim.sonrakiSahneAdi = "HarfSecmeOyunu";
+        secim.sonrakiSahneAdi = "LevelEkranı";
 
         SolPaneliKur(secim, avatarGorunumu);
         DolapArkaPlaniniKur();

@@ -194,7 +194,8 @@ public static class SesEfektKurulumEditor
         // SFX
         AudioClip[] sfx = ClipleriYukle(SfxKlasor);
         ses.tiklamaSesi = MuzikClipiniSec(sfx, "tik", "tiklama", "click", "ui");
-        ses.yanlisSes = MuzikClipiniSec(sfx, "yanlis", "yanlış", "wrong", "error", "hata");
+        ses.dogruSes = MuzikClipiniSec(sfx, "dogru", "doğru", "correct", "ok");
+        ses.yanlisSes = MuzikClipiniSec(sfx, "yanlis", "yanlış", "wrong", "error", "hata", "buzzer");
         if (ses.tiklamaSesi == null && sfx.Length > 0)
             ses.tiklamaSesi = sfx[0];
         if (ses.yanlisSes == null && sfx.Length > 1)
@@ -210,6 +211,7 @@ public static class SesEfektKurulumEditor
             " prompt=" + (ses.soruPromptSesi != null ? ses.soruPromptSesi.name : "yok") +
             " oyunMuzigi=" + (ses.oyunMuzigi != null ? ses.oyunMuzigi.name : "yok") +
             " tiklama=" + (ses.tiklamaSesi != null ? ses.tiklamaSesi.name : "yok") +
+            " dogru=" + (ses.dogruSes != null ? ses.dogruSes.name : "yok") +
             " yanlis=" + (ses.yanlisSes != null ? ses.yanlisSes.name : "yok"));
     }
 

@@ -77,12 +77,33 @@ public class AvatarGorunumu : MonoBehaviour
     // Gövde alt kenarının hizalanacağı Y (ayaklar UI'dan uzak)
     public float hedefZeminY = -1.5f;
 
+    // Karakter ekranından doldurulur; SepetOyunu balon karakteri için yaşar
+    public static HayvanGorseli[] SablonHayvanlar;
+    public static AksesuarGorseli[] SablonAksesuarlar;
+
+    /// <summary>Şablon sprite listeleri hazır mı?</summary>
+    public static bool SablonHazir
+    {
+        get { return SablonHayvanlar != null && SablonHayvanlar.Length > 0; }
+    }
+
+    /// <summary>Bu görünümün listelerini statik şablona yazar (sahne değişince kaybolmasın).</summary>
+    public void SablonOlarakKaydet()
+    {
+        if (hayvanlar == null || hayvanlar.Length == 0)
+            return;
+        SablonHayvanlar = hayvanlar;
+        SablonAksesuarlar = aksesuarlar;
+    }
+
     private void Awake()
     {
         // Inspector boş kaldıysa child isimlerinden otomatik bul
         RendererlariOtomatikBul();
         // Her hayvana tüm aksesuar satırlarını ekle (eksikse)
         AksesuarAyarlariniSenkronizeEt();
+        // Sepet / diğer sahneler için şablon
+        SablonOlarakKaydet();
     }
 
     /// <summary>
@@ -97,6 +118,8 @@ public class AvatarGorunumu : MonoBehaviour
 
     private void Start()
     {
+        // Şablon güncel kalsın
+        SablonOlarakKaydet();
         // Sahne açılınca seçili görünüme göre çiz
         Guncelle();
     }

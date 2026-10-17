@@ -3,7 +3,7 @@ using TMPro;
 
 /// <summary>
 /// Doğru/yanlış geri bildirimi: UI aç/kapa + partikül.
-/// Yanlış ses SesYoneticisi üzerinden; doğru ses obje klibidir (burada çalmaz).
+/// Kısa SFX SesYoneticisi üzerinden; obje adı sesi HarfSecme'de ayrı çalar.
 /// </summary>
 public class GeriBildirimYoneticisi : MonoBehaviour
 {
@@ -19,7 +19,7 @@ public class GeriBildirimYoneticisi : MonoBehaviour
     // Tik arkasında partikül patlaması
     public ParticleSystem parlıltıEfekti;
 
-    // Eski alanlar — Paket 6 bağlayabilir; doğru SFX burada çalmaz
+    // Yerel yedek — öncelik SesYoneticisi
     public AudioSource sesKaynagi;
     public AudioClip dogruSes;
     public AudioClip yanlisSes;
@@ -27,7 +27,7 @@ public class GeriBildirimYoneticisi : MonoBehaviour
     // Gösterim süresi (partikül ile uyumlu 1.5 sn)
     public float gosterimSuresi = 1.5f;
 
-    /// <summary>Doğru cevabı gösterir; partikül oynatır. Obje adı sesi SesYoneticisi'ndedir.</summary>
+    /// <summary>Doğru cevabı gösterir; kısa ding + partikül. Obje adı sesi ayrı çalar.</summary>
     public void DogruGoster()
     {
         GorseliGoster(dogruGorsel, yanlisGorsel);
@@ -35,6 +35,17 @@ public class GeriBildirimYoneticisi : MonoBehaviour
         // Partikül yoksa sessizce geç
         if (parlıltıEfekti != null)
             parlıltıEfekti.Play();
+
+        // Öncelik: ortak SesYoneticisi
+        if (SesYoneticisi.Instance != null)
+        {
+            SesYoneticisi.Instance.DogruSesiCal();
+            return;
+        }
+
+        // Yedek: yerel kaynak (clip yoksa sessiz)
+        if (sesKaynagi != null && dogruSes != null)
+            sesKaynagi.PlayOneShot(dogruSes);
     }
 
     /// <summary>Yanlış cevabı gösterir; SesYoneticisi.YanlisSesiCal (yoksa yerel clip).</summary>
