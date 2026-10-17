@@ -335,7 +335,8 @@ public static class Bolum1KurulumEditor
         // Yüz merkezli 512px kırpıma göre kafa / şapka varsayılan Y
         // Landmark tabanlı varsayılan Y (Oyun > Avatar Aksesuar Otomatik Hizala ile yenilenebilir)
         gorunum.hayvanlar[0] = HayvanYukle("Kedi", "avatar_kedi", "kedi", 2.25f, 1.64f);
-        gorunum.hayvanlar[1] = HayvanYukle("Tavşan", "avatar_tavsan", "tavsan", 2.25f, 1.78f);
+        // Uzun kulak: yüz daha aşağıda (göz ~1.21, taç ~1.56)
+        gorunum.hayvanlar[1] = HayvanYukle("Tavşan", "avatar_tavsan", "tavsan", 1.56f, 1.21f);
         gorunum.hayvanlar[2] = HayvanYukle("Kuş", "avatar_kus", "kus", 2.30f, 1.75f);
         gorunum.hayvanlar[3] = HayvanYukle("Rakun", "avatar_rakun", "rakun", 2.38f, 1.88f);
         gorunum.hedefGovdeYuksekligi = 4.5f;

@@ -117,6 +117,9 @@ public class AvatarYoneticisi : MonoBehaviour
             if (gorunumler[i] != null)
                 gorunumler[i].Guncelle();
         }
+
+        // Sol panel kartlarındaki seçim çerçevesini güncelle
+        SecimVurgusu.HepsiniYenile();
     }
 
     /// <summary>PlayerPrefs'ten kayıtlı seçimleri okur.</summary>

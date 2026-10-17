@@ -42,11 +42,11 @@ Bu dosya **sadece Mustafa Said Bayram** için faz kapılı çalışma planıdır
 
 - Çekirdek scriptler + renk + aksesuar seçimi **kodda hazır**; sahne kısmen bağlı.
 - Karakter PNG’leri 512px + yüz merkezli kırpım; meta/GUID onarımı yapıldı.
-- Aksesuarlar **karaktere özel** (`Aksesuar/{kedi,kus,tavsan,rakun}/`) + otomatik hizala (gözlük/şapka/kulaklık). **Play’de oturdu** (bir-iki gözlük ince ayarı sonra).
+- Aksesuarlar **karaktere özel** + otomatik hizala (uzun kulak/tavşan dahil). Şimdilik kabul; tavşan + bir-iki gözlük sonra ince ayar.
 - `govdeOlcekCarpani` çoğunlukla **1** (normalize yeterli); isterse sonra ayrı çarpan.
-- Arka plan / sahne cilası Faz 4; UI düzeni Faz 5; aksesuar buton index 8–10 Faz 5.
+- Arka plan / dolap sahnesi hazır. Faz 5 UI: sol panel ızgara hücreleri büyütüldü (karakter 400, renk 190×4 sütun, aksesuar 260×3 sütun); Canvas Scaler 1920×1080 match 0.5.
 
-**Sıradaki odak:** Faz 4 — arka plan + sahne tasarımı (veya commit + push bu art adımı için).
+**Sıradaki odak:** Play’de sol panel oranını doğrula (Faz 5); sonra Faz 8 teslim veya kalan UI.
 
 ---
 
@@ -212,7 +212,7 @@ Faz 0 (Hazırlık)                         [tamam]
 
 - [ ] Her hayvan için ayrı ölçek değeri girildi (`govdeOlcekCarpani` hâlâ 1; normalize ile dengeli)
 - [x] Play’de dört hayvan da ekranda dengeli duruyor
-- [ ] Commit + push yapıldı
+- [x] Commit + push yapıldı
 
 **Çıkış:** → Faz 7
 
@@ -236,7 +236,7 @@ Faz 0 (Hazırlık)                         [tamam]
 
 - [x] Şapka / gözlük vb. her hayvanda kabul edilebilir konumda (bir-iki gözlük sonra ince ayar)
 - [x] Ölçek aşırı büyük/küçük değil
-- [ ] Commit + push yapıldı
+- [x] Commit + push yapıldı
 
 **Çıkış:** → Faz 8
 
