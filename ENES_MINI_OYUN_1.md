@@ -43,15 +43,14 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 
 
 
-## Mevcut durum özeti (2026-10-14)
+## Mevcut durum özeti (2026-10-17)
 
-- Çalışma **`main`** üzerinde. `enes/level1` geride (eski iskelet); son sepet işi `main`’de, **origin’e push edilmedi** (2 commit önde).
-- **Faz 0–2:** Sahne + `ObjeSurukleme` + `SepetDemoKurucu` var. Play: harf balonda, 4 obje altta, sürükleme ve balon bırakma düzeltildi (commit notu).
-- Prefab `Obje.prefab` ve sahnedeki `ObjePozisyon1`…`4` **yok**. Objeler, harf rozeti ve balon şekli Play’de `SepetDemoKurucu` ile kuruluyor.
-- **Faz 3:** `HarfObjeVerisi`, `SoruSecici`, `SkorYoneticisi`, `GeriBildirimYoneticisi` ve 8 harf kartı repoda var. Bu bileşenler `SepetOyunu` sahnesine henüz konmadı.
-- **Faz 4–6:** `SepetOyunYoneticisi` yok. Süre, skor ve doğru/yanlış turu yok.
+- Branch: **`enes/level1`**.
+- **Faz 0–2:** Sahne + `ObjeSurukleme` + `SepetDemoKurucu` (Play’de kurulum).
+- **Faz 3–4 (kod):** `SepetOyunYoneticisi` eklendi. Play’de `SepetDemoKurucu` SoruSecici / Skor / GeriBildirim + üst puan barı + `correct_check` / `wrong_x` (pop + bip) bağlar. Doğru = +1 puan + yeni tur; yanlış = çarpı + objeyi geri koy.
+- Prefab `Obje.prefab` hâlâ yok (runtime şablon). Final SFX clip’leri Yiğit / Paket 6.
 
-**Sıradaki tek iş:** `SepetOyunu` sahnesine `SoruSecici` + `SkorYoneticisi` + `GeriBildirimYoneticisi` koy, `tumHarfler` dizisini doldur.
+**Sıradaki tek iş:** Unity’de Play — yanlışta `wrong_x`, doğruda tik + puan + yeni harf/objeler. Bitince “Play’de çalıştı” yaz.
 
 ---
 
@@ -60,12 +59,12 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 ## Faz akışı
 
 ```
-Faz 0 (Hazırlık)                         [tamam, push hariç]
-  → Faz 1 (Sahne)                        [demo ile tamam, prefab/pozisyon boş]
-    → Faz 2 (ObjeSurukleme + touch)      [Play doğrulandı, push hariç]
-      → Faz 3 (Paket 3 checkpoint)               ← sıradaki (sahneye koy)
-        → Faz 4 (SepetOyunYoneticisi)
-          → Faz 5 (Bağlama + entegrasyon)
+Faz 0 (Hazırlık)                         [tamam]
+  → Faz 1 (Sahne)                        [demo ile tamam]
+    → Faz 2 (ObjeSurukleme + touch)      [tamam]
+      → Faz 3 (Paket 3 checkpoint)       [API + Play runtime bağ]
+        → Faz 4 (SepetOyunYoneticisi)    [kod tamam — Play teyidi sırada]
+          → Faz 5 (Bağlama + entegrasyon)  ← Play test
             → Faz 6 (Teslim → main)
 ```
 
@@ -321,20 +320,18 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen sadece checklist’i doldurursun; eksikse 
 
 ### 3.3 Sahneye taşınabilirlik
 
-- [ ] Bu bileşenler `SepetOyunu` sahnesine eklenebilir / prefab’lanabilir durumda (en azından diğer sahnede çalıştığı gösterilmiş)
+- [x] Bu bileşenler `SepetOyunu` Play’de `SepetDemoKurucu` ile runtime bağlanıyor
 
 
 
 ## Tamamlandı kontrol listesi
 
-- [ ] Yukarıdaki tüm maddeler işaretli **veya** Yiğit ile “API kilitlendi, asset’ler yakında” yazılı mutabakat var ve sen en azından boş `HarfObjeVerisi` + çalışan `SoruSecici` iskeletine sahipsin
-- [ ] Eksik kalanlar bu dosyaya not edildi
-- [ ] `enes/level1` güncel `main` ile merge/rebase edildi (Paket 3 dosyaları geldi)
+- [x] Yukarıdaki tüm maddeler işaretli **veya** Yiğit ile “API kilitlendi, asset’ler yakında” yazılı mutabakat var ve sen en azından boş `HarfObjeVerisi` + çalışan `SoruSecici` iskeletine sahipsin
+- [x] Eksik kalanlar bu dosyaya not edildi
+- [x] Paket 3 API’leri `enes/level1` üzerinde kullanılabilir
 - [ ] Commit + push yapıldı
 
-**Not (2026-10-14):** 3.1 ve 3.2 repoda yeşil. Eksik: bu üç bileşen `SepetOyunu` sahnesinde yok; `SepetDemoKurucu` harf kartlarını kendisi yüklüyor, skor ve geri bildirim çağırmıyor. `enes/level1` güncel `main` ile birleşik değil.
-
-**Çıkış şartı:** Checklist yeşil olmadan Faz 4’e geçme. → Faz 4
+**Not (2026-10-17):** Play’de kurucu SoruSecici / Skor / GeriBildirim bağlar. → Faz 4 kodu yazıldı.
 
 ---
 
@@ -411,15 +408,16 @@ Sadece compile kontrolü yeterli olabilir; tam bağlama **Faz 5**. En azından:
 
 ## Tamamlandı kontrol listesi
 
-- [ ] Plan Mode çıktısı okundu ve onaylandı
-- [ ] `SepetOyunYoneticisi.cs` compile oluyor
-- [ ] Public alan isimleri tablodakiyle aynı
-- [ ] `kalanSure` varsayılan 60, `dogruPuan` 10
-- [ ] `ObjeSurukleme` yöneticiyi çağıracak şekilde güncellendi
-- [ ] Avatar referansı yok
+- [x] Plan (ENES faz 4 + kullanıcı isteği) uygulandı
+- [x] `SepetOyunYoneticisi.cs` eklendi
+- [x] Public alan isimleri tablodakiyle aynı (+ `skorYazisi` puan barı)
+- [x] `kalanSure` varsayılan 60; `dogruPuan` **1** (istek: her doğruda +1)
+- [x] `ObjeSurukleme` → `ObjeBirakildi` bağlandı
+- [x] Avatar referansı yok
 - [ ] Commit + push yapıldı
+- [ ] Play teyidi: yanlış → wrong_x; doğru → check + puan + yeni tur
 
-**Çıkış:** Kod hazır. → Faz 5
+**Çıkış:** Kod hazır. → Faz 5 Play test
 
 ---
 

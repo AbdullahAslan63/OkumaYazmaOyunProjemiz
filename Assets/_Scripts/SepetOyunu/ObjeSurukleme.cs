@@ -170,17 +170,40 @@ public class ObjeSurukleme : MonoBehaviour
             ustunde = Vector2.Distance(transform.position, yakin) <= birakmaMesafesi;
         }
 
-        // Merkez balonun üstündeyse bırakıldı say
+        // Merkez balonun üstündeyse yöneticiye haber ver
         if (ustunde)
         {
-            // Demo: yönetici yok, sadece log
-            Debug.Log("Balona birakildi: " + objeAdi);
+            // Oyun yöneticisi varsa değerlendir
+            if (SepetOyunYoneticisi.Instance != null)
+            {
+                // Doğru/yanlış burada işlenir
+                SepetOyunYoneticisi.Instance.ObjeBirakildi(this);
+            }
+            else
+            {
+                // Yönetici yoksa eski demo logu
+                Debug.Log("Balona birakildi: " + objeAdi);
+            }
         }
         else
         {
             // Yakın ama üstünde değilse yuvasına dön
-            transform.position = baslangicPozisyonu;
+            BaslangicaDon();
         }
+    }
+
+    /// <summary>Objeyi tur başındaki konuma geri koyar.</summary>
+    public void BaslangicaDon()
+    {
+        // Başlangıç dünyası
+        transform.position = baslangicPozisyonu;
+    }
+
+    /// <summary>Spawn sonrası başlangıç konumunu yeniler.</summary>
+    public void BaslangiciKaydet()
+    {
+        // Şu anki konum tur yuvası olsun
+        baslangicPozisyonu = transform.position;
     }
 
     // İmleç veya ilk parmak basılı mı
