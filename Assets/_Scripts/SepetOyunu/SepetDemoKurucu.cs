@@ -171,10 +171,11 @@ public class SepetDemoKurucu : MonoBehaviour
         GameObject bar = new GameObject("PuanBari", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
         bar.transform.SetParent(canvasGo.transform, false);
         RectTransform barRt = bar.GetComponent<RectTransform>();
-        barRt.anchorMin = new Vector2(0.5f, 1f);
-        barRt.anchorMax = new Vector2(0.5f, 1f);
-        barRt.pivot = new Vector2(0.5f, 1f);
-        barRt.anchoredPosition = new Vector2(0f, -24f);
+        // Sol üst köşe
+        barRt.anchorMin = new Vector2(0f, 1f);
+        barRt.anchorMax = new Vector2(0f, 1f);
+        barRt.pivot = new Vector2(0f, 1f);
+        barRt.anchoredPosition = new Vector2(24f, -24f);
         barRt.sizeDelta = new Vector2(280f, 64f);
         Image barImg = bar.GetComponent<Image>();
         barImg.color = new Color(0.12f, 0.18f, 0.32f, 0.82f);
@@ -200,15 +201,18 @@ public class SepetDemoKurucu : MonoBehaviour
         }
 
         ses.playOnAwake = false;
+        // Geri bildirim sesi yüksek olsun
+        ses.volume = 1f;
+        geri.sesSeviyesi = 1.6f;
         // Clip yoksa kısa bip üret (Yiğit / Paket 6 final clip bağlayana kadar)
         if (geri.dogruSes == null)
         {
-            geri.dogruSes = KisaBipOlustur(880f, 0.12f);
+            geri.dogruSes = KisaBipOlustur(880f, 0.14f);
         }
 
         if (geri.yanlisSes == null)
         {
-            geri.yanlisSes = KisaBipOlustur(220f, 0.18f);
+            geri.yanlisSes = KisaBipOlustur(220f, 0.2f);
         }
 
         // Geri bildirim bağları
@@ -333,7 +337,8 @@ public class SepetDemoKurucu : MonoBehaviour
         {
             float t = i / (float)ornekHiz;
             float zarf = 1f - (t / sure);
-            ornekler[i] = Mathf.Sin(2f * Mathf.PI * frekans * t) * 0.35f * zarf;
+            // Daha yüksek genlik (duyulur bip)
+            ornekler[i] = Mathf.Sin(2f * Mathf.PI * frekans * t) * 0.85f * zarf;
         }
 
         clip.SetData(ornekler, 0);

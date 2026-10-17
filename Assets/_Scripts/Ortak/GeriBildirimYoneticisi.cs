@@ -21,6 +21,9 @@ public class GeriBildirimYoneticisi : MonoBehaviour
     public AudioClip dogruSes;
     public AudioClip yanlisSes;
 
+    // PlayOneShot ses çarpanı (1 = normal, 1.5+ daha yüksek)
+    public float sesSeviyesi = 1.5f;
+
     // Otomatik gizleme süresi
     public float gosterimSuresi = 0.8f;
 
@@ -82,8 +85,8 @@ public class GeriBildirimYoneticisi : MonoBehaviour
         // Ses kaynağı ve clip varsa çal
         if (sesKaynagi != null && clip != null)
         {
-            // Tek seferlik
-            sesKaynagi.PlayOneShot(clip);
+            // Tek seferlik, sesSeviyesi ile yüksek
+            sesKaynagi.PlayOneShot(clip, Mathf.Clamp(sesSeviyesi, 0f, 1.5f));
         }
     }
 
