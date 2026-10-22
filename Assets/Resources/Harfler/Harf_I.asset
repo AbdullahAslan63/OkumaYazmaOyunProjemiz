@@ -15,7 +15,7 @@ MonoBehaviour:
   harf: 73
   dogruObjeler:
   - {fileID: -71054137782703823, guid: 86e3a1d707bd8446b8dcece8357cd98b, type: 3}
-  - {fileID: 7073260176537713582, guid: 98a36f7d5911046fb91898e2736eb0b5, type: 3}
+  - {fileID: 4677977719197682355, guid: 98a36f7d5911046fb91898e2736eb0b5, type: 3}
   - {fileID: 1859656379952452130, guid: 7a1b56f9692b44ec38df7d11cdae1109, type: 3}
   - {fileID: -4367482579208348860, guid: e06041f05acfb4988ab65933a516fff7, type: 3}
   - {fileID: -5501325579296700104, guid: 2b2043503300842cc9fd8efa9bf03dae, type: 3}

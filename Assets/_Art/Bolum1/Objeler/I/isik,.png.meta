@@ -3,14 +3,8 @@ guid: 98a36f7d5911046fb91898e2736eb0b5
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7073260176537713582
-    second: isik,_0
-  - first:
       213: 4677977719197682355
     second: isik,_1
-  - first:
-      213: -1343006701739283926
-    second: isik,_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -106,28 +100,6 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: isik,_0
-      rect:
-        serializedVersion: 2
-        x: 50
-        y: 336
-        width: 65
-        height: 49
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: eab7272a7a4492260800000000000000
-      internalID: 7073260176537713582
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: isik,_1
       rect:
         serializedVersion: 2
@@ -136,7 +108,7 @@ TextureImporter:
         width: 357
         height: 489
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -145,28 +117,6 @@ TextureImporter:
       bones: []
       spriteID: 3ba48fb53f38be040800000000000000
       internalID: 4677977719197682355
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: isik,_2
-      rect:
-        serializedVersion: 2
-        x: 47
-        y: 247
-        width: 62
-        height: 37
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: a2a6cd3358eac5de0800000000000000
-      internalID: -1343006701739283926
       vertices: []
       indices: 
       edges: []
@@ -185,9 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      isik,_0: 7073260176537713582
       isik,_1: 4677977719197682355
-      isik,_2: -1343006701739283926
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -56,8 +56,6 @@ public class SepetDemoKurucu : MonoBehaviour
         ArkaplaniHazirla(kamera);
         // Ortadaki deneme arabasını kapat
         DenemeArabasiniKapat();
-        // Balonu bul veya oluştur, ekranın üstüne oturt
-        GameObject balon = BalonuHazirla(kamera);
         // Harf kartlarını yükle
         List<HarfObjeVerisi> harfler = DoluHarfleriYukle();
         // Kart yoksa sistem kurma
@@ -69,14 +67,32 @@ public class SepetDemoKurucu : MonoBehaviour
             return;
         }
 
-        // Rozeti stil ile hazırla (metni yönetici yazacak)
-        HarfiYaz(balon, '?', kamera);
+        // 4 balon kuyruğu (01–04): solda küçükler + ortada ana
+        BalonKuyrugu kuyruk = BalonKuyrugunuKur(kamera);
         // Oyun yöneticisi + UI + ortak sistemler
-        OyunSistemleriniKur(kamera, balon, harfler);
+        OyunSistemleriniKur(kamera, kuyruk, harfler);
+    }
+
+    // BalonKuyrugu objesini oluşturur
+    private BalonKuyrugu BalonKuyrugunuKur(Camera kamera)
+    {
+        // Varsa kullan
+        BalonKuyrugu mevcut = FindAnyObjectByType<BalonKuyrugu>();
+        if (mevcut != null)
+        {
+            mevcut.Kur(kamera);
+            return mevcut;
+        }
+
+        // Yeni kuyruk
+        GameObject go = new GameObject("BalonKuyrugu");
+        BalonKuyrugu kuyruk = go.AddComponent<BalonKuyrugu>();
+        kuyruk.Kur(kamera);
+        return kuyruk;
     }
 
     // SepetOyunYoneticisi, skor barı, tik/çarpı ve slotları bağlar
-    private void OyunSistemleriniKur(Camera kamera, GameObject balon, List<HarfObjeVerisi> harfler)
+    private void OyunSistemleriniKur(Camera kamera, BalonKuyrugu kuyruk, List<HarfObjeVerisi> harfler)
     {
         // Yönetici objesi (yoksa oluştur)
         SepetOyunYoneticisi yonetici = FindAnyObjectByType<SepetOyunYoneticisi>();
@@ -121,15 +137,14 @@ public class SepetDemoKurucu : MonoBehaviour
         Transform[] slotlar = ObjeSlotlariniKur(kamera);
         // Gizli obje şablonu
         GameObject prefab = ObjePrefabSablonuKur(yonetici.transform);
-        // Balondaki TMP rozet
-        TextMeshPro rozet = balon != null ? balon.GetComponentInChildren<TextMeshPro>() : null;
         // Yönetici alanlarını bağla
         yonetici.soruSecici = soru;
         yonetici.skorYoneticisi = skor;
         yonetici.geriBildirim = geri;
+        yonetici.balonKuyrugu = kuyruk;
         yonetici.objePrefab = prefab;
         yonetici.objePozisyonlari = slotlar;
-        yonetici.harfRozeti = rozet;
+        yonetici.harfRozeti = kuyruk != null ? kuyruk.HarfRozeti : null;
         yonetici.dogruPuan = 1;
         yonetici.kalanSure = 60f;
     }
@@ -482,31 +497,47 @@ public class SepetDemoKurucu : MonoBehaviour
         // Sprite yoksa konumlama yapma
         if (cizici.sprite == null)
         {
+            // Yine de hafif sallanma ekle
+            BalonSallanmasiniEkle(balon);
             // Balonu olduğu gibi bırak
             return balon;
         }
 
         // Sahnedeki balon bu konum ve ölçekte kalsın
-        if (sahnedeVardi)
+        if (!sahnedeVardi)
         {
-            // Play açılınca yeniden oturtma
-            return balon;
+            // Ekran yüksekliği
+            float yukseklik = kamera.orthographicSize * 2f;
+            // Balon yüksekliği ekranın üçte biri
+            float hedef = yukseklik / 3f;
+            // Sprite yüksekliği
+            float spriteH = cizici.sprite.bounds.size.y;
+            // Sıfıra bölme
+            float olcek = spriteH > 0.001f ? hedef / spriteH : 1f;
+            // Üst ortaya yakın merkez
+            float merkezY = kamera.orthographicSize - hedef * 0.55f;
+            // Görsel merkezi bu noktaya gelsin
+            MerkezeOturt(balon.transform, cizici.sprite, new Vector3(0f, merkezY, 0f), olcek);
         }
 
-        // Ekran yüksekliği
-        float yukseklik = kamera.orthographicSize * 2f;
-        // Balon yüksekliği ekranın üçte biri
-        float hedef = yukseklik / 3f;
-        // Sprite yüksekliği
-        float spriteH = cizici.sprite.bounds.size.y;
-        // Sıfıra bölme
-        float olcek = spriteH > 0.001f ? hedef / spriteH : 1f;
-        // Üst ortaya yakın merkez
-        float merkezY = kamera.orthographicSize - hedef * 0.55f;
-        // Görsel merkezi bu noktaya gelsin
-        MerkezeOturt(balon.transform, cizici.sprite, new Vector3(0f, merkezY, 0f), olcek);
+        // Hafif sağa-sola sallanma
+        BalonSallanmasiniEkle(balon);
         // Hazır balonu döndür
         return balon;
+    }
+
+    // Balona yavaş sallanma bileşeni ekler
+    private void BalonSallanmasiniEkle(GameObject balon)
+    {
+        // Zaten varsa tekrar ekleme
+        if (balon.GetComponent<BalonSallanma>() != null)
+        {
+            // Çık
+            return;
+        }
+
+        // Hafif salınım
+        balon.AddComponent<BalonSallanma>();
     }
 
     // Tag Balon veya adı Balon ile başlayan objeyi bulur
@@ -1301,18 +1332,81 @@ public class HarfPariltisi : MonoBehaviour
         float carpan = Mathf.Lerp(0.9f, 1.1f, nabiz);
         // Taban ölçeğe uygula
         transform.localScale = tabanOlcek * carpan;
-        // Çizici varsa parlaklık da nabızlasın
+        // Çizici varsa parlaklık da nabızlasın (daha güçlü)
         if (cizici != null)
         {
             // Mevcut renk
             Color renk = cizici.color;
-            // Eski parlaklığın yarısı
-            renk.a = Mathf.Lerp(0.39f, 0.5f, nabiz);
+            // Yüksek alfa aralığı
+            renk.a = Mathf.Lerp(0.72f, 0.95f, nabiz);
             // Rengi yaz
             cizici.color = renk;
         }
 
         // Yıldız kolları yavaş dönsün
         transform.Rotate(0f, 0f, 16f * Time.deltaTime);
+    }
+}
+
+/// <summary>
+/// Balonu yavaş ve hafif sağa-sola sallar (salıncak gibi).
+/// </summary>
+public class BalonSallanma : MonoBehaviour
+{
+    // Yatay salınım genliği (dünya birimi)
+    public float yatayGenlik = 0.12f;
+
+    // Dönüş genliği (derece)
+    public float donusGenlik = 3.5f;
+
+    // Salınım hızı (düşük = yavaş)
+    public float hiz = 1.15f;
+
+    // Animasyon sırasında kapatılır
+    public bool sallanmaAktif = true;
+
+    // Play başındaki konum
+    private Vector3 tabanKonum;
+
+    // Play başındaki Z dönüşü
+    private float tabanDonus;
+
+    // Başlangıç konumunu kaydet
+    private void Start()
+    {
+        // Orta nokta
+        tabanKonum = transform.position;
+        // Başlangıç açısı
+        tabanDonus = transform.eulerAngles.z;
+    }
+
+    /// <summary>Salınım merkezini günceller.</summary>
+    public void TabanAyarla(Vector3 konum)
+    {
+        tabanKonum = konum;
+        transform.position = konum;
+        tabanDonus = transform.eulerAngles.z;
+    }
+
+    // Her karede hafif sağa-sola
+    private void Update()
+    {
+        // Kapalıysa dokunma
+        if (!sallanmaAktif)
+        {
+            return;
+        }
+
+        // -1..1 yavaş sinüs
+        float s = Mathf.Sin(Time.time * hiz);
+        // Yatay kaydır
+        Vector3 konum = tabanKonum;
+        konum.x += s * yatayGenlik;
+        // 2D düzlem
+        konum.z = 0f;
+        // Konumu yaz
+        transform.position = konum;
+        // Hafif eğilme
+        transform.rotation = Quaternion.Euler(0f, 0f, tabanDonus + s * donusGenlik);
     }
 }

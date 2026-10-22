@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -19,13 +20,16 @@ public class SepetOyunYoneticisi : MonoBehaviour
     // Doğru/yanlış ikon + ses (Paket 3)
     public GeriBildirimYoneticisi geriBildirim;
 
+    // 4 balon kuyruğu (doğru cevapta geçiş animasyonu)
+    public BalonKuyrugu balonKuyrugu;
+
     // Spawn şablonu (SpriteRenderer + Collider + ObjeSurukleme)
     public GameObject objePrefab;
 
     // Alt sıradaki 4 sabit slot
     public Transform[] objePozisyonlari;
 
-    // Balondaki harf yazısı (dünya uzayı TMP)
+    // Balondaki harf yazısı (dünya uzayı TMP) — kuyruk yoksa kullanılır
     public TextMeshPro harfRozeti;
 
     // Süre yazısı (UI)
@@ -121,7 +125,7 @@ public class SepetOyunYoneticisi : MonoBehaviour
         }
     }
 
-    /// <summary>Yeni harf seçer, objeleri yeniden dizer.</summary>
+    /// <summary>Yeni harf seçer, objeleri yeniden dizer (ilk tur / animasyonsuz).</summary>
     public void YeniTurBaslat()
     {
         // Oyun bittiyse tur açma
@@ -153,19 +157,68 @@ public class SepetOyunYoneticisi : MonoBehaviour
             return;
         }
 
-        // Rozete harfi yaz
-        if (harfRozeti != null)
-        {
-            // Büyük harf metni
-            harfRozeti.text = aktifHarf.harf.ToString();
-            // Mesh'i tazeleyerek renk geçişini koru
-            harfRozeti.ForceMeshUpdate();
-        }
-
+        // Harfi ana balona yaz
+        HarfiBalonaYaz(aktifHarf.harf);
         // Eski objeleri sil
         ObjeleriTemizle();
         // Yeni 4 objeyi üret
         ObjeleriOlustur();
+    }
+
+    // Harfi kuyruk veya rozete yazar
+    private void HarfiBalonaYaz(char harf)
+    {
+        // Kuyruk varsa onun API'si
+        if (balonKuyrugu != null)
+        {
+            balonKuyrugu.HarfiAyarla(harf);
+            // Referansı güncel tut
+            harfRozeti = balonKuyrugu.HarfRozeti;
+            return;
+        }
+
+        // Eski tek rozet yolu
+        if (harfRozeti != null)
+        {
+            harfRozeti.text = harf.ToString();
+            harfRozeti.ForceMeshUpdate();
+        }
+    }
+
+    // Doğru cevap: balon geçişi + yeni objeler
+    private IEnumerator DogruTurGecisi()
+    {
+        // Objeleri hemen kaldır (balon animasyonu sırasında sürüklenmesin)
+        ObjeleriTemizle();
+        // Yeni harf seç
+        if (soruSecici != null)
+        {
+            aktifHarf = soruSecici.YeniHarfSec();
+        }
+
+        // Harf yoksa yine de kilidi aç
+        if (aktifHarf == null)
+        {
+            islemKilitli = false;
+            yield break;
+        }
+
+        // Kuyruk animasyonu
+        if (balonKuyrugu != null)
+        {
+            yield return balonKuyrugu.DogruSonrasiGecis(aktifHarf.harf);
+            harfRozeti = balonKuyrugu.HarfRozeti;
+        }
+        else
+        {
+            // Animasyonsuz harf
+            HarfiBalonaYaz(aktifHarf.harf);
+        }
+
+        // Yeni tur objeleri
+        ObjeleriOlustur();
+        // Bırakmaya izin
+        islemKilitli = false;
     }
 
     /// <summary>1 doğru + 3 çeldiriciyi karıştırıp slotlara koyar.</summary>
@@ -362,8 +415,8 @@ public class SepetOyunYoneticisi : MonoBehaviour
                 geriBildirim.DogruGoster();
             }
 
-            // Yeni soruya geç
-            YeniTurBaslat();
+            // Balon kuyruğu geçişi + yeni soru
+            StartCoroutine(DogruTurGecisi());
         }
         else
         {
