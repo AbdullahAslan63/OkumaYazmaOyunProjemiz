@@ -19,6 +19,7 @@ public class AvatarSahneKurucu : MonoBehaviour
     private static Sprite kareSprite;
     private static Sprite daireSprite;
     private static Sprite yuvarlakKareSprite;
+    private static Sprite renkCarkiSprite;
 
     // Dolap görselinin dünya merkezi — karakter halıya hizalansın
     private static Vector3 dolapMerkez;
@@ -219,7 +220,7 @@ public class AvatarSahneKurucu : MonoBehaviour
         // Üst sekme çubuğu
         GameObject sekmeCubugu = Panel(sol.transform, "SekmeCubugu", new Color(0.88f, 0.90f, 0.95f, 1f));
         RectTransform sekmeRt = sekmeCubugu.GetComponent<RectTransform>();
-        Stretch(sekmeRt, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(20f, -112f), new Vector2(-20f, -18f));
+        Stretch(sekmeRt, new Vector2(0f, 1f), new Vector2(1f, 1f), new Vector2(20f, -136f), new Vector2(-20f, -14f));
         YuvarlakYap(sekmeCubugu.GetComponent<Image>(), true);
         GolgeEkle(sekmeCubugu, new Color(0.08f, 0.09f, 0.14f, 0.18f), new Vector2(0f, -4f));
         GolgeEkle(sekmeCubugu, new Color(0.08f, 0.09f, 0.14f, 0.08f), new Vector2(0f, -10f));
@@ -230,9 +231,12 @@ public class AvatarSahneKurucu : MonoBehaviour
         sekmeLay.childForceExpandWidth = true;
         sekmeLay.childForceExpandHeight = true;
 
-        Button karakterSekme = SekmeButon(sekmeCubugu.transform, "KarakterSekme", "Karakter");
-        Button renkSekme = SekmeButon(sekmeCubugu.transform, "RenkSekme", "Renk");
-        Button aksesuarSekme = SekmeButon(sekmeCubugu.transform, "AksesuarSekme", "Aksesuar");
+        // Yazıyı okuyamayan çocuk resimden anlasın: hayvan, şapka, renk çarkı
+        Sprite karakterIkon = IlkKarakterSprite(gorunum);
+        Sprite aksesuarIkon = SapkaVeyaIlkAksesuar(gorunum);
+        Button karakterSekme = SekmeButon(sekmeCubugu.transform, "KarakterSekme", "Karakter", karakterIkon, Color.white);
+        Button aksesuarSekme = SekmeButon(sekmeCubugu.transform, "AksesuarSekme", "Aksesuar", aksesuarIkon, Color.white);
+        Button renkSekme = SekmeButon(sekmeCubugu.transform, "RenkSekme", "Renk", RenkCarkiSpriteAl(), Color.white);
 
         karakterSekme.onClick.AddListener(secim.KarakterSekmesiniAc);
         renkSekme.onClick.AddListener(secim.RenkSekmesiniAc);
@@ -241,7 +245,7 @@ public class AvatarSahneKurucu : MonoBehaviour
         // İçerik alanı (sekme ile değişen paneller)
         GameObject icerik = new GameObject("IcerikAlani", typeof(RectTransform));
         icerik.transform.SetParent(sol.transform, false);
-        Stretch(icerik.GetComponent<RectTransform>(), new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(20f, 140f), new Vector2(-20f, -120f));
+        Stretch(icerik.GetComponent<RectTransform>(), new Vector2(0f, 0f), new Vector2(1f, 1f), new Vector2(20f, 140f), new Vector2(-20f, -148f));
 
         GameObject karakterPaneli = IzgaraPanel(icerik.transform, "KarakterPaneli", new Vector2(210f, 240f), 18f, 2);
         GameObject renkPaneli = IzgaraPanel(icerik.transform, "RenkPaneli", new Vector2(86f, 86f), 16f, 4);
@@ -511,17 +515,151 @@ public class AvatarSahneKurucu : MonoBehaviour
         return sb;
     }
 
-    static Button SekmeButon(Transform parent, string ad, string yazi)
+    /// <summary>Sekme: solda mini resim, sağda kısa yazı.</summary>
+    static Button SekmeButon(Transform parent, string ad, string yazi, Sprite ikon, Color ikonRenk)
     {
-        Button btn = Buton(parent, ad, Vector2.zero, new Vector2(180f, 64f), new Color(0.96f, 0.97f, 0.99f, 1f));
+        Button btn = Buton(parent, ad, Vector2.zero, new Vector2(180f, 78f), new Color(0.96f, 0.97f, 0.99f, 1f));
         YuvarlakYap(btn.GetComponent<Image>(), true);
         LayoutElement le = btn.gameObject.AddComponent<LayoutElement>();
         le.flexibleWidth = 1f;
-        le.minHeight = 64f;
+        le.minHeight = 78f;
         GolgeEkle(btn.gameObject, new Color(0.08f, 0.09f, 0.14f, 0.20f), new Vector2(0f, -3f));
         GolgeEkle(btn.gameObject, new Color(0.08f, 0.09f, 0.14f, 0.08f), new Vector2(0f, -8f));
-        TextEkle(btn.transform, yazi, 30, new Color(0.18f, 0.18f, 0.2f));
+
+        HorizontalLayoutGroup ic = btn.gameObject.AddComponent<HorizontalLayoutGroup>();
+        ic.padding = new RectOffset(10, 10, 8, 8);
+        ic.spacing = 8f;
+        ic.childAlignment = TextAnchor.MiddleCenter;
+        ic.childControlWidth = true;
+        ic.childControlHeight = true;
+        ic.childForceExpandWidth = false;
+        ic.childForceExpandHeight = false;
+
+        SekmeIkonuEkle(btn.transform, ikon, ikonRenk);
+
+        GameObject yaziGo = new GameObject("Text", typeof(RectTransform), typeof(LayoutElement));
+        yaziGo.transform.SetParent(btn.transform, false);
+        LayoutElement yaziLe = yaziGo.GetComponent<LayoutElement>();
+        yaziLe.flexibleWidth = 1f;
+        yaziLe.minHeight = 48f;
+        Text t = yaziGo.AddComponent<Text>();
+        t.text = yazi;
+        t.alignment = TextAnchor.MiddleCenter;
+        t.color = new Color(0.18f, 0.18f, 0.2f);
+        t.fontSize = 28;
+        t.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        t.horizontalOverflow = HorizontalWrapMode.Overflow;
+        t.verticalOverflow = VerticalWrapMode.Overflow;
+        t.raycastTarget = false;
         return btn;
+    }
+
+    /// <summary>Sekmenin yanındaki küçük resim. Tıklamayı yutmasın.</summary>
+    static void SekmeIkonuEkle(Transform parent, Sprite sprite, Color renk)
+    {
+        GameObject go = new GameObject("Ikon", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(LayoutElement));
+        go.transform.SetParent(parent, false);
+        Image img = go.GetComponent<Image>();
+        img.sprite = sprite != null ? sprite : DaireSpriteAl();
+        img.color = renk;
+        img.preserveAspect = true;
+        img.raycastTarget = false;
+        LayoutElement le = go.GetComponent<LayoutElement>();
+        le.preferredWidth = 58f;
+        le.preferredHeight = 58f;
+        le.minWidth = 48f;
+        le.minHeight = 48f;
+        le.flexibleWidth = 0f;
+        le.flexibleHeight = 0f;
+    }
+
+    /// <summary>İlk hayvanın normal pozunu sekme ikonu yapar.</summary>
+    static Sprite IlkKarakterSprite(AvatarGorunumu gorunum)
+    {
+        if (gorunum == null || gorunum.hayvanlar == null)
+            return null;
+
+        for (int i = 0; i < gorunum.hayvanlar.Length; i++)
+        {
+            HayvanGorseli hayvan = gorunum.hayvanlar[i];
+            if (hayvan != null && hayvan.normalPoz != null)
+                return hayvan.normalPoz;
+        }
+
+        return null;
+    }
+
+    /// <summary>Şapka varsa onu, yoksa listedeki ilk aksesuarı döndürür.</summary>
+    static Sprite SapkaVeyaIlkAksesuar(AvatarGorunumu gorunum)
+    {
+        if (gorunum == null || gorunum.aksesuarlar == null)
+            return null;
+
+        Sprite yedek = null;
+        for (int i = 0; i < gorunum.aksesuarlar.Length; i++)
+        {
+            AksesuarGorseli aks = gorunum.aksesuarlar[i];
+            if (aks == null || aks.sprite == null)
+                continue;
+
+            if (yedek == null)
+                yedek = aks.sprite;
+
+            if (aks.sprite.name.IndexOf("sapka", System.StringComparison.OrdinalIgnoreCase) >= 0)
+                return aks.sprite;
+        }
+
+        return yedek;
+    }
+
+    /// <summary>Altı dilimli renk çarkı. Renk sekmesinin resmi.</summary>
+    static Sprite RenkCarkiSpriteAl()
+    {
+        if (renkCarkiSprite != null)
+            return renkCarkiSprite;
+
+        int s = 64;
+        Texture2D t = new Texture2D(s, s, TextureFormat.RGBA32, false);
+        t.filterMode = FilterMode.Bilinear;
+        float c = (s - 1) * 0.5f;
+        float r = c - 1f;
+        Color[] dilimler =
+        {
+            new Color(0.95f, 0.28f, 0.32f, 1f),
+            new Color(1f, 0.62f, 0.16f, 1f),
+            new Color(1f, 0.86f, 0.22f, 1f),
+            new Color(0.35f, 0.78f, 0.38f, 1f),
+            new Color(0.28f, 0.62f, 0.95f, 1f),
+            new Color(0.62f, 0.38f, 0.92f, 1f)
+        };
+
+        for (int y = 0; y < s; y++)
+        {
+            for (int x = 0; x < s; x++)
+            {
+                float dx = x - c;
+                float dy = y - c;
+                float d = Mathf.Sqrt(dx * dx + dy * dy);
+                if (d > r)
+                {
+                    t.SetPixel(x, y, Color.clear);
+                    continue;
+                }
+
+                float aci = Mathf.Atan2(dy, dx);
+                int dilim = Mathf.FloorToInt((aci + Mathf.PI) / (Mathf.PI * 2f) * dilimler.Length);
+                dilim = Mathf.Clamp(dilim, 0, dilimler.Length - 1);
+                Color renk = dilimler[dilim];
+                if (d > r - 1.2f)
+                    renk.a = Mathf.Clamp01(r - d);
+                t.SetPixel(x, y, renk);
+            }
+        }
+
+        t.Apply();
+        renkCarkiSprite = Sprite.Create(t, new Rect(0f, 0f, s, s), new Vector2(0.5f, 0.5f), s);
+        renkCarkiSprite.name = "RenkCarki";
+        return renkCarkiSprite;
     }
 
     static GameObject Kart(Transform parent, string ad)

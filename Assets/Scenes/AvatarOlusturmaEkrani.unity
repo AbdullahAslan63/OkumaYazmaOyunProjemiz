@@ -1538,10 +1538,10 @@ RectTransform:
   - {fileID: 1947411435}
   m_Father: {fileID: 426906830}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &356237182
 MonoBehaviour:
@@ -1784,8 +1784,8 @@ RectTransform:
   - {fileID: 1164138739}
   m_Father: {fileID: 820299222}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 180, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3592,10 +3592,10 @@ RectTransform:
   - {fileID: 1059799320}
   m_Father: {fileID: 426906830}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &793817984
 MonoBehaviour:
@@ -5702,27 +5702,38 @@ MonoBehaviour:
     aksesuarOfset: {x: 0, y: 1.9}
     aksesuarAyarlari:
     - aksesuarAdi: aksesuar_gozluk_kus_0
-      ofset: {x: 0, y: 1.55}
+      ofset: {x: -1.2, y: 1.4}
+      olcekCarpani: 5.4
     - aksesuarAdi: aksesuar_kaplan_arkadan_takmali_sapka_0
-      ofset: {x: 0, y: 1.9}
+      ofset: {x: -1.2, y: 2.3}
+      olcekCarpani: 1.9
     - aksesuarAdi: aksesuar_kaplan_gozluk_0
-      ofset: {x: 0, y: 1.55}
+      ofset: {x: -1.2, y: 1.4}
+      olcekCarpani: 2.8
     - aksesuarAdi: aksesuar_kaplan_gunes_gozlugu_0
-      ofset: {x: 0, y: 1.55}
+      ofset: {x: -1.2, y: 1.4}
+      olcekCarpani: 2.8
     - aksesuarAdi: aksesuar_kaplan_kova_sapka_0
-      ofset: {x: 0, y: 1.9}
+      ofset: {x: -1.2, y: 2.3}
+      olcekCarpani: 1.9
     - aksesuarAdi: aksesuar_kaplan_kulakli_sapka_0
-      ofset: {x: 0, y: 1.9}
+      ofset: {x: -1.2, y: 2.3}
+      olcekCarpani: 1.8
     - aksesuarAdi: aksesuar_kaplan_logolu_sapka_0
-      ofset: {x: 0, y: 1.9}
+      ofset: {x: -1.2, y: 2.3}
+      olcekCarpani: 2
     - aksesuarAdi: aksesuar_kaplan_sapka_0
-      ofset: {x: 0, y: 1.9}
+      ofset: {x: -1.2, y: 2.3}
+      olcekCarpani: 1.9
     - aksesuarAdi: aksesuar_kaplan_yuvarlak_gozluk_0
-      ofset: {x: 0, y: 1.55}
+      ofset: {x: -1.2, y: 1.4}
+      olcekCarpani: 2.19
     - aksesuarAdi: aksesuar_kulaklik_maymun_0
-      ofset: {x: 0, y: 1.9}
+      ofset: {x: -1.2, y: 1.9}
+      olcekCarpani: 5
     - aksesuarAdi: aksesuar_sapka_kus_0
-      ofset: {x: 0, y: 1.9}
+      ofset: {x: -1.2, y: 2.3}
+      olcekCarpani: 3
   - hayvanAdi: "Tav\u015Fan"
     normalPoz: {fileID: 1153188567824183562, guid: 4332f0fd42178c0d4baa06d532d45d8c, type: 3}
     mutluPoz: {fileID: 5869272504414987646, guid: 8e3b3a03a6a5c4c4e8cfc3ff5462ec96, type: 3}
@@ -5731,27 +5742,38 @@ MonoBehaviour:
     aksesuarOfset: {x: 0, y: 1.7}
     aksesuarAyarlari:
     - aksesuarAdi: aksesuar_gozluk_kus_0
-      ofset: {x: 0, y: 1.35}
+      ofset: {x: 0, y: 0.84}
+      olcekCarpani: 2.9
     - aksesuarAdi: aksesuar_kaplan_arkadan_takmali_sapka_0
       ofset: {x: 0, y: 1.7}
+      olcekCarpani: 1
     - aksesuarAdi: aksesuar_kaplan_gozluk_0
-      ofset: {x: 0, y: 1.35}
+      ofset: {x: 0, y: 0.77}
+      olcekCarpani: 1.7
     - aksesuarAdi: aksesuar_kaplan_gunes_gozlugu_0
-      ofset: {x: 0, y: 1.35}
+      ofset: {x: 0, y: 0.77}
+      olcekCarpani: 1.7
     - aksesuarAdi: aksesuar_kaplan_kova_sapka_0
       ofset: {x: 0, y: 1.7}
+      olcekCarpani: 1
     - aksesuarAdi: aksesuar_kaplan_kulakli_sapka_0
       ofset: {x: 0, y: 1.7}
+      olcekCarpani: 1
     - aksesuarAdi: aksesuar_kaplan_logolu_sapka_0
       ofset: {x: 0, y: 1.7}
+      olcekCarpani: 1
     - aksesuarAdi: aksesuar_kaplan_sapka_0
       ofset: {x: 0, y: 1.7}
+      olcekCarpani: 1
     - aksesuarAdi: aksesuar_kaplan_yuvarlak_gozluk_0
-      ofset: {x: 0, y: 1.35}
+      ofset: {x: 0, y: 0.85}
+      olcekCarpani: 1.32
     - aksesuarAdi: aksesuar_kulaklik_maymun_0
-      ofset: {x: 0, y: 1.7}
+      ofset: {x: 0, y: 1}
+      olcekCarpani: 2
     - aksesuarAdi: aksesuar_sapka_kus_0
       ofset: {x: 0, y: 1.7}
+      olcekCarpani: 1
   - hayvanAdi: "Ku\u015F"
     normalPoz: {fileID: 8378548140099857260, guid: ada661af0a6e2410d9261d1198bea2df, type: 3}
     mutluPoz: {fileID: 3850390660085421179, guid: e637309e6de3e4bac82444064370a0eb, type: 3}
@@ -5760,27 +5782,38 @@ MonoBehaviour:
     aksesuarOfset: {x: 0, y: 3}
     aksesuarAyarlari:
     - aksesuarAdi: aksesuar_gozluk_kus_0
-      ofset: {x: 0, y: 2.65}
+      ofset: {x: 0, y: 1.82}
+      olcekCarpani: 3.2
     - aksesuarAdi: aksesuar_kaplan_arkadan_takmali_sapka_0
       ofset: {x: 0, y: 3}
+      olcekCarpani: 1
     - aksesuarAdi: aksesuar_kaplan_gozluk_0
-      ofset: {x: 0, y: 2.65}
+      ofset: {x: 0, y: 2}
+      olcekCarpani: 1.98
     - aksesuarAdi: aksesuar_kaplan_gunes_gozlugu_0
-      ofset: {x: 0, y: 2.65}
+      ofset: {x: 0, y: 2}
+      olcekCarpani: 1.98
     - aksesuarAdi: aksesuar_kaplan_kova_sapka_0
       ofset: {x: 0, y: 3}
+      olcekCarpani: 1
     - aksesuarAdi: aksesuar_kaplan_kulakli_sapka_0
       ofset: {x: 0, y: 3}
+      olcekCarpani: 1
     - aksesuarAdi: aksesuar_kaplan_logolu_sapka_0
       ofset: {x: 0, y: 3}
+      olcekCarpani: 1
     - aksesuarAdi: aksesuar_kaplan_sapka_0
       ofset: {x: 0, y: 3}
+      olcekCarpani: 1
     - aksesuarAdi: aksesuar_kaplan_yuvarlak_gozluk_0
-      ofset: {x: 0, y: 2.65}
-    - aksesuarAdi: aksesuar_kulaklik_maymun_0
       ofset: {x: 0, y: 3}
+      olcekCarpani: 1
+    - aksesuarAdi: aksesuar_kulaklik_maymun_0
+      ofset: {x: 0, y: 2.21}
+      olcekCarpani: 2.47
     - aksesuarAdi: aksesuar_sapka_kus_0
       ofset: {x: 0, y: 3}
+      olcekCarpani: 1
   - hayvanAdi: Rakun
     normalPoz: {fileID: -3121074332411749344, guid: 65e5e906a460491e18ca943eb816ad4c, type: 3}
     mutluPoz: {fileID: -5200758030901369874, guid: 658063bfe4565453bac86e6c906bee7a, type: 3}
@@ -5790,26 +5823,37 @@ MonoBehaviour:
     aksesuarAyarlari:
     - aksesuarAdi: aksesuar_gozluk_kus_0
       ofset: {x: 0, y: 1.4499999}
+      olcekCarpani: 9
     - aksesuarAdi: aksesuar_kaplan_arkadan_takmali_sapka_0
-      ofset: {x: 0, y: 1.8}
+      ofset: {x: 0, y: 2.34}
+      olcekCarpani: 3
     - aksesuarAdi: aksesuar_kaplan_gozluk_0
       ofset: {x: 0, y: 1.4499999}
+      olcekCarpani: 4.6
     - aksesuarAdi: aksesuar_kaplan_gunes_gozlugu_0
       ofset: {x: 0, y: 1.4499999}
+      olcekCarpani: 4.6
     - aksesuarAdi: aksesuar_kaplan_kova_sapka_0
-      ofset: {x: 0, y: 1.8}
+      ofset: {x: 0, y: 2.34}
+      olcekCarpani: 2.6
     - aksesuarAdi: aksesuar_kaplan_kulakli_sapka_0
-      ofset: {x: 0, y: 1.8}
+      ofset: {x: 0, y: 2.34}
+      olcekCarpani: 2.5
     - aksesuarAdi: aksesuar_kaplan_logolu_sapka_0
-      ofset: {x: 0, y: 1.8}
+      ofset: {x: 0, y: 2.34}
+      olcekCarpani: 2.5
     - aksesuarAdi: aksesuar_kaplan_sapka_0
-      ofset: {x: 0, y: 1.8}
+      ofset: {x: 0, y: 2.34}
+      olcekCarpani: 2.5
     - aksesuarAdi: aksesuar_kaplan_yuvarlak_gozluk_0
       ofset: {x: 0, y: 1.4499999}
+      olcekCarpani: 3.7
     - aksesuarAdi: aksesuar_kulaklik_maymun_0
       ofset: {x: 0, y: 1.8}
+      olcekCarpani: 6.3
     - aksesuarAdi: aksesuar_sapka_kus_0
-      ofset: {x: 0, y: 1.8}
+      ofset: {x: 0, y: 2.4}
+      olcekCarpani: 4
   aksesuarlar:
   - sprite: {fileID: 8821337933559988086, guid: ad5b207aa33d04d1391db5a4ad988f16, type: 3}
     olcek: 0.28
@@ -6760,8 +6804,8 @@ RectTransform:
   - {fileID: 370010200}
   m_Father: {fileID: 820299222}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 180, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -7477,10 +7521,10 @@ RectTransform:
   - {fileID: 2126512146}
   m_Father: {fileID: 426906830}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2010186658
 MonoBehaviour:
@@ -7904,10 +7948,10 @@ RectTransform:
   - {fileID: 706517466}
   m_Father: {fileID: 426906830}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2016521996
 MonoBehaviour:
@@ -8654,8 +8698,8 @@ RectTransform:
   - {fileID: 1681246714}
   m_Father: {fileID: 820299222}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 180, y: 64}
   m_Pivot: {x: 0.5, y: 0.5}

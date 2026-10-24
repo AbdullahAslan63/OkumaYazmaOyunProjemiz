@@ -156,7 +156,7 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
         yonetici.bitisTebrikYazisi = tebrik;
         yonetici.bitisSkorYazisi = bitisSkor;
         yonetici.bitisYildizlari = yildizlar;
-        yonetici.anaMenuSahneAdi = "AvatarOlusturmaEkrani";
+        yonetici.anaMenuSahneAdi = "SaidAnaEkran";
     }
 
     static GameObject SecenekPrefabOlustur(Transform parent)

@@ -672,7 +672,7 @@ public static class Bolum1KurulumEditor
         hy.bitisTebrikYazisi = tebrik;
         hy.bitisSkorYazisi = bitisSkor;
         hy.bitisYildizlari = yildizlar;
-        hy.anaMenuSahneAdi = "AvatarOlusturmaEkrani";
+        hy.anaMenuSahneAdi = "SaidAnaEkran";
         UnityEventTools.AddPersistentListener(anaMenu.onClick, hy.AnaMenuyeDon);
 
         EditorSceneManager.SaveScene(scene, HarfSahne);
@@ -719,11 +719,11 @@ public static class Bolum1KurulumEditor
 
     private static void BuildSettingsGuncelle()
     {
-        var scenes = new List<EditorBuildSettingsScene>
-        {
-            new EditorBuildSettingsScene(AvatarSahne, true),
-            new EditorBuildSettingsScene(HarfSahne, true)
-        };
+        var scenes = new List<EditorBuildSettingsScene>();
+        if (File.Exists("Assets/Scenes/SaidAnaEkran.unity"))
+            scenes.Add(new EditorBuildSettingsScene("Assets/Scenes/SaidAnaEkran.unity", true));
+        scenes.Add(new EditorBuildSettingsScene(AvatarSahne, true));
+        scenes.Add(new EditorBuildSettingsScene(HarfSahne, true));
         // Sepet varsa ekle
         if (File.Exists("Assets/Scenes/SepetOyunu.unity"))
             scenes.Add(new EditorBuildSettingsScene("Assets/Scenes/SepetOyunu.unity", true));

@@ -39,7 +39,7 @@ public class HarfSecmeYoneticisi : MonoBehaviour
     public float kalanSure;
 
     [Header("Sahne")]
-    public string anaMenuSahneAdi = "AvatarOlusturmaEkrani";
+    public string anaMenuSahneAdi = "SaidAnaEkran";
 
     [Header("Animasyon")]
     public float yukselmeSuresi = 0.45f;

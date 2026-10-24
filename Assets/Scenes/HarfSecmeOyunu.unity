@@ -905,7 +905,7 @@ MonoBehaviour:
   soruBaslikMetni: "Hangisinin ba\u015F harfi"
   oyunSuresi: 60
   kalanSure: 0
-  anaMenuSahneAdi: AvatarOlusturmaEkrani
+  anaMenuSahneAdi: SaidAnaEkran
   yukselmeSuresi: 0.45
   yukselmeOfsetY: 400
 --- !u!4 &677589048
