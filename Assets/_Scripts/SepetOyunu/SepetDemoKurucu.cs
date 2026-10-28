@@ -26,6 +26,18 @@ public class SepetDemoKurucu : MonoBehaviour
     // Yanlış çarpı görseli
     private const string YanlisIkonYolu = "Assets/_Art/Bolum1/UI/wrong_x.png";
 
+    // Güneş sayacı
+    private const string GunesYolu = "Assets/_Art/Bolum1/UI/güneş.jpeg";
+
+    // Işın
+    private const string IsinYolu = "Assets/_Art/Bolum1/UI/ışın.jpeg";
+
+    // Tekrar Dene butonu
+    private const string TekrarDeneYolu = "Assets/_Art/Bolum1/UI/Tekrar_Dene_Turuncu.png";
+
+    // Yıldız (Bolum1'de yok; Bolum2'deki kullanılır)
+    private const string YildizYolu = "Assets/_Art/Bolum2/UI/Dogru_Yildiz.png";
+
     // Bir turda kaç obje
     private const int ObjeSayisi = 4;
 
@@ -198,9 +210,16 @@ public class SepetDemoKurucu : MonoBehaviour
         // Puan yazısı
         TextMeshProUGUI skorTmp = UiTmp(bar.transform, "SkorYazisi", "Puan: 0", 36f, Vector2.zero, new Vector2(260f, 56f));
         skorTmp.color = Color.white;
-        // Süre (sağ üst)
+        // Eski metin süre gizlenir (yerine güneş sayacı)
         TextMeshProUGUI sureTmp = UiTmp(canvasGo.transform, "SureYazisi", "01:00", 40f, new Vector2(720f, 480f), new Vector2(220f, 56f));
         sureTmp.color = Color.white;
+        sureTmp.gameObject.SetActive(false);
+
+        // Sağ üst: güneş + 12 ışın
+        GunesSayac gunes = GunesSayaciniKur(canvasGo.transform, yonetici);
+
+        // Bitiş paneli: 3 yıldız + Tekrar Dene
+        BitisPaneliniKur(canvasGo.transform, yonetici);
 
         // Doğru / yanlış ikonları (ekran ortası üst)
         GameObject dogruFb = FeedbackImage(canvasGo.transform, "DogruGeriBildirim", DogruIkonYolu);
@@ -238,6 +257,213 @@ public class SepetDemoKurucu : MonoBehaviour
         // Yönetici UI
         yonetici.skorYazisi = skorTmp;
         yonetici.sureYazisi = sureTmp;
+        yonetici.gunesSayac = gunes;
+    }
+
+    // Sağ üst güneş + çevresinde 12 ışın (siyah arka plan silinir)
+    private GunesSayac GunesSayaciniKur(Transform canvas, SepetOyunYoneticisi yonetici)
+    {
+        GameObject kok = new GameObject("GunesSayac", typeof(RectTransform));
+        kok.transform.SetParent(canvas, false);
+        RectTransform kokRt = kok.GetComponent<RectTransform>();
+        kokRt.anchorMin = new Vector2(1f, 1f);
+        kokRt.anchorMax = new Vector2(1f, 1f);
+        kokRt.pivot = new Vector2(1f, 1f);
+        kokRt.anchoredPosition = new Vector2(-28f, -12f);
+        // Daha büyük sayaç
+        kokRt.sizeDelta = new Vector2(320f, 320f);
+
+        GunesSayac sayac = kok.AddComponent<GunesSayac>();
+        // JPEG siyahlıkları şeffaf olsun
+        Sprite gunesSp = SiyahligiSeffafYap(ArtSpriteYukle(GunesYolu));
+        Sprite isinSp = SiyahligiSeffafYap(ArtSpriteYukle(IsinYolu));
+
+        // Ortadaki güneş
+        GameObject gunesGo = new GameObject("Gunes", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        gunesGo.transform.SetParent(kok.transform, false);
+        RectTransform gRt = gunesGo.GetComponent<RectTransform>();
+        gRt.anchorMin = gRt.anchorMax = gRt.pivot = new Vector2(0.5f, 0.5f);
+        gRt.anchoredPosition = Vector2.zero;
+        gRt.sizeDelta = new Vector2(120f, 120f);
+        Image gImg = gunesGo.GetComponent<Image>();
+        gImg.sprite = gunesSp;
+        gImg.preserveAspect = true;
+        gImg.color = Color.white;
+        sayac.gunesGorsel = gImg;
+
+        // 15 ışın: eşit aralık (her 24°), biraz küçük, dışa bakacak
+        const int isinAdet = 15;
+        Image[] isinlar = new Image[isinAdet];
+        // Güneş kenarı ile ışın tabanı arası boşluk
+        float icYaricap = 70f;
+        float aciAdim = 360f / isinAdet;
+        for (int i = 0; i < isinAdet; i++)
+        {
+            GameObject isinGo = new GameObject("Isin_" + (i + 1), typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            isinGo.transform.SetParent(kok.transform, false);
+            RectTransform iRt = isinGo.GetComponent<RectTransform>();
+            iRt.anchorMin = iRt.anchorMax = new Vector2(0.5f, 0.5f);
+            // Pivot alt orta: ışın güneşten dışarı uzansın
+            iRt.pivot = new Vector2(0.5f, 0f);
+            // Biraz daha küçük ışın
+            iRt.sizeDelta = new Vector2(28f, 48f);
+            // Saat yönünde eşit açı
+            float aci = i * aciAdim;
+            float rad = aci * Mathf.Deg2Rad;
+            iRt.anchoredPosition = new Vector2(Mathf.Sin(rad) * icYaricap, Mathf.Cos(rad) * icYaricap);
+            // Yukarı bakan kapsülü dışa çevir
+            iRt.localRotation = Quaternion.Euler(0f, 0f, -aci);
+            Image iImg = isinGo.GetComponent<Image>();
+            iImg.sprite = isinSp;
+            iImg.preserveAspect = true;
+            iImg.raycastTarget = false;
+            iImg.color = Color.white;
+            isinlar[i] = iImg;
+        }
+
+        sayac.isinlar = isinlar;
+        sayac.isinSuresi = 4f;
+        // Güneş ışınların üstünde
+        gunesGo.transform.SetAsLastSibling();
+        return sayac;
+    }
+
+    // JPEG siyah arka planı şeffaf yapar (UI sayaç için)
+    private Sprite SiyahligiSeffafYap(Sprite kaynak)
+    {
+        if (kaynak == null || kaynak.texture == null)
+        {
+            return kaynak;
+        }
+
+        Texture2D okunabilir = TextureOkunabilirKopyala(kaynak.texture);
+        if (okunabilir == null)
+        {
+            return kaynak;
+        }
+
+        // Sprite'ın textureRect alanını işle
+        Rect r = kaynak.textureRect;
+        int x0 = Mathf.FloorToInt(r.x);
+        int y0 = Mathf.FloorToInt(r.y);
+        int w = Mathf.FloorToInt(r.width);
+        int h = Mathf.FloorToInt(r.height);
+        if (w <= 0 || h <= 0)
+        {
+            return kaynak;
+        }
+
+        Color[] px = okunabilir.GetPixels(x0, y0, w, h);
+        for (int i = 0; i < px.Length; i++)
+        {
+            // Koyu / siyah pikselleri tamamen şeffaf yap
+            float parlak = (px[i].r + px[i].g + px[i].b) / 3f;
+            if (parlak < 0.18f)
+            {
+                px[i].a = 0f;
+            }
+            else if (parlak < 0.32f)
+            {
+                // Yumuşak kenar
+                px[i].a = Mathf.Clamp01((parlak - 0.18f) / 0.14f);
+            }
+        }
+
+        Texture2D yeni = new Texture2D(w, h, TextureFormat.RGBA32, false);
+        yeni.filterMode = FilterMode.Bilinear;
+        yeni.wrapMode = TextureWrapMode.Clamp;
+        yeni.SetPixels(px);
+        yeni.Apply();
+        return Sprite.Create(yeni, new Rect(0f, 0f, w, h), new Vector2(0.5f, 0.5f), 100f);
+    }
+
+    // GPU üzerinden okunabilir Texture2D kopyası
+    private Texture2D TextureOkunabilirKopyala(Texture kaynak)
+    {
+        if (kaynak == null)
+        {
+            return null;
+        }
+
+        int w = kaynak.width;
+        int h = kaynak.height;
+        RenderTexture rt = RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.ARGB32);
+        Graphics.Blit(kaynak, rt);
+        RenderTexture onceki = RenderTexture.active;
+        RenderTexture.active = rt;
+        Texture2D kopya = new Texture2D(w, h, TextureFormat.RGBA32, false);
+        kopya.ReadPixels(new Rect(0, 0, w, h), 0, 0);
+        kopya.Apply();
+        RenderTexture.active = onceki;
+        RenderTexture.ReleaseTemporary(rt);
+        return kopya;
+    }
+
+    // Ortada bitiş: 3 yıldız + Tekrar Dene
+    private void BitisPaneliniKur(Transform canvas, SepetOyunYoneticisi yonetici)
+    {
+        GameObject panel = new GameObject("BitisPaneli", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        panel.transform.SetParent(canvas, false);
+        RectTransform pRt = panel.GetComponent<RectTransform>();
+        pRt.anchorMin = Vector2.zero;
+        pRt.anchorMax = Vector2.one;
+        pRt.offsetMin = Vector2.zero;
+        pRt.offsetMax = Vector2.zero;
+        panel.GetComponent<Image>().color = new Color(0.05f, 0.08f, 0.15f, 0.72f);
+
+        // Yıldız grubu
+        GameObject yildizGrup = new GameObject("Yildizlar", typeof(RectTransform));
+        yildizGrup.transform.SetParent(panel.transform, false);
+        RectTransform ygRt = yildizGrup.GetComponent<RectTransform>();
+        ygRt.anchorMin = ygRt.anchorMax = ygRt.pivot = new Vector2(0.5f, 0.5f);
+        ygRt.anchoredPosition = new Vector2(0f, 80f);
+        ygRt.sizeDelta = new Vector2(420f, 120f);
+
+        Sprite yildizSp = ArtSpriteYukle(YildizYolu);
+        Image[] yildizlar = new Image[3];
+        float[] xPos = { -140f, 0f, 140f };
+        for (int i = 0; i < 3; i++)
+        {
+            GameObject y = new GameObject("Yildiz" + (i + 1), typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            y.transform.SetParent(yildizGrup.transform, false);
+            RectTransform yrt = y.GetComponent<RectTransform>();
+            yrt.anchorMin = yrt.anchorMax = yrt.pivot = new Vector2(0.5f, 0.5f);
+            yrt.anchoredPosition = new Vector2(xPos[i], 0f);
+            yrt.sizeDelta = new Vector2(110f, 110f);
+            Image yi = y.GetComponent<Image>();
+            yi.sprite = yildizSp;
+            yi.preserveAspect = true;
+            yi.color = new Color(0.45f, 0.45f, 0.5f, 0.55f);
+            yildizlar[i] = yi;
+        }
+
+        // Tekrar Dene butonu (yıldızların altında)
+        GameObject btnGo = new GameObject("TekrarDene", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+        btnGo.transform.SetParent(panel.transform, false);
+        RectTransform bRt = btnGo.GetComponent<RectTransform>();
+        bRt.anchorMin = bRt.anchorMax = bRt.pivot = new Vector2(0.5f, 0.5f);
+        bRt.anchoredPosition = new Vector2(0f, -80f);
+        bRt.sizeDelta = new Vector2(360f, 110f);
+        Image bImg = btnGo.GetComponent<Image>();
+        Sprite tekrarSp = ArtSpriteYukle(TekrarDeneYolu);
+        if (tekrarSp != null)
+        {
+            bImg.sprite = tekrarSp;
+            bImg.preserveAspect = true;
+            bImg.color = Color.white;
+        }
+        else
+        {
+            bImg.color = new Color(0.98f, 0.55f, 0.25f, 1f);
+        }
+
+        Button btn = btnGo.GetComponent<Button>();
+        btn.targetGraphic = bImg;
+
+        panel.SetActive(false);
+        yonetici.bitisPaneli = panel;
+        yonetici.bitisYildizlari = yildizlar;
+        yonetici.tekrarDeneButonu = btn;
     }
 
     // UI Image geri bildirim ikonu
