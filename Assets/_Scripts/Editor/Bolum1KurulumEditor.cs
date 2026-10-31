@@ -332,12 +332,16 @@ public static class Bolum1KurulumEditor
 
         // Hayvan sprite'larını doldur
         gorunum.hayvanlar = new HayvanGorseli[4];
-        gorunum.hayvanlar[0] = HayvanYukle("Kedi", "avatar_kedi", new Vector2(0f, 1.9f));
-        gorunum.hayvanlar[1] = HayvanYukle("Tavşan", "avatar_tavsan", new Vector2(0f, 1.7f));
-        gorunum.hayvanlar[2] = HayvanYukle("Kuş", "avatar_kus", new Vector2(0f, 1.5f));
-        gorunum.hayvanlar[3] = HayvanYukle("Rakun", "avatar_rakun", new Vector2(0f, 1.8f));
+        // Yüz merkezli 512px kırpıma göre kafa / şapka varsayılan Y
+        // Landmark tabanlı varsayılan Y (Oyun > Avatar Aksesuar Otomatik Hizala ile yenilenebilir)
+        gorunum.hayvanlar[0] = HayvanYukle("Kedi", "avatar_kedi", "kedi", 2.25f, 1.64f);
+        // Uzun kulak: yüz daha aşağıda (göz ~1.21, taç ~1.56)
+        gorunum.hayvanlar[1] = HayvanYukle("Tavşan", "avatar_tavsan", "tavsan", 1.56f, 1.21f);
+        gorunum.hayvanlar[2] = HayvanYukle("Kuş", "avatar_kus", "kus", 2.30f, 1.75f);
+        gorunum.hayvanlar[3] = HayvanYukle("Rakun", "avatar_rakun", "rakun", 2.38f, 1.88f);
         gorunum.hedefGovdeYuksekligi = 4.5f;
         gorunum.hedefZeminY = -1.5f;
+        // UI katalog ikonları kedi klasöründen (sabit sıra)
         gorunum.aksesuarlar = AksesuarGorselleriniYukle();
         EditorUtility.SetDirty(gorunum);
 
@@ -359,7 +363,7 @@ public static class Bolum1KurulumEditor
 
             AvatarSecimEkrani secim = canvasGo.AddComponent<AvatarSecimEkrani>();
             secim.avatarGorunumu = gorunum;
-            secim.sonrakiSahneAdi = "HarfSecmeOyunu";
+            secim.sonrakiSahneAdi = "LevelEkranı";
 
             // Geri / İleri butonları
             Sprite okSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/_Art/Avatar/UI/ui_icon_sag_ok.png");
@@ -449,18 +453,64 @@ public static class Bolum1KurulumEditor
         Debug.Log("Avatar sahnesi kaydedildi: " + AvatarSahne);
     }
 
-    private static HayvanGorseli HayvanYukle(string ad, string prefix, Vector2 aksesuarOfset)
+    // Aksesuar/kedi|kus|tavsan|rakun altındaki sabit dosya sırası (UI index ile aynı)
+    private static readonly string[] AksesuarDosyaAdlari =
+    {
+        "gozluk_kus",
+        "kaplan_arkadan_takmali_sapka",
+        "kaplan_gozluk",
+        "kaplan_gunes_gozlugu",
+        "kaplan_kova_sapka",
+        "kaplan_kulakli_sapka",
+        "kaplan_logolu_sapka",
+        "kaplan_sapka",
+        "kaplan_yuvarlak_gozluk",
+        "kulaklik_maymun",
+        "sapka_kus"
+    };
+
+    private static HayvanGorseli HayvanYukle(
+        string ad,
+        string prefix,
+        string aksesuarKlasorAdi,
+        float sapkaY,
+        float gozlukY)
     {
         string klasor = "Assets/_Art/Avatar/Karakterler";
-        return new HayvanGorseli
+        HayvanGorseli hayvan = new HayvanGorseli
         {
             hayvanAdi = ad,
             normalPoz = SpritePrefixBul(klasor, prefix + "_normal"),
             mutluPoz = SpritePrefixBul(klasor, prefix + "_mutlu"),
             uzgunPoz = SpritePrefixBul(klasor, prefix + "_uzgun"),
             govdeOlcekCarpani = 1f,
-            aksesuarOfset = aksesuarOfset
+            aksesuarOfset = new Vector2(0f, sapkaY)
         };
+        hayvan.aksesuarAyarlari = HayvanAksesuarAyarlariniYukle(aksesuarKlasorAdi, sapkaY, gozlukY);
+        return hayvan;
+    }
+
+    /// <summary>Bu hayvan klasöründen 11 aksesuar sprite + ofset satırı üretir.</summary>
+    private static HayvanAksesuarAyari[] HayvanAksesuarAyarlariniYukle(
+        string aksesuarKlasorAdi,
+        float sapkaY,
+        float gozlukY)
+    {
+        string klasor = "Assets/_Art/Avatar/Aksesuar/" + aksesuarKlasorAdi;
+        HayvanAksesuarAyari[] satirlar = new HayvanAksesuarAyari[AksesuarDosyaAdlari.Length];
+        for (int i = 0; i < AksesuarDosyaAdlari.Length; i++)
+        {
+            string ad = AksesuarDosyaAdlari[i];
+            bool gozluk = ad.Contains("gozluk") || ad.Contains("gunes");
+            satirlar[i] = new HayvanAksesuarAyari
+            {
+                aksesuarAdi = ad,
+                sprite = SpriteYukle(klasor + "/" + ad + ".png"),
+                ofset = new Vector2(0f, gozluk ? gozlukY : sapkaY),
+                olcekCarpani = 1f
+            };
+        }
+        return satirlar;
     }
 
     private static Sprite SpritePrefixBul(string klasor, string prefix)
@@ -480,27 +530,22 @@ public static class Bolum1KurulumEditor
         return all2.OfType<Sprite>().FirstOrDefault();
     }
 
+    /// <summary>UI katalog: yalnızca kedi klasörü, olcek=1 (art karaktere göre hazır).</summary>
     private static AksesuarGorseli[] AksesuarGorselleriniYukle()
     {
-        string klasor = "Assets/_Art/Avatar/Aksesuar";
+        string klasor = "Assets/_Art/Avatar/Aksesuar/kedi";
         if (!AssetDatabase.IsValidFolder(klasor)) return new AksesuarGorseli[0];
-        string[] guids = AssetDatabase.FindAssets("t:Texture2D", new[] { klasor });
-        List<AksesuarGorseli> list = new List<AksesuarGorseli>();
-        foreach (string guid in guids)
-        {
-            string path = AssetDatabase.GUIDToAssetPath(guid);
-            Object[] all = AssetDatabase.LoadAllAssetsAtPath(path);
-            Sprite s = all.OfType<Sprite>().FirstOrDefault();
-            if (s == null) continue;
 
-            // Gözlükler daha küçük ve biraz aşağı; şapkalar kafa tepesinde
-            string ad = s.name.ToLowerInvariant();
-            bool gozluk = ad.Contains("gozluk") || ad.Contains("gunes");
+        List<AksesuarGorseli> list = new List<AksesuarGorseli>();
+        foreach (string ad in AksesuarDosyaAdlari)
+        {
+            Sprite s = SpriteYukle(klasor + "/" + ad + ".png");
+            if (s == null) continue;
             list.Add(new AksesuarGorseli
             {
                 sprite = s,
-                olcek = gozluk ? 0.28f : 0.45f,
-                yerelOfset = gozluk ? new Vector2(0f, -0.35f) : Vector2.zero
+                olcek = 1f,
+                yerelOfset = Vector2.zero
             });
         }
         return list.ToArray();
@@ -602,8 +647,8 @@ public static class Bolum1KurulumEditor
         baslik.color = Color.white;
 
         // Geri bildirim görselleri
-        GameObject dogruFb = FeedbackImage(canvasGo.transform, "DogruGeriBildirim", "Assets/_Art/Bolum2/UI/Dogru_Onay.png");
-        GameObject yanlisFb = FeedbackImage(canvasGo.transform, "YanlisGeriBildirim", "Assets/_Art/Bolum2/UI/Tekrar_Dene_Mesaj.png");
+        GameObject dogruFb = FeedbackImage(canvasGo.transform, "DogruGeriBildirim", "Assets/_Art/Bolum2/UI/correct_check.png");
+        GameObject yanlisFb = FeedbackImage(canvasGo.transform, "YanlisGeriBildirim", "Assets/_Art/Bolum2/UI/wrong_x.png");
         dogruFb.SetActive(false);
         yanlisFb.SetActive(false);
         geri.dogruGorsel = dogruFb;
@@ -672,7 +717,7 @@ public static class Bolum1KurulumEditor
         hy.bitisTebrikYazisi = tebrik;
         hy.bitisSkorYazisi = bitisSkor;
         hy.bitisYildizlari = yildizlar;
-        hy.anaMenuSahneAdi = "SaidAnaEkran";
+        hy.anaMenuSahneAdi = "AvatarOlusturmaEkrani";
         UnityEventTools.AddPersistentListener(anaMenu.onClick, hy.AnaMenuyeDon);
 
         EditorSceneManager.SaveScene(scene, HarfSahne);
@@ -719,10 +764,13 @@ public static class Bolum1KurulumEditor
 
     private static void BuildSettingsGuncelle()
     {
-        var scenes = new List<EditorBuildSettingsScene>();
-        if (File.Exists("Assets/Scenes/SaidAnaEkran.unity"))
-            scenes.Add(new EditorBuildSettingsScene("Assets/Scenes/SaidAnaEkran.unity", true));
-        scenes.Add(new EditorBuildSettingsScene(AvatarSahne, true));
+        var scenes = new List<EditorBuildSettingsScene>
+        {
+            new EditorBuildSettingsScene(AvatarSahne, true)
+        };
+        // Level seçim ekranı
+        if (File.Exists("Assets/Scenes/LevelEkranı.unity"))
+            scenes.Add(new EditorBuildSettingsScene("Assets/Scenes/LevelEkranı.unity", true));
         scenes.Add(new EditorBuildSettingsScene(HarfSahne, true));
         // Sepet varsa ekle
         if (File.Exists("Assets/Scenes/SepetOyunu.unity"))

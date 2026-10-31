@@ -210,6 +210,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SecenekBalonu
   objeResmi: {fileID: 1993487181300536577}
+  objeArkaPlan: {fileID: 0}
   objeGenislikOrani: 0.46
   objeYukseklikOrani: 0.4
   objeDikeyKayma: 0.14
+  arkaPlanOlcek: 1.2
+  arkaPlanRengi: {r: 1, g: 1, b: 1, a: 1}

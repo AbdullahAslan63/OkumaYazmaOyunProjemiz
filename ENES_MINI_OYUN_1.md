@@ -2,18 +2,22 @@
 
 Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod yazmadan önce proje kökündeki `AGENTS.md` dosyasını okuyun. Genel görev özeti: `DETAYLI GÖREV DAĞILIMI VE KILAVUZ.md` → Paket 4.
 
+**Branch:** `enes/level1`  
+**Geçersiz:** `enes/minigame1` — kullanma; silindi / taşındı.
+
 ---
 
 ## Katı kurallar
 
 1. Bir fazın **Tamamlandı kontrol listesi** tamamen işaretlenmeden sonraki faza geçme.
 2. Kod üretildikten sonra o fazın **Unity Editor** bölümünü bitirmeden fazı kapatma.
-3. Paket 3 (Mustafa Yiğit Avan) bitmeden **Faz 4’e** (`SepetOyunYoneticisi`) geçme.
+3. Paket 3 çekirdek API’leri (`SoruSecici` / `SkorYoneticisi` / `GeriBildirimYoneticisi`) olmadan **Faz 4’e** (`SepetOyunYoneticisi`) geçme. Ses/partikül finali Yiğit’in `mustafayigit/efektler` kapısından sonra gelebilir; yöneticiyi skor/geri bildirim ile yazabilirsin.
 4. `SepetHareketi.cs` yazma — iptal edildi; yerine `ObjeSurukleme.cs`.
 5. Bu sahnede avatar gösterme (avatar entegrasyonu yok).
 6. Cursor’a bir seferde tek script ver; yönetici için önce Plan Mode.
 7. Checklist’i çocuğun tek başına doldurmasını bekleme — `AGENTS.md` → **İlerleme takibi**: sık durum bildir, olgu sor, onaylara göre bu dosyadaki `[ ]` kutularını agent günceller.
 8. “Ne durumdayım?” sorusuna `AGENTS.md` → **yönlendirici cevap** şablonuyla yanıt ver; karar aldırma, plandaki sıradaki **tek işi** yaptır.
+9. Her faz çıkışında agent **commit + push** hatırlatır (`AGENTS.md` → Commit + push). Branch: `enes/level1`.
 
 ---
 
@@ -24,14 +28,30 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 
 | Konu           | Karar                                                    |
 | -------------- | -------------------------------------------------------- |
+| Branch         | `enes/level1`                                            |
 | Mekanik        | Balon sabit; altta 4 pozisyon; objeler balona sürüklenir |
 | Scriptler      | `ObjeSurukleme.cs` + `SepetOyunYoneticisi.cs`            |
 | Giriş          | Fare + touch/parmak                                      |
 | Yanlış bırakma | Geri bildirim + obje başlangıç pozisyonuna döner         |
 | Süre           | Varsayılan **60** saniye (`kalanSure`)                   |
 | Doğru puan     | Varsayılan **+10** (`dogruPuan`)                         |
-| Paket 3        | Bitmeden oyun yöneticisi yazılmaz                        |
+| Sahne yolu     | Güncel: `Assets/Scenes/SepetOyunu.unity` (eski `_Scenes` notu geçersiz) |
+| Paket 3        | Skor/soru/geri bildirim olmadan yönetici yazılmaz        |
 
+
+---
+
+
+
+## Mevcut durum özeti (2026-10-14)
+
+- Çalışma **`main`** üzerinde. `enes/level1` geride (eski iskelet); son sepet işi `main`’de, **origin’e push edilmedi** (2 commit önde).
+- **Faz 0–2:** Sahne + `ObjeSurukleme` + `SepetDemoKurucu` var. Play: harf balonda, 4 obje altta, sürükleme ve balon bırakma düzeltildi (commit notu).
+- Prefab `Obje.prefab` ve sahnedeki `ObjePozisyon1`…`4` **yok**. Objeler, harf rozeti ve balon şekli Play’de `SepetDemoKurucu` ile kuruluyor.
+- **Faz 3:** `HarfObjeVerisi`, `SoruSecici`, `SkorYoneticisi`, `GeriBildirimYoneticisi` ve 8 harf kartı repoda var. Bu bileşenler `SepetOyunu` sahnesine henüz konmadı.
+- **Faz 4–6:** `SepetOyunYoneticisi` yok. Süre, skor ve doğru/yanlış turu yok.
+
+**Sıradaki tek iş:** `SepetOyunu` sahnesine `SoruSecici` + `SkorYoneticisi` + `GeriBildirimYoneticisi` koy, `tumHarfler` dizisini doldur.
 
 ---
 
@@ -40,13 +60,13 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 ## Faz akışı
 
 ```
-Faz 0 (Hazırlık)
-  → Faz 1 (Sahne — kod yok)
-    → Faz 2 (ObjeSurukleme + touch)
-      → Faz 3 (Paket 3 checkpoint)
+Faz 0 (Hazırlık)                         [tamam, push hariç]
+  → Faz 1 (Sahne)                        [demo ile tamam, prefab/pozisyon boş]
+    → Faz 2 (ObjeSurukleme + touch)      [Play doğrulandı, push hariç]
+      → Faz 3 (Paket 3 checkpoint)               ← sıradaki (sahneye koy)
         → Faz 4 (SepetOyunYoneticisi)
           → Faz 5 (Bağlama + entegrasyon)
-            → Faz 6 (Teslim)
+            → Faz 6 (Teslim → main)
 ```
 
 ---
@@ -67,17 +87,20 @@ Faz 0 (Hazırlık)
 3. Unity Project penceresinde klasörleri oluştur (yoksa):
   - `Assets/_Scripts/SepetOyunu/`
   - `Assets/_Prefabs/SepetOyunu/`
-  - `Assets/_Scenes/` (yoksa)
+  - Sahne klasörü: **`Assets/Scenes/`** (AGENTS güncel yol; `_Scenes` zorunlu değil)
 
 
 
 ## Tamamlandı kontrol listesi
 
 - [x] `AGENTS.md` okundu
-- [ ] Asset envanteri not edildi (var / eksik)
-- [x] `Assets/_Scripts/SepetOyunu/` var
-- [ ] `Assets/_Prefabs/SepetOyunu/` var
-- [ ] `Assets/_Scenes/` var
+- [x] `Assets/_Scripts/SepetOyunu/` var (`ObjeSurukleme.cs`, `SepetDemoKurucu.cs`)
+- [ ] `Assets/_Prefabs/SepetOyunu/` var (main’de yok; objeler kodla üretiliyor)
+- [x] Sahne yolu: `Assets/Scenes/SepetOyunu.unity`
+- [x] Asset envanteri bu dosyaya kısaca not edildi (var / eksik)
+- [ ] Commit + push yapıldı (`main` 2 commit önde; `enes/level1` bu işi taşımıyor)
+
+**Asset notu (2026-10-14):** Var — arkaplan `Assets/_Art/Bolum1/Arkaplan/arkaplan_adiyaman.png`, balon `Assets/_Art/Bolum1/Balon/`, obje sprite’ları `Assets/_Art/Bolum1/Objeler/` (A, E, I, İ, O, Ö, U, Ü). Eksik — `Obje.prefab`.
 
 **Çıkış:** Klasörler hazır; eksik asset’ler yazılı. → Faz 1
 
@@ -96,7 +119,7 @@ Faz 0 (Hazırlık)
 ### 1.1 Yeni sahne
 
 1. Menü: **File > New Scene** (2D şablon varsa onu seç).
-2. **File > Save As…** → yol: `Assets/_Scenes/SepetOyunu.unity`
+2. **File > Save As…** → yol: `Assets/Scenes/SepetOyunu.unity` (güncel AGENTS yolu)
 3. Hierarchy’de **Main Camera** seçili olsun; Projection **Orthographic** olsun.
 
 
@@ -172,15 +195,16 @@ Faz 0 (Hazırlık)
 
 ## Tamamlandı kontrol listesi
 
-- [x] `Assets/_Scenes/SepetOyunu.unity` kayıtlı
+- [x] `Assets/Scenes/SepetOyunu.unity` kayıtlı (`main`)
 - [x] Arkaplan `Order in Layer = -10`
-- [ ] `Balon` üzerinde Box Collider 2D + **Is Trigger**
-- [ ] Tag `Balon` atanmış
-- [ ] Child `HarfRozeti` (TMP) var
+- [x] Balon çarpışması: sahnede kutu yok; Play’de `SepetDemoKurucu` PolygonCollider2D + **Is Trigger** ekliyor
+- [x] Tag `Balon` atanmış
+- [x] `HarfRozeti` Play’de oluşuyor (`SepetDemoKurucu`; sahnede child değil). Commit: harf balonun üzerinde
 - [ ] Prefab `Assets/_Prefabs/SepetOyunu/Obje.prefab` var
-- [ ] Prefab’da Box Collider 2D **trigger değil**
-- [ ] `ObjePozisyon1`…`4` altta yerleştirildi
-- [ ] Play’de görsel kontrol yapıldı
+- [x] Üretilen objede Box Collider 2D **trigger değil** (`SepetDemoKurucu.ObjeOlustur`)
+- [ ] `ObjePozisyon1`…`4` sahnede duruyor (yerine kod alt sıraya diziyor; Play’de 4 obje görüldü)
+- [x] Play’de görsel kontrol yapıldı (commit: sahne düzeni hazır, objeler altta)
+- [ ] Commit + push yapıldı
 
 **Çıkış:** Sahne iskeleti hazır. → Faz 2
 
@@ -255,12 +279,13 @@ Faz 4’te bu satırı `SepetOyunYoneticisi.Instance.ObjeBirakildi(this);` ile d
 
 ## Tamamlandı kontrol listesi
 
-- [ ] `ObjeSurukleme.cs` compile oluyor
-- [ ] Prefab’a script ekli; public alanlar dolu
-- [ ] Play: sürükleme çalışıyor
-- [ ] Play: uzak bırakınca geri dönüyor
-- [ ] Play: balona yakın bırakınca Console log geliyor
-- [ ] Touch veya en azından mousePosition yolu kodda mevcut
+- [x] `ObjeSurukleme.cs` yazıldı (`main`; fare + dokunmatik, Input System)
+- [x] Touch veya mouse yolu kodda mevcut (`GetIsaretDunyaPozisyonu`)
+- [ ] Prefab’a script ekli (prefab yok). Alanlar Play’de `SepetDemoKurucu` dolduruyor: `objeAdi`, `dogruHarf`
+- [x] Play: sürükleme çalışıyor (commit: objeler hareket ettirilebiliyor)
+- [x] Play: balon çiziminin dışına bırakınca başa dönüyor (commit: erken “bırakıldı” sayılması düzeltildi)
+- [x] Play: balonun üstüne bırakınca `Debug.Log("Balona birakildi: ...")` yolu duruyor
+- [ ] Commit + push yapıldı
 
 **Çıkış:** Sürükle-bırak tek başına doğrulandı. → Faz 3
 
@@ -280,17 +305,17 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen sadece checklist’i doldurursun; eksikse 
 
 ### 3.1 Veri
 
-- [ ] `HarfObjeVerisi` ScriptableObject script’i var (`Assets/_Scripts/Ortak/` veya kılavuza uygun yer)
-- [ ] `Assets/_Data/Harfler/` (veya benzeri) altında en az birkaç harf asset’i (hedef: A, E, I, İ, O, Ö, U, Ü)
-- [ ] Her asset’te `harf` + `dogruObjeler` sprite listesi dolu (test için en az 1 harfte 2+ obje)
+- [x] `HarfObjeVerisi` ScriptableObject script’i var (`Assets/_Scripts/Ortak/HarfObjeVerisi.cs`)
+- [x] `Assets/_Data/Harfler/` altında A, E, I, İ, O, Ö, U, Ü kartları var
+- [x] Her asset’te `harf` + `dogruObjeler` sprite listesi dolu (kart başına birden fazla obje)
 
 
 
 ### 3.2 Script API’leri (public isimler kılavuza uymalı)
 
-- [ ] `SoruSecici` — `HarfObjeVerisi[] tumHarfler`, `YeniHarfSec()`
-- [ ] `SkorYoneticisi` — `SkorEkle(int miktar)`, skor yazısı alanı
-- [ ] `GeriBildirimYoneticisi` — `DogruGoster()`, `YanlisGoster()`
+- [x] `SoruSecici` — `HarfObjeVerisi[] tumHarfler`, `YeniHarfSec()`
+- [x] `SkorYoneticisi` — `SkorEkle(int miktar)`, skor yazısı alanı
+- [x] `GeriBildirimYoneticisi` — `DogruGoster()`, `YanlisGoster()`
 
 
 
@@ -304,6 +329,10 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen sadece checklist’i doldurursun; eksikse 
 
 - [ ] Yukarıdaki tüm maddeler işaretli **veya** Yiğit ile “API kilitlendi, asset’ler yakında” yazılı mutabakat var ve sen en azından boş `HarfObjeVerisi` + çalışan `SoruSecici` iskeletine sahipsin
 - [ ] Eksik kalanlar bu dosyaya not edildi
+- [ ] `enes/level1` güncel `main` ile merge/rebase edildi (Paket 3 dosyaları geldi)
+- [ ] Commit + push yapıldı
+
+**Not (2026-10-14):** 3.1 ve 3.2 repoda yeşil. Eksik: bu üç bileşen `SepetOyunu` sahnesinde yok; `SepetDemoKurucu` harf kartlarını kendisi yüklüyor, skor ve geri bildirim çağırmıyor. `enes/level1` güncel `main` ile birleşik değil.
 
 **Çıkış şartı:** Checklist yeşil olmadan Faz 4’e geçme. → Faz 4
 
@@ -388,6 +417,7 @@ Sadece compile kontrolü yeterli olabilir; tam bağlama **Faz 5**. En azından:
 - [ ] `kalanSure` varsayılan 60, `dogruPuan` 10
 - [ ] `ObjeSurukleme` yöneticiyi çağıracak şekilde güncellendi
 - [ ] Avatar referansı yok
+- [ ] Commit + push yapıldı
 
 **Çıkış:** Kod hazır. → Faz 5
 
@@ -472,6 +502,7 @@ Play’e bas ve sırayla dene:
 - [ ] Play test checklist’inin tamamı geçti
 - [ ] Sahne kayıtlı
 - [ ] Build Settings’te `SepetOyunu` var
+- [ ] Commit + push yapıldı
 
 **Çıkış:** Mini Oyun 1 oynanabilir. → Faz 6
 
@@ -487,7 +518,8 @@ Play’e bas ve sırayla dene:
 
 ```
 Mini Oyun 1 (Enes) teslim
-- Sahne: Assets/_Scenes/SepetOyunu.unity
+- Branch: enes/level1 → main PR
+- Sahne: Assets/Scenes/SepetOyunu.unity
 - Scriptler: ObjeSurukleme.cs, SepetOyunYoneticisi.cs
 - Prefab: Assets/_Prefabs/SepetOyunu/Obje.prefab
 - Süre varsayılan 60 sn, doğru +10
@@ -507,6 +539,7 @@ Paket 6’dan beklenenler:
 
 - [ ] Faz 0–5 listeleri bu dosyada işaretli
 - [ ] Teslim notu Süleyman’a iletildi (chat / dosya / sözlü)
+- [ ] Commit + push + `main` PR açıldı
 - [ ] Bilinen bug’lar varsa bu bölüme yazıldı:
 
 **Bilinen sorunlar:**
@@ -525,7 +558,8 @@ Paket 6’dan beklenenler:
 | Sürükleme      | `Assets/_Scripts/SepetOyunu/ObjeSurukleme.cs`       |
 | Yönetici       | `Assets/_Scripts/SepetOyunu/SepetOyunYoneticisi.cs` |
 | Prefab         | `Assets/_Prefabs/SepetOyunu/Obje.prefab`            |
-| Sahne          | `Assets/_Scenes/SepetOyunu.unity`                   |
+| Sahne          | `Assets/Scenes/SepetOyunu.unity`                    |
+| Branch         | `enes/level1`                                       |
 | Ekip kuralları | `AGENTS.md`                                         |
 
 

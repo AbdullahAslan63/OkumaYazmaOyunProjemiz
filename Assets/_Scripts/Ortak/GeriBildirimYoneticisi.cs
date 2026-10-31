@@ -2,7 +2,8 @@ using UnityEngine;
 using TMPro;
 
 /// <summary>
-/// Doğru/yanlış geri bildirimi: UI Image veya panel aç/kapa; ses clip null-safe.
+/// Doğru/yanlış geri bildirimi: UI aç/kapa + partikül.
+/// Kısa SFX SesYoneticisi üzerinden; obje adı sesi HarfSecme'de ayrı çalar.
 /// </summary>
 public class GeriBildirimYoneticisi : MonoBehaviour
 {
@@ -15,24 +16,53 @@ public class GeriBildirimYoneticisi : MonoBehaviour
     // İsteğe bağlı skor yazısı
     public TextMeshProUGUI skorYazisi;
 
-    // Ses (clip yoksa sessiz geçer)
+    // Tik arkasında partikül patlaması
+    public ParticleSystem parlıltıEfekti;
+
+    // Yerel yedek — öncelik SesYoneticisi
     public AudioSource sesKaynagi;
     public AudioClip dogruSes;
     public AudioClip yanlisSes;
 
-    // Otomatik gizleme süresi
-    public float gosterimSuresi = 0.8f;
+    // Gösterim süresi (partikül ile uyumlu 1.5 sn)
+    public float gosterimSuresi = 1.5f;
 
-    /// <summary>Doğru cevabı gösterir.</summary>
+    /// <summary>Doğru cevabı gösterir; kısa ding + partikül. Obje adı sesi ayrı çalar.</summary>
     public void DogruGoster()
     {
-        Goster(dogruGorsel, yanlisGorsel, dogruSes);
+        GorseliGoster(dogruGorsel, yanlisGorsel);
+
+        // Partikül yoksa sessizce geç
+        if (parlıltıEfekti != null)
+            parlıltıEfekti.Play();
+
+        // Öncelik: ortak SesYoneticisi
+        if (SesYoneticisi.Instance != null)
+        {
+            SesYoneticisi.Instance.DogruSesiCal();
+            return;
+        }
+
+        // Yedek: yerel kaynak (clip yoksa sessiz)
+        if (sesKaynagi != null && dogruSes != null)
+            sesKaynagi.PlayOneShot(dogruSes);
     }
 
-    /// <summary>Yanlış cevabı gösterir.</summary>
+    /// <summary>Yanlış cevabı gösterir; SesYoneticisi.YanlisSesiCal (yoksa yerel clip).</summary>
     public void YanlisGoster()
     {
-        Goster(yanlisGorsel, dogruGorsel, yanlisSes);
+        GorseliGoster(yanlisGorsel, dogruGorsel);
+
+        // Öncelik: ortak SesYoneticisi
+        if (SesYoneticisi.Instance != null)
+        {
+            SesYoneticisi.Instance.YanlisSesiCal();
+            return;
+        }
+
+        // Yedek: yerel kaynak (clip yoksa sessiz)
+        if (sesKaynagi != null && yanlisSes != null)
+            sesKaynagi.PlayOneShot(yanlisSes);
     }
 
     /// <summary>Skor yazısını günceller (null ise dokunmaz).</summary>
@@ -42,7 +72,8 @@ public class GeriBildirimYoneticisi : MonoBehaviour
             skorYazisi.text = "Doğru: " + skor;
     }
 
-    private void Goster(GameObject acilacak, GameObject kapanacak, AudioClip clip)
+    /// <summary>Bir görseli açar, diğerini kapatır; süre sonunda gizler.</summary>
+    private void GorseliGoster(GameObject acilacak, GameObject kapanacak)
     {
         if (kapanacak != null) kapanacak.SetActive(false);
         if (acilacak != null)
@@ -51,9 +82,6 @@ public class GeriBildirimYoneticisi : MonoBehaviour
             CancelInvoke(nameof(GizleHepsi));
             Invoke(nameof(GizleHepsi), gosterimSuresi);
         }
-
-        if (sesKaynagi != null && clip != null)
-            sesKaynagi.PlayOneShot(clip);
     }
 
     private void GizleHepsi()

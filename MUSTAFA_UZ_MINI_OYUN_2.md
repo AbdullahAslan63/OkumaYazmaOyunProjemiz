@@ -2,19 +2,22 @@
 
 Bu dosya **sadece Mustafa Üz** için faz kapılı çalışma planıdır. Kod yazmadan önce proje kökündeki `AGENTS.md` dosyasını okuyun. Genel görev özeti: `DETAYLI GÖREV DAĞILIMI VE KILAVUZ.md` → Paket 5.
 
+**Branch:** `mustafauz/level2`
+
 ---
 
 ## Katı kurallar
 
 1. Bir fazın **Tamamlandı kontrol listesi** tamamen işaretlenmeden sonraki faza geçme.
 2. Kod üretildikten sonra o fazın **Unity Editor** bölümünü bitirmeden fazı kapatma.
-3. Paket 3 (Mustafa Yiğit Avan) bitmeden **Faz 7’ye** (ortak sistem entegrasyonu) geçme.
+3. Paket 3 (Mustafa Yiğit Avan) bitmeden **Faz 7’ye** (ortak sistem entegrasyonu) geçme — skor/soru/geri bildirim alanları sahnede varsa checkpoint’i erken yeşile çekebilirsin; `SesYoneticisi` Yiğit kapısından sonra gelir.
 4. Başkasının paket klasörüne (`Ortak/`, `Avatar/`, `SepetOyunu/`) script ekleme.
 5. Ses clip üretimi / TTS / `SesYoneticisi` gövdesi **Paket 3**; partikül+ses asset bağlama finali **Paket 6**. Senin işin: sahnende UI/animasyon ve çağrı kancalarının hazır olması.
 6. Cursor’a bir seferde tek script / tek odak ver; yöneticide büyük değişiklik için önce Plan Mode.
 7. Bu planda “şimdilik kod/sahne kilidi” yok — yeni işe `AGENTS.md` + bu dosyadaki mevcut fazdan devam et.
 8. Checklist’i çocuğun tek başına doldurmasını bekleme — `AGENTS.md` → **İlerleme takibi**: sık durum bildir, olgu sor, onaylara göre bu dosyadaki `[ ]` kutularını agent günceller.
 9. “Ne durumdayım?” sorusuna `AGENTS.md` → **yönlendirici cevap** şablonuyla yanıt ver; karar aldırma, plandaki sıradaki **tek işi** yaptır.
+10. Her faz çıkışında agent **commit + push** hatırlatır (`AGENTS.md`). Branch: `mustafauz/level2`.
 
 ---
 
@@ -25,14 +28,18 @@ Bu dosya **sadece Mustafa Üz** için faz kapılı çalışma planıdır. Kod ya
 
 | Konu               | Karar                                                                                                                          |
 | ------------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| Branch             | `mustafauz/level2`                                                                                                             |
 | Mekanik            | Büyük harf sorulur; ekranda **4 seçenek**; 1 doğru + 3 çeldirici; tıklayarak seçim                                             |
 | Scriptler          | `HarfSecmeYoneticisi.cs` + `SecenekBalonu.cs`                                                                                  |
 | Sahne (güncel yol) | `Assets/Scenes/HarfSecmeOyunu.unity`                                                                                           |
 | Giriş              | Fare + touch/parmak (`Input System`)                                                                                           |
 | Yanlış cevap       | Geri bildirim; **aynı soru kalır**                                                                                             |
-| Doğru cevap        | Kısa uçuş / tik; sonra yeni soru                                                                                               |
+| Doğru cevap        | Tıklanan balonun üstünde `correct_check.png`; sonra yeni soru                                                                  |
+| Yanlış ikon        | Tıklanan balonun üstünde `wrong_x.png` (`Assets/_Art/Bolum2/UI/`)                                                               |
+| Ses                | Üz ses çalmaz. Yalnızca null-safe çağrı bırakır; yanlış SFX ve obje klibi **Paket 3**                                          |
 | Süre               | Varsayılan **60** saniye (`kalanSure`)                                                                                         |
-| Bitiş ekranı       | Sade ve çocuk dostu: tebrik + 1–3 yıldız (daire) + `Doğru: N` + Ana Menü — harf rapor listesi **yok**                          |
+| Bitiş ekranı       | Sade: tebrik + 1–3 yıldız + `Doğru: N` + **Yeniden Dene** (`TekrarOyna`) + Ana Menü — harf rapor listesi **yok**               |
+| Tema               | Arka plan, yazı renkleri, yazı boyut/konum **Inspector’dan değiştirilebilir**; runtime hardcode ezmesin                        |
 | Hedef cihazlar     | **Mobil** ve **Windows akıllı tahta** (büyük ekran) — UI ölçeği kritik                                                         |
 | Balon girişi       | Anında belirme yok; **aşağıdan yukarı** yükseliş; hızlar hafif rastgele farklarla                                              |
 | Seslendirme        | Çocuklar okumadığı için soru + obje adı sesleri gerekir → clip/API **Paket 3**; Paket 5 yalnızca güvenli çağrı noktası bırakır |
@@ -55,14 +62,17 @@ Bu dosya **sadece Mustafa Üz** için faz kapılı çalışma planıdır. Kod ya
 
 **Eksik / sonraki:**
 
+- Faz 4 UI polish (punto / panel) + runtime hardcode kaldırma
+- **Faz 4b:** değiştirilebilir arka plan / yazı renk-boyut-konum + bitişte Yeniden Dene (`Tekrar_Dene_Mavi.png`)
+- **Faz 4c:** tıklanan balonun üstünde tik (`correct_check.png`) / çarpı (`wrong_x.png`) — ses yok, null-safe çağrı
 - Play smoke test (mobil + tahta)
-- Ses clip bağlama (Paket 6)
-- Faz 4 UI polish (punto / panel) Play teyidi sonrası
+- Ses clip bağlama (Paket 3/6)
 
 **Bilinen notlar:**
 
 - Ana Menü hedefi: `AvatarOlusturmaEkrani`
 - TMP: `com.unity.ugui` üzerinden TextMeshProUGUI
+- `SoruUiHazirla` / `YeniSoru` içinde hardcoded renk/boyut/pozisyon varsa Faz 4–4b’de kaldır
 
 ---
 
@@ -76,10 +86,12 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
     → Faz 2 (SecenekBalonu + tıklama)     [tamam]
       → Faz 3 (Yönetici temel + bitiş)    [tamam]
         → Faz 4 (UI okunabilirlik + ölçek)        ← sıradaki odak
-          → Faz 5 (Balon yükseliş animasyonu)
-            → Faz 6 (Paket 3 checkpoint)
-              → Faz 7 (Ortak entegrasyon + ses kancaları)
-                → Faz 8 (Teslim)
+          → Faz 4b (Tema + Yeniden Dene)
+            → Faz 4c (Balon üstü tik / çarpı)
+              → Faz 5 (Balon yükseliş animasyonu)
+                → Faz 6 (Paket 3 checkpoint)
+                  → Faz 7 (Ortak entegrasyon + ses kancaları)
+                    → Faz 8 (Teslim → main)
 ```
 
 ---
@@ -115,6 +127,7 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 - [x] Sahne dosyası var
 - [ ] Prefab klasöründe en az bir seçenek şablonu (isteğe bağlı; world-sprite modelinde zorunlu değil — boşsa not düş)
 - [x] Asset envanteri bu dosyaya işlendi (yukarıdaki madde 3)
+- [ ] Commit + push yapıldı (`mustafauz/level2` — önceki işler `main`’deyse ilk push notu)
 
 **Çıkış:** Hazırlık net. → Faz 1
 
@@ -143,6 +156,7 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 - [x] Soru harfi görselleri sahnede
 - [x] Doğru/yanlış feedback görselleri (çoğu) sahnede
 - [ ] Dört sabit slot için boş `Transform` referans objeleri (`SecenekPozisyon1`…`4`) Hierarchy’de net isimlendirildi (yoksa Faz 4’te ekle)
+- [ ] Commit + push yapıldı
 
 **Çıkış:** Sahne art iskeleti. → Faz 2
 
@@ -179,6 +193,7 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 - [x] Tıklanınca yöneticiye sonuç bildiriliyor
 - [x] World-space sprite + collider yolu çalışıyor
 - [x] `objeResmi` alanı tanımlı (UI’ye geçilirse kullanılacak)
+- [ ] Commit + push yapıldı
 
 **Çıkış:** Seçenek birimi hazır. → Faz 3
 
@@ -198,7 +213,7 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 - `YeniSoru()` — desteden harf; 1 doğru + 3 çeldirici; Fisher-Yates; 4 slot
 - `SecenekSecildi(bool)` + `SecenekSecildi(bool, SecenekBalonu)`
 - Süre `kalanSure`; bitince `OyunuBitir`
-- Bitiş: tebrik + 1–3 işaret + `Doğru: N` + Ana Menü (harf rapor listesi yok)
+- Bitiş: tebrik + 1–3 işaret + `Doğru: N` + Ana Menü (harf rapor listesi yok) — **Yeniden Dene Faz 4b**
 - Paket 3 olmadan yerel skor sayacı kullanılabilir
 
 
@@ -212,6 +227,7 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 - [x] Ana Menü sahne yüklemesi bağlı
 - [x] Build Settings’te `HarfSecmeOyunu` var
 - [ ] `codes` / yönetici objesinde Inspector alanları mümkün olduğunca elle dolu (`AutoDoldur` yedek kalsın)
+- [ ] Commit + push yapıldı
 
 **Çıkış:** Oynanabilir çekirdek. → Faz 4
 
@@ -248,6 +264,7 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 
 - `sureYazisi` Inspector’dan atansın; runtime Canvas üretimini kaldır veya yalnızca yedek bırak.
 - Renk / punto sabitlerini abartılı “sistem UI”den uzak tut; sahnedeki Canvas’a bırakmayı tercih et.
+- `SoruUiHazirla` / `YeniSoru` içinde hardcoded `color` / `fontSize` / `anchoredPosition` varsa **kaldır veya public alanlara taşı** (Faz 4b ile birlikte).
 - Plan Mode: yalnızca yönetici UI bağları değişecekse kısa plan + onay.
 
 
@@ -260,8 +277,84 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 - [ ] Runtime’a bağımlı süre yazısı yerine (mümkünse) sahne Canvas referansı kullanılıyor
 - [ ] Bitiş ekranı aynı dilde (büyük tebrik, net buton)
 - [ ] Sahne kayıtlı
+- [ ] Commit + push yapıldı
 
-**Çıkış:** Okunabilir, ölçeklenen UI. → Faz 5
+**Çıkış:** Okunabilir, ölçeklenen UI. → Faz 4b
+
+---
+
+
+
+# Faz 4b — Tema (arka plan / yazı) + Yeniden Dene
+
+**Amaç:** Sahne teması Inspector’dan değiştirilebilir olsun; bitiş ekranında oyunu yeniden başlat.
+
+**Branch işi:** `mustafauz/level2`
+
+## 4b.A — Değiştirilebilir arka plan
+
+1. `HarfSecmeYoneticisi` (veya sahne helper) üzerinde `Image` / `SpriteRenderer` / `Sprite` public alanı (örn. `arkaplanGorseli` veya mevcut `Arkaplan` referansı).
+2. Inspector’dan sprite değiştirince Play’de yeni arka plan görünsün.
+3. Runtime’da sabit sprite ataması varsa kaldır.
+
+## 4b.B — Yazı renkleri / boyutları / konumları
+
+1. Soru harfi, başlık, süre, bitiş metinleri için public `Color`, punto (`float` / TMP font size), `Vector2` anchored position **veya** tamamen Inspector TMP ayarına bırak (kod ezmesin).
+2. Hardcoded runtime layout yazımlarını kaldır.
+3. Play’de Inspector değeri değiştir → görünüm güncellenir (veya yeniden Play).
+
+## 4b.C — Yeniden Dene butonu
+
+1. Bitiş panelinde Ana Menü yanına **Yeniden Dene** Button.
+2. Buton görseli: `Assets/_Art/Bolum2/UI/Tekrar_Dene_Mavi.png` (yedek: `Tekrar_Dene_Turuncu.png`).
+3. Public metot: `TekrarOyna()` — `oyunBitti` temizle, skoru sıfırla (`SkoruSifirla` varsa), süreyi resetle, bitiş panelini kapat, `YeniSoru()` çağır.
+4. Button OnClick → `TekrarOyna`.
+5. Play: süre bitir → Yeniden Dene → oyun yeniden başlar.
+
+## Tamamlandı kontrol listesi
+
+- [ ] Arka plan Inspector’dan değiştirilebiliyor
+- [ ] Yazı renkleri değiştirilebiliyor (kod ezmiyor)
+- [ ] Yazı boyut / konum Inspector veya public alanlarla ayarlanabiliyor
+- [ ] `TekrarOyna()` var ve bitiş butonuna bağlı
+- [ ] Play: Yeniden Dene akışı çalışıyor
+- [ ] Commit + push yapıldı
+
+**Çıkış:** Tema + yeniden dene hazır. → Faz 4c
+
+---
+
+
+
+# Faz 4c — Balon üstü tik / çarpı
+
+**Amaç:** Doğru ve yanlış ikon tıklanan balonun üstünde görünsün. Ses çalma bu fazda yok.
+
+**Dosyalar:** `HarfSecmeYoneticisi.cs` (`DogruCevapSureci` / `YanlisCevapSureci`), `SecenekBalonu.cs`
+
+Şu an geri bildirim ekran ortasındaki `GeriBildirimYoneticisi` panelidir. Bu fazda ikon, tıklanan `SecenekBalonu` üzerine gelir.
+
+## 4c.A — Görseller
+
+1. Yanlış balon: `Assets/_Art/Bolum2/UI/wrong_x.png`
+2. Doğru balon: `Assets/_Art/Bolum2/UI/correct_check.png`
+3. İkon kısa süre görünüp gizlenir. Yanlışta aynı soru kalır; doğruda yeni soru (mevcut akış).
+
+## 4c.B — Ses (yalnızca kanca)
+
+1. `geriBildirim` null değilse `YanlisGoster()` / doğru tarafta obje sesi için Paket 3 API’sine null-safe çağrı bırak.
+2. Clip üretme, `PlayOneShot` gövdesi yazma, `SesYoneticisi` doldurma. Bunlar Mustafa Yiğit (Paket 3).
+3. Clip yokken Console’da kırmızı hata olmasın.
+
+## Tamamlandı kontrol listesi
+
+- [ ] Yanlış tıklamada çarpı, tıklanan balonun üstünde
+- [ ] Doğru tıklamada tik, tıklanan balonun üstünde
+- [ ] Ses dosyası bu fazda bağlanmadı; çağrı null-safe
+- [ ] Play: yanlışta soru aynı kalıyor, doğruda yeni soru geliyor
+- [ ] Commit + push yapıldı
+
+**Çıkış:** Tik / çarpı balonun üstünde. → Faz 5
 
 ---
 
@@ -293,6 +386,7 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 - [ ] Yükseliş bitmeden tıklama işlenmiyor
 - [ ] Doğru cevap sonrası yeni tur animasyonu da tutarlı
 - [ ] Play’de mobil/tahta ölçeğinde ofset abartılı kaçmıyor
+- [ ] Commit + push yapıldı
 
 **Çıkış:** Doğal giriş animasyonu. → Faz 6
 
@@ -336,6 +430,7 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen checklist doldurursun; eksikse bekle / hat
 
 - [ ] Yukarıdakiler yeşil **veya** yazılı mutabakat var
 - [ ] Eksikler bu dosyaya not edildi
+- [ ] Commit + push (not commit’i) yapıldı
 
 **Çıkış şartı:** Yeşil olmadan Faz 7’ye geçme. → Faz 7
 
@@ -396,6 +491,7 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen checklist doldurursun; eksikse bekle / hat
 - [ ] `YeniSoru` ses kancası null-safe
 - [ ] Doğru/yanlışta `GeriBildirimYoneticisi` null-safe çağrılıyor
 - [ ] Clip yokken Console’da kırmızı error yok
+- [ ] Commit + push yapıldı
 
 **Çıkış:** Ortak sistemlere bağlı oynanış. → Faz 8
 
@@ -411,12 +507,14 @@ Sorumlu: **Mustafa Yiğit Avan**. Sen checklist doldurursun; eksikse bekle / hat
 
 ```
 Mini Oyun 2 (Mustafa Üz) teslim
+- Branch: mustafauz/level2 → main PR
 - Sahne: Assets/Scenes/HarfSecmeOyunu.unity
 - Scriptler: HarfSecmeYoneticisi.cs, SecenekBalonu.cs
 - Mekanik: 4 şık, 1 doğru + 3 çeldirici, 60 sn
 - UI: mobil + akıllı tahta ölçeği hedeflendi
+- Tema: arka plan + yazı renk/boyut/konum Inspector’dan
 - Balon giriş: aşağıdan yükseliş
-- Bitiş: sade (tebrik + yıldız + Doğru + Ana Menü)
+- Bitiş: sade (tebrik + yıldız + Doğru + Yeniden Dene + Ana Menü)
 - Seslendirme: çağrı kancaları hazır; clip’ler Paket 3/6
 
 Paket 6’dan beklenenler:
@@ -433,6 +531,7 @@ Paket 6’dan beklenenler:
 
 - [ ] Faz 0–7 ilgili maddeler bu dosyada işaretli
 - [ ] Teslim notu Süleyman’a iletildi
+- [ ] Commit + push + `main` PR açıldı
 - [ ] Bilinen bug’lar aşağıdaki bölüme yazıldı
 
 **Bilinen sorunlar:**
@@ -453,6 +552,7 @@ Paket 6’dan beklenenler:
 | Sahne          | `Assets/Scenes/HarfSecmeOyunu.unity`                    |
 | Art            | `Assets/_Art/HarfSecmeOyunu/`                           |
 | Prefab (hedef) | `Assets/_Prefabs/HarfSecmeOyunu/`                       |
+| Branch         | `mustafauz/level2`                                      |
 | Ekip kuralları | `AGENTS.md`                                             |
 | Bu plan        | `MUSTAFA_UZ_MINI_OYUN_2.md`                             |
 
@@ -468,6 +568,7 @@ Paket 6’dan beklenenler:
 | -------------------------------------------------------------------- | --------------------------------- |
 | `HarfObjeVerisi` / `SoruSecici` / `SkorYoneticisi` script gövdesi    | Paket 3                           |
 | AI ile soru/obje ses dosyası üretimi + `SesYoneticisi` çalma mantığı | Paket 3                           |
+| Yanlış cevap SFX ve doğru objenin klibini çalma (`_Audio/Objeler/`)  | Paket 3 (Mustafa Yiğit)           |
 | `GeriBildirimYoneticisi` partikül/ses component gövdesi              | Paket 3                           |
 | Proje genel font atlas / tüm sahnelerde font unify                   | Paket 6                           |
 | Menü ↔ oyun `SahneGecisi` buton ağı finali                           | Paket 6                           |

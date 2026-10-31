@@ -135,6 +135,8 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
         art.sizeDelta = new Vector2(320, 90);
         anaGo.GetComponent<Image>().color = new Color(0.98f, 0.55f, 0.25f);
         Button anaBtn = anaGo.GetComponent<Button>();
+        // Ortak tıklama sesi (clip yoksa sessiz)
+        anaGo.AddComponent<ButonTiklamaSesi>();
         TextMeshProUGUI anaText = Tmp(anaGo.transform, "Text", "Ana Menü", 40, Vector2.zero);
         anaText.color = Color.white;
         anaBtn.onClick.AddListener(yonetici.AnaMenuyeDon);
@@ -156,7 +158,7 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
         yonetici.bitisTebrikYazisi = tebrik;
         yonetici.bitisSkorYazisi = bitisSkor;
         yonetici.bitisYildizlari = yildizlar;
-        yonetici.anaMenuSahneAdi = "SaidAnaEkran";
+        yonetici.anaMenuSahneAdi = "AvatarOlusturmaEkrani";
     }
 
     static GameObject SecenekPrefabOlustur(Transform parent)

@@ -189,7 +189,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 8821337933559988086, guid: ad5b207aa33d04d1391db5a4ad988f16, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 52eec5388d4643999d504a96536b1794, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -357,7 +357,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -7526612722584224420, guid: 4a870fd270df2424bb3ae674a8fcb0f3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1d4bcf2903b74c0f81f3f3e8d0f79494, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -507,7 +507,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1812938208763894669, guid: ddc69c81c39d14fd890b3e04ef9f58fd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 67106276c1854198b0920f00d2a81251, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -525,6 +525,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 126099443}
   m_CullTransparentMesh: 1
+--- !u!1001 &135680834
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1488067436571866439, guid: 7cc442f1561871092b35ba2635e7aa79, type: 3}
+      propertyPath: m_Name
+      value: SesYoneticisi
+      objectReference: {fileID: 0}
+    - target: {fileID: 5458743377210651631, guid: 7cc442f1561871092b35ba2635e7aa79, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5458743377210651631, guid: 7cc442f1561871092b35ba2635e7aa79, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5458743377210651631, guid: 7cc442f1561871092b35ba2635e7aa79, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5458743377210651631, guid: 7cc442f1561871092b35ba2635e7aa79, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5458743377210651631, guid: 7cc442f1561871092b35ba2635e7aa79, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5458743377210651631, guid: 7cc442f1561871092b35ba2635e7aa79, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5458743377210651631, guid: 7cc442f1561871092b35ba2635e7aa79, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5458743377210651631, guid: 7cc442f1561871092b35ba2635e7aa79, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5458743377210651631, guid: 7cc442f1561871092b35ba2635e7aa79, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5458743377210651631, guid: 7cc442f1561871092b35ba2635e7aa79, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7cc442f1561871092b35ba2635e7aa79, type: 3}
 --- !u!28 &174345643
 Texture2D:
   m_ObjectHideFlags: 0
@@ -824,7 +881,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AvatarSecimEkrani
   avatarGorunumu: {fileID: 1512242600}
-  sonrakiSahneAdi: HarfSecmeOyunu
+  sonrakiSahneAdi: "LevelEkran\u0131"
   karakterPaneli: {fileID: 426906829}
   renkPaneli: {fileID: 263103104}
   aksesuarPaneli: {fileID: 495180408}
@@ -991,17 +1048,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GridLayoutGroup
   m_Padding:
-    m_Left: 8
-    m_Right: 8
-    m_Top: 8
-    m_Bottom: 8
-  m_ChildAlignment: 0
+    m_Left: 12
+    m_Right: 12
+    m_Top: 12
+    m_Bottom: 12
+  m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 190, y: 190}
+  m_CellSize: {x: 260, y: 260}
   m_Spacing: {x: 16, y: 16}
   m_Constraint: 1
-  m_ConstraintCount: 2
+  m_ConstraintCount: 3
 --- !u!1 &219190493
 GameObject:
   m_ObjectHideFlags: 0
@@ -1059,7 +1116,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 1965938563520552373, guid: 6b7ee017e826147f5bd938a6b5e08e20, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 783f369841f44dc3b68bf2aa327cb276, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1283,17 +1340,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GridLayoutGroup
   m_Padding:
-    m_Left: 8
-    m_Right: 8
-    m_Top: 8
-    m_Bottom: 8
-  m_ChildAlignment: 0
+    m_Left: 16
+    m_Right: 16
+    m_Top: 16
+    m_Bottom: 16
+  m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 110, y: 110}
-  m_Spacing: {x: 20, y: 20}
+  m_CellSize: {x: 190, y: 190}
+  m_Spacing: {x: 18, y: 18}
   m_Constraint: 1
-  m_ConstraintCount: 2
+  m_ConstraintCount: 4
 --- !u!114 &263103107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2129,15 +2186,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GridLayoutGroup
   m_Padding:
-    m_Left: 8
-    m_Right: 8
-    m_Top: 8
-    m_Bottom: 8
-  m_ChildAlignment: 0
+    m_Left: 16
+    m_Right: 16
+    m_Top: 16
+    m_Bottom: 16
+  m_ChildAlignment: 1
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 210, y: 240}
-  m_Spacing: {x: 18, y: 18}
+  m_CellSize: {x: 400, y: 420}
+  m_Spacing: {x: 20, y: 20}
   m_Constraint: 1
   m_ConstraintCount: 2
 --- !u!114 &426906832
@@ -3980,7 +4037,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -3276594972826741158, guid: a642ff0e5287f47ba823cb7c91920f95, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e6506ece83024ae691572d94f148d739, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -4921,7 +4978,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 232234725356071119, guid: 42c1897b263334813be074c5fa1a8296, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e2cccd793c2c4647803a062d67799414, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -4996,7 +5053,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -5754643353664920790, guid: 504c49fbcd0d6427e9fdd5bf3fe303a2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 27adee994e4a4c2db66c0dd8df1ea6c7, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -5318,7 +5375,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 2386309632928874317, guid: 09b5909a11f414e408870c5c34f470ca, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d73555fdff254515bb66d1063c8913ed, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -5645,7 +5702,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 7907871713640751088, guid: 64957a580e6b6476b9f0d11fede1cf16, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1dc891e439d14b3eb50c2c18c8980fab, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -5699,194 +5756,238 @@ MonoBehaviour:
     mutluPoz: {fileID: -661529905683360949, guid: 4bf42d106dcce438d88e4caa68f2f221, type: 3}
     uzgunPoz: {fileID: 1946391630538052084, guid: 8eb5489f8bb0d4a8eb8b1f28350a3627, type: 3}
     govdeOlcekCarpani: 1
-    aksesuarOfset: {x: 0, y: 1.9}
+    aksesuarOfset: {x: 0, y: 2.25}
     aksesuarAyarlari:
-    - aksesuarAdi: aksesuar_gozluk_kus_0
-      ofset: {x: -1.2, y: 1.4}
-      olcekCarpani: 5.4
-    - aksesuarAdi: aksesuar_kaplan_arkadan_takmali_sapka_0
-      ofset: {x: -1.2, y: 2.3}
-      olcekCarpani: 1.9
-    - aksesuarAdi: aksesuar_kaplan_gozluk_0
-      ofset: {x: -1.2, y: 1.4}
-      olcekCarpani: 2.8
-    - aksesuarAdi: aksesuar_kaplan_gunes_gozlugu_0
-      ofset: {x: -1.2, y: 1.4}
-      olcekCarpani: 2.8
-    - aksesuarAdi: aksesuar_kaplan_kova_sapka_0
-      ofset: {x: -1.2, y: 2.3}
-      olcekCarpani: 1.9
-    - aksesuarAdi: aksesuar_kaplan_kulakli_sapka_0
-      ofset: {x: -1.2, y: 2.3}
-      olcekCarpani: 1.8
-    - aksesuarAdi: aksesuar_kaplan_logolu_sapka_0
-      ofset: {x: -1.2, y: 2.3}
-      olcekCarpani: 2
-    - aksesuarAdi: aksesuar_kaplan_sapka_0
-      ofset: {x: -1.2, y: 2.3}
-      olcekCarpani: 1.9
-    - aksesuarAdi: aksesuar_kaplan_yuvarlak_gozluk_0
-      ofset: {x: -1.2, y: 1.4}
-      olcekCarpani: 2.19
-    - aksesuarAdi: aksesuar_kulaklik_maymun_0
-      ofset: {x: -1.2, y: 1.9}
-      olcekCarpani: 5
-    - aksesuarAdi: aksesuar_sapka_kus_0
-      ofset: {x: -1.2, y: 2.3}
-      olcekCarpani: 3
+    - aksesuarAdi: gozluk_kus
+      sprite: {fileID: 21300000, guid: 52eec5388d4643999d504a96536b1794, type: 3}
+      ofset: {x: 0, y: 1.64}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_arkadan_takmali_sapka
+      sprite: {fileID: 21300000, guid: f7da79e2c9aa4c429bc7a28b4fbd9003, type: 3}
+      ofset: {x: 0, y: 2.25}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_gozluk
+      sprite: {fileID: 21300000, guid: e6506ece83024ae691572d94f148d739, type: 3}
+      ofset: {x: 0, y: 1.64}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_gunes_gozlugu
+      sprite: {fileID: 21300000, guid: e2cccd793c2c4647803a062d67799414, type: 3}
+      ofset: {x: 0, y: 1.64}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_kova_sapka
+      sprite: {fileID: 21300000, guid: d73555fdff254515bb66d1063c8913ed, type: 3}
+      ofset: {x: 0, y: 2.25}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_kulakli_sapka
+      sprite: {fileID: 21300000, guid: 27adee994e4a4c2db66c0dd8df1ea6c7, type: 3}
+      ofset: {x: 0, y: 2.25}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_logolu_sapka
+      sprite: {fileID: 21300000, guid: 783f369841f44dc3b68bf2aa327cb276, type: 3}
+      ofset: {x: 0, y: 2.25}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_sapka
+      sprite: {fileID: 21300000, guid: 1d4bcf2903b74c0f81f3f3e8d0f79494, type: 3}
+      ofset: {x: 0, y: 2.25}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_yuvarlak_gozluk
+      sprite: {fileID: 21300000, guid: 1dc891e439d14b3eb50c2c18c8980fab, type: 3}
+      ofset: {x: 0, y: 1.64}
+      olcekCarpani: 1
+    - aksesuarAdi: kulaklik_maymun
+      sprite: {fileID: 21300000, guid: 67106276c1854198b0920f00d2a81251, type: 3}
+      ofset: {x: 0, y: 2.25}
+      olcekCarpani: 1
+    - aksesuarAdi: sapka_kus
+      sprite: {fileID: 21300000, guid: f4d65b636eb04648a5c6f242feb95f30, type: 3}
+      ofset: {x: 0, y: 2.25}
+      olcekCarpani: 1
   - hayvanAdi: "Tav\u015Fan"
     normalPoz: {fileID: 1153188567824183562, guid: 4332f0fd42178c0d4baa06d532d45d8c, type: 3}
     mutluPoz: {fileID: 5869272504414987646, guid: 8e3b3a03a6a5c4c4e8cfc3ff5462ec96, type: 3}
     uzgunPoz: {fileID: 2601688128221183828, guid: 568c69a52bf554935811e4c5a670f78b, type: 3}
     govdeOlcekCarpani: 1
-    aksesuarOfset: {x: 0, y: 1.7}
+    aksesuarOfset: {x: 0, y: 1.56}
     aksesuarAyarlari:
-    - aksesuarAdi: aksesuar_gozluk_kus_0
-      ofset: {x: 0, y: 0.84}
-      olcekCarpani: 2.9
-    - aksesuarAdi: aksesuar_kaplan_arkadan_takmali_sapka_0
-      ofset: {x: 0, y: 1.7}
+    - aksesuarAdi: gozluk_kus
+      sprite: {fileID: 21300000, guid: 35118335b467419f850a9d98e48f8a4b, type: 3}
+      ofset: {x: 0, y: 1.21}
       olcekCarpani: 1
-    - aksesuarAdi: aksesuar_kaplan_gozluk_0
-      ofset: {x: 0, y: 0.77}
-      olcekCarpani: 1.7
-    - aksesuarAdi: aksesuar_kaplan_gunes_gozlugu_0
-      ofset: {x: 0, y: 0.77}
-      olcekCarpani: 1.7
-    - aksesuarAdi: aksesuar_kaplan_kova_sapka_0
-      ofset: {x: 0, y: 1.7}
+    - aksesuarAdi: kaplan_arkadan_takmali_sapka
+      sprite: {fileID: 21300000, guid: 7eee99acb161470ab7b90f44bad53677, type: 3}
+      ofset: {x: 0, y: 1.56}
       olcekCarpani: 1
-    - aksesuarAdi: aksesuar_kaplan_kulakli_sapka_0
-      ofset: {x: 0, y: 1.7}
+    - aksesuarAdi: kaplan_gozluk
+      sprite: {fileID: 21300000, guid: ed320d305915400b9bcefcc0a44c44a7, type: 3}
+      ofset: {x: 0, y: 1.21}
       olcekCarpani: 1
-    - aksesuarAdi: aksesuar_kaplan_logolu_sapka_0
-      ofset: {x: 0, y: 1.7}
+    - aksesuarAdi: kaplan_gunes_gozlugu
+      sprite: {fileID: 21300000, guid: d9123b9c2bf14153aa5e410d2db6ac0d, type: 3}
+      ofset: {x: 0, y: 1.21}
       olcekCarpani: 1
-    - aksesuarAdi: aksesuar_kaplan_sapka_0
-      ofset: {x: 0, y: 1.7}
+    - aksesuarAdi: kaplan_kova_sapka
+      sprite: {fileID: 21300000, guid: 0d5229f6136b484aa1188ad46ae86636, type: 3}
+      ofset: {x: 0, y: 1.56}
       olcekCarpani: 1
-    - aksesuarAdi: aksesuar_kaplan_yuvarlak_gozluk_0
-      ofset: {x: 0, y: 0.85}
-      olcekCarpani: 1.32
-    - aksesuarAdi: aksesuar_kulaklik_maymun_0
-      ofset: {x: 0, y: 1}
-      olcekCarpani: 2
-    - aksesuarAdi: aksesuar_sapka_kus_0
-      ofset: {x: 0, y: 1.7}
+    - aksesuarAdi: kaplan_kulakli_sapka
+      sprite: {fileID: 21300000, guid: ce302f084bcd4729b725ac007f8c507a, type: 3}
+      ofset: {x: 0, y: 1.56}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_logolu_sapka
+      sprite: {fileID: 21300000, guid: 40536b2edaf2409199b2a604b7762033, type: 3}
+      ofset: {x: 0, y: 1.56}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_sapka
+      sprite: {fileID: 21300000, guid: f24193ed505c46778576f569d27ddabc, type: 3}
+      ofset: {x: 0, y: 1.56}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_yuvarlak_gozluk
+      sprite: {fileID: 21300000, guid: dfeb9cd7702644b69a43fd0e02ac869e, type: 3}
+      ofset: {x: 0, y: 1.21}
+      olcekCarpani: 1
+    - aksesuarAdi: kulaklik_maymun
+      sprite: {fileID: 21300000, guid: fb42952271bc40ee91d13ae7553c7299, type: 3}
+      ofset: {x: 0, y: 1.56}
+      olcekCarpani: 1
+    - aksesuarAdi: sapka_kus
+      sprite: {fileID: 21300000, guid: 3599719add7647f08d5b4e2d8e8e800e, type: 3}
+      ofset: {x: 0, y: 1.56}
       olcekCarpani: 1
   - hayvanAdi: "Ku\u015F"
     normalPoz: {fileID: 8378548140099857260, guid: ada661af0a6e2410d9261d1198bea2df, type: 3}
     mutluPoz: {fileID: 3850390660085421179, guid: e637309e6de3e4bac82444064370a0eb, type: 3}
     uzgunPoz: {fileID: -6525783450138826507, guid: 4b82523522f364b3b8cd0bda20e028bf, type: 3}
     govdeOlcekCarpani: 1
-    aksesuarOfset: {x: 0, y: 3}
+    aksesuarOfset: {x: 0, y: 2.3}
     aksesuarAyarlari:
-    - aksesuarAdi: aksesuar_gozluk_kus_0
-      ofset: {x: 0, y: 1.82}
-      olcekCarpani: 3.2
-    - aksesuarAdi: aksesuar_kaplan_arkadan_takmali_sapka_0
-      ofset: {x: 0, y: 3}
+    - aksesuarAdi: gozluk_kus
+      sprite: {fileID: 21300000, guid: a337c8afca8d4e9093626cf90169740a, type: 3}
+      ofset: {x: 0, y: 1.75}
       olcekCarpani: 1
-    - aksesuarAdi: aksesuar_kaplan_gozluk_0
-      ofset: {x: 0, y: 2}
-      olcekCarpani: 1.98
-    - aksesuarAdi: aksesuar_kaplan_gunes_gozlugu_0
-      ofset: {x: 0, y: 2}
-      olcekCarpani: 1.98
-    - aksesuarAdi: aksesuar_kaplan_kova_sapka_0
-      ofset: {x: 0, y: 3}
+    - aksesuarAdi: kaplan_arkadan_takmali_sapka
+      sprite: {fileID: 21300000, guid: 4065ed7cdb914a0b94e3f2e4720d3069, type: 3}
+      ofset: {x: 0, y: 2.3}
       olcekCarpani: 1
-    - aksesuarAdi: aksesuar_kaplan_kulakli_sapka_0
-      ofset: {x: 0, y: 3}
+    - aksesuarAdi: kaplan_gozluk
+      sprite: {fileID: 21300000, guid: 9a9b8734ce8e4760a3e4ff0b07878b7f, type: 3}
+      ofset: {x: 0, y: 1.75}
       olcekCarpani: 1
-    - aksesuarAdi: aksesuar_kaplan_logolu_sapka_0
-      ofset: {x: 0, y: 3}
+    - aksesuarAdi: kaplan_gunes_gozlugu
+      sprite: {fileID: 21300000, guid: c4bcee5e73124dd8a313ba976703f58c, type: 3}
+      ofset: {x: 0, y: 1.75}
       olcekCarpani: 1
-    - aksesuarAdi: aksesuar_kaplan_sapka_0
-      ofset: {x: 0, y: 3}
+    - aksesuarAdi: kaplan_kova_sapka
+      sprite: {fileID: 21300000, guid: f97817daf26b4297976829f2edecc430, type: 3}
+      ofset: {x: 0, y: 2.3}
       olcekCarpani: 1
-    - aksesuarAdi: aksesuar_kaplan_yuvarlak_gozluk_0
-      ofset: {x: 0, y: 3}
+    - aksesuarAdi: kaplan_kulakli_sapka
+      sprite: {fileID: 21300000, guid: 9077c89b75d241909f5963e0ab917e91, type: 3}
+      ofset: {x: 0, y: 2.3}
       olcekCarpani: 1
-    - aksesuarAdi: aksesuar_kulaklik_maymun_0
-      ofset: {x: 0, y: 2.21}
-      olcekCarpani: 2.47
-    - aksesuarAdi: aksesuar_sapka_kus_0
-      ofset: {x: 0, y: 3}
+    - aksesuarAdi: kaplan_logolu_sapka
+      sprite: {fileID: 21300000, guid: 22b0b67fae7c487583693375db820229, type: 3}
+      ofset: {x: 0, y: 2.3}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_sapka
+      sprite: {fileID: 21300000, guid: aec634568c504ed3872384d90d276885, type: 3}
+      ofset: {x: 0, y: 2.3}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_yuvarlak_gozluk
+      sprite: {fileID: 21300000, guid: 739ee3c518a943d4b7d577dd741a364a, type: 3}
+      ofset: {x: 0, y: 1.75}
+      olcekCarpani: 1
+    - aksesuarAdi: kulaklik_maymun
+      sprite: {fileID: 21300000, guid: 2be9ab4a3cfa44efb0cf518529c7194b, type: 3}
+      ofset: {x: 0, y: 2.3}
+      olcekCarpani: 1
+    - aksesuarAdi: sapka_kus
+      sprite: {fileID: 21300000, guid: 94c17976eced46eaad0a5a5496093af7, type: 3}
+      ofset: {x: 0, y: 2.3}
       olcekCarpani: 1
   - hayvanAdi: Rakun
     normalPoz: {fileID: -3121074332411749344, guid: 65e5e906a460491e18ca943eb816ad4c, type: 3}
     mutluPoz: {fileID: -5200758030901369874, guid: 658063bfe4565453bac86e6c906bee7a, type: 3}
     uzgunPoz: {fileID: -3802810221231629889, guid: 033781ec27b7b4faab7508d0d6559122, type: 3}
     govdeOlcekCarpani: 1
-    aksesuarOfset: {x: 0, y: 1.8}
+    aksesuarOfset: {x: 0, y: 2.38}
     aksesuarAyarlari:
-    - aksesuarAdi: aksesuar_gozluk_kus_0
-      ofset: {x: 0, y: 1.4499999}
-      olcekCarpani: 9
-    - aksesuarAdi: aksesuar_kaplan_arkadan_takmali_sapka_0
-      ofset: {x: 0, y: 2.34}
-      olcekCarpani: 3
-    - aksesuarAdi: aksesuar_kaplan_gozluk_0
-      ofset: {x: 0, y: 1.4499999}
-      olcekCarpani: 4.6
-    - aksesuarAdi: aksesuar_kaplan_gunes_gozlugu_0
-      ofset: {x: 0, y: 1.4499999}
-      olcekCarpani: 4.6
-    - aksesuarAdi: aksesuar_kaplan_kova_sapka_0
-      ofset: {x: 0, y: 2.34}
-      olcekCarpani: 2.6
-    - aksesuarAdi: aksesuar_kaplan_kulakli_sapka_0
-      ofset: {x: 0, y: 2.34}
-      olcekCarpani: 2.5
-    - aksesuarAdi: aksesuar_kaplan_logolu_sapka_0
-      ofset: {x: 0, y: 2.34}
-      olcekCarpani: 2.5
-    - aksesuarAdi: aksesuar_kaplan_sapka_0
-      ofset: {x: 0, y: 2.34}
-      olcekCarpani: 2.5
-    - aksesuarAdi: aksesuar_kaplan_yuvarlak_gozluk_0
-      ofset: {x: 0, y: 1.4499999}
-      olcekCarpani: 3.7
-    - aksesuarAdi: aksesuar_kulaklik_maymun_0
-      ofset: {x: 0, y: 1.8}
-      olcekCarpani: 6.3
-    - aksesuarAdi: aksesuar_sapka_kus_0
-      ofset: {x: 0, y: 2.4}
-      olcekCarpani: 4
+    - aksesuarAdi: gozluk_kus
+      sprite: {fileID: 21300000, guid: b38c09caa98a4e848ad98b5ee68a8e36, type: 3}
+      ofset: {x: 0, y: 1.88}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_arkadan_takmali_sapka
+      sprite: {fileID: 21300000, guid: 413de8796da94f76b000ac1db8c9cd8c, type: 3}
+      ofset: {x: 0, y: 2.38}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_gozluk
+      sprite: {fileID: 21300000, guid: 05e6e419c4aa4a4788a0a8758854ee39, type: 3}
+      ofset: {x: 0, y: 1.88}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_gunes_gozlugu
+      sprite: {fileID: 21300000, guid: 2ed48ecd2b704a868cce1d1a78b613f6, type: 3}
+      ofset: {x: 0, y: 1.88}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_kova_sapka
+      sprite: {fileID: 21300000, guid: c2df0330c30540f993f38f6c70137920, type: 3}
+      ofset: {x: 0, y: 2.38}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_kulakli_sapka
+      sprite: {fileID: 21300000, guid: c17cb59e577a4e689b0549615fd28ff2, type: 3}
+      ofset: {x: 0, y: 2.38}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_logolu_sapka
+      sprite: {fileID: 21300000, guid: 7190b9889d1549d181033861d03b1feb, type: 3}
+      ofset: {x: 0, y: 2.38}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_sapka
+      sprite: {fileID: 21300000, guid: 92bb869534004402a2af87d501e8f905, type: 3}
+      ofset: {x: 0, y: 2.38}
+      olcekCarpani: 1
+    - aksesuarAdi: kaplan_yuvarlak_gozluk
+      sprite: {fileID: 21300000, guid: f6ed7657379a452085523a762c6676a4, type: 3}
+      ofset: {x: 0, y: 1.88}
+      olcekCarpani: 1
+    - aksesuarAdi: kulaklik_maymun
+      sprite: {fileID: 21300000, guid: 90b80950986c44538183dbba87c172bc, type: 3}
+      ofset: {x: 0, y: 2.38}
+      olcekCarpani: 1
+    - aksesuarAdi: sapka_kus
+      sprite: {fileID: 21300000, guid: cdc0cbc4e519488cbbf09b7339aea978, type: 3}
+      ofset: {x: 0, y: 2.38}
+      olcekCarpani: 1
   aksesuarlar:
-  - sprite: {fileID: 8821337933559988086, guid: ad5b207aa33d04d1391db5a4ad988f16, type: 3}
-    olcek: 0.28
-    yerelOfset: {x: 0, y: -0.35}
-  - sprite: {fileID: -3287648763509175603, guid: 283225ee6214a41528bfeb4ade6dea78, type: 3}
-    olcek: 0.45
+  - sprite: {fileID: 21300000, guid: 52eec5388d4643999d504a96536b1794, type: 3}
+    olcek: 1
     yerelOfset: {x: 0, y: 0}
-  - sprite: {fileID: -3276594972826741158, guid: a642ff0e5287f47ba823cb7c91920f95, type: 3}
-    olcek: 0.28
-    yerelOfset: {x: 0, y: -0.35}
-  - sprite: {fileID: 232234725356071119, guid: 42c1897b263334813be074c5fa1a8296, type: 3}
-    olcek: 0.28
-    yerelOfset: {x: 0, y: -0.35}
-  - sprite: {fileID: 2386309632928874317, guid: 09b5909a11f414e408870c5c34f470ca, type: 3}
-    olcek: 0.45
+  - sprite: {fileID: 21300000, guid: f7da79e2c9aa4c429bc7a28b4fbd9003, type: 3}
+    olcek: 1
     yerelOfset: {x: 0, y: 0}
-  - sprite: {fileID: -5754643353664920790, guid: 504c49fbcd0d6427e9fdd5bf3fe303a2, type: 3}
-    olcek: 0.45
+  - sprite: {fileID: 21300000, guid: e6506ece83024ae691572d94f148d739, type: 3}
+    olcek: 1
     yerelOfset: {x: 0, y: 0}
-  - sprite: {fileID: 1965938563520552373, guid: 6b7ee017e826147f5bd938a6b5e08e20, type: 3}
-    olcek: 0.45
+  - sprite: {fileID: 21300000, guid: e2cccd793c2c4647803a062d67799414, type: 3}
+    olcek: 1
     yerelOfset: {x: 0, y: 0}
-  - sprite: {fileID: -7526612722584224420, guid: 4a870fd270df2424bb3ae674a8fcb0f3, type: 3}
-    olcek: 0.45
+  - sprite: {fileID: 21300000, guid: d73555fdff254515bb66d1063c8913ed, type: 3}
+    olcek: 1
     yerelOfset: {x: 0, y: 0}
-  - sprite: {fileID: 7907871713640751088, guid: 64957a580e6b6476b9f0d11fede1cf16, type: 3}
-    olcek: 0.28
-    yerelOfset: {x: 0, y: -0.35}
-  - sprite: {fileID: -1812938208763894669, guid: ddc69c81c39d14fd890b3e04ef9f58fd, type: 3}
-    olcek: 0.45
+  - sprite: {fileID: 21300000, guid: 27adee994e4a4c2db66c0dd8df1ea6c7, type: 3}
+    olcek: 1
     yerelOfset: {x: 0, y: 0}
-  - sprite: {fileID: 4145504286207685818, guid: e5a6e776f3aea4fedaa31f3aec66fef6, type: 3}
-    olcek: 0.45
+  - sprite: {fileID: 21300000, guid: 783f369841f44dc3b68bf2aa327cb276, type: 3}
+    olcek: 1
+    yerelOfset: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 1d4bcf2903b74c0f81f3f3e8d0f79494, type: 3}
+    olcek: 1
+    yerelOfset: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 1dc891e439d14b3eb50c2c18c8980fab, type: 3}
+    olcek: 1
+    yerelOfset: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: 67106276c1854198b0920f00d2a81251, type: 3}
+    olcek: 1
+    yerelOfset: {x: 0, y: 0}
+  - sprite: {fileID: 21300000, guid: f4d65b636eb04648a5c6f242feb95f30, type: 3}
+    olcek: 1
     yerelOfset: {x: 0, y: 0}
   govdeRenderer: {fileID: 103730447}
   aksesuarRenderer: {fileID: 1994091102}
@@ -5901,7 +6002,7 @@ Transform:
   m_GameObject: {fileID: 1512242599}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.884137, y: -3.2700915, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7015,7 +7116,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 4145504286207685818, guid: e5a6e776f3aea4fedaa31f3aec66fef6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f4d65b636eb04648a5c6f242feb95f30, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -8304,7 +8405,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -3287648763509175603, guid: 283225ee6214a41528bfeb4ade6dea78, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f7da79e2c9aa4c429bc7a28b4fbd9003, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -8714,3 +8815,4 @@ SceneRoots:
   - {fileID: 183446066}
   - {fileID: 1435006220}
   - {fileID: 1875443284}
+  - {fileID: 135680834}
