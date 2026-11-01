@@ -528,11 +528,17 @@ public class SepetOyunYoneticisi : MonoBehaviour
 
         int puan = skorYoneticisi != null ? skorYoneticisi.skor : 0;
 
-        // Yıldızların üstünde tebrik metni
+        // Yıldızların üstünde eğimli tebrik metni
         if (bitisTebrikYazisi != null)
         {
             bitisTebrikYazisi.text = "Tebrikler " + puan + " tane doğru eşleştirdiniz.";
             bitisTebrikYazisi.gameObject.SetActive(true);
+            // Yay eğrisini yeni metne göre uygula
+            EgimliYazi egim = bitisTebrikYazisi.GetComponent<EgimliYazi>();
+            if (egim != null)
+            {
+                egim.Yenile();
+            }
         }
 
         int sariYildiz = YildizSayisiHesapla(puan);

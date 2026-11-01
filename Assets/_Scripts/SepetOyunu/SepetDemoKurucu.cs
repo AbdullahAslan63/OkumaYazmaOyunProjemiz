@@ -411,38 +411,45 @@ public class SepetDemoKurucu : MonoBehaviour
         pRt.offsetMax = Vector2.zero;
         panel.GetComponent<Image>().color = new Color(0.05f, 0.08f, 0.15f, 0.72f);
 
-        // Yıldızların üstünde renkli tebrik yazısı
-        TextMeshProUGUI tebrik = UiTmp(
-            panel.transform,
-            "BitisTebrik",
-            "Tebrikler 0 tane doğru eşleştirdiniz.",
-            52f,
-            new Vector2(0f, 220f),
-            new Vector2(1100f, 120f));
-        tebrik.fontStyle = FontStyles.Bold;
-        tebrik.enableWordWrapping = true;
-        tebrik.overflowMode = TextOverflowModes.Overflow;
-        tebrik.color = Color.white;
-        tebrik.enableVertexGradient = true;
-        tebrik.colorGradient = new VertexGradient(
-            new Color32(255, 220, 40, 255),
-            new Color32(255, 120, 40, 255),
-            new Color32(80, 220, 255, 255),
-            new Color32(180, 90, 255, 255));
-        tebrik.outlineWidth = 0.35f;
-        tebrik.outlineColor = new Color32(20, 10, 40, 255);
-        if (tebrik.fontMaterial != null)
-        {
-            tebrik.fontMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, 0.25f);
-        }
-
-        // Yıldız grubu
+        // Yıldız grubu (önce konum; yazı yıldız kemeri üzerine oturacak)
         GameObject yildizGrup = new GameObject("Yildizlar", typeof(RectTransform));
         yildizGrup.transform.SetParent(panel.transform, false);
         RectTransform ygRt = yildizGrup.GetComponent<RectTransform>();
         ygRt.anchorMin = ygRt.anchorMax = ygRt.pivot = new Vector2(0.5f, 0.5f);
-        ygRt.anchoredPosition = new Vector2(0f, 80f);
+        ygRt.anchoredPosition = new Vector2(0f, 40f);
         ygRt.sizeDelta = new Vector2(420f, 120f);
+
+        // Yıldızların solundan sağına doğru eğimli (kemer) tebrik yazısı — geniş + dikkat çekici
+        TextMeshProUGUI tebrik = UiTmp(
+            panel.transform,
+            "BitisTebrik",
+            "Tebrikler 0 tane doğru eşleştirdiniz.",
+            64f,
+            new Vector2(0f, 145f),
+            new Vector2(1400f, 200f));
+        tebrik.fontStyle = FontStyles.Bold;
+        tebrik.enableWordWrapping = false;
+        tebrik.overflowMode = TextOverflowModes.Overflow;
+        tebrik.alignment = TextAlignmentOptions.Center;
+        tebrik.characterSpacing = 4f;
+        tebrik.color = Color.white;
+        tebrik.enableVertexGradient = true;
+        tebrik.colorGradient = new VertexGradient(
+            new Color32(255, 240, 60, 255),
+            new Color32(255, 80, 40, 255),
+            new Color32(40, 255, 160, 255),
+            new Color32(120, 80, 255, 255));
+        tebrik.outlineWidth = 0.55f;
+        tebrik.outlineColor = new Color32(15, 5, 30, 255);
+        if (tebrik.fontMaterial != null)
+        {
+            tebrik.fontMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, 0.42f);
+        }
+
+        // Daha belirgin yay
+        EgimliYazi egim = tebrik.gameObject.AddComponent<EgimliYazi>();
+        egim.yayYuksekligi = 110f;
+        egim.karakterleriDondur = true;
 
         Sprite yildizSp = ArtSpriteYukle(YildizYolu);
         Image[] yildizlar = new Image[3];
