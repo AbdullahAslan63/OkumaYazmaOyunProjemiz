@@ -45,6 +45,9 @@ public class SepetOyunYoneticisi : MonoBehaviour
     // Bitiş paneli
     public GameObject bitisPaneli;
 
+    // Yıldızların üstündeki tebrik yazısı
+    public TextMeshProUGUI bitisTebrikYazisi;
+
     // 3 yıldız Image (sarı / soluk)
     public Image[] bitisYildizlari;
 
@@ -515,7 +518,7 @@ public class SepetOyunYoneticisi : MonoBehaviour
         Debug.Log("SepetOyunu bitti. Skor: " + (skorYoneticisi != null ? skorYoneticisi.skor : 0));
     }
 
-    // Yıldızlar + Tekrar Dene paneli
+    // Yıldızlar + tebrik yazısı + Tekrar Dene paneli
     private void BitisPaneliniGoster()
     {
         if (bitisPaneli != null)
@@ -524,6 +527,14 @@ public class SepetOyunYoneticisi : MonoBehaviour
         }
 
         int puan = skorYoneticisi != null ? skorYoneticisi.skor : 0;
+
+        // Yıldızların üstünde tebrik metni
+        if (bitisTebrikYazisi != null)
+        {
+            bitisTebrikYazisi.text = "Tebrikler " + puan + " tane doğru eşleştirdiniz.";
+            bitisTebrikYazisi.gameObject.SetActive(true);
+        }
+
         int sariYildiz = YildizSayisiHesapla(puan);
         // Soluk / sarı
         Color sari = new Color(1f, 0.85f, 0.15f, 1f);

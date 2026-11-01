@@ -399,7 +399,7 @@ public class SepetDemoKurucu : MonoBehaviour
         return kopya;
     }
 
-    // Ortada bitiş: 3 yıldız + Tekrar Dene
+    // Ortada bitiş: tebrik yazısı + 3 yıldız + Tekrar Dene
     private void BitisPaneliniKur(Transform canvas, SepetOyunYoneticisi yonetici)
     {
         GameObject panel = new GameObject("BitisPaneli", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
@@ -410,6 +410,31 @@ public class SepetDemoKurucu : MonoBehaviour
         pRt.offsetMin = Vector2.zero;
         pRt.offsetMax = Vector2.zero;
         panel.GetComponent<Image>().color = new Color(0.05f, 0.08f, 0.15f, 0.72f);
+
+        // Yıldızların üstünde renkli tebrik yazısı
+        TextMeshProUGUI tebrik = UiTmp(
+            panel.transform,
+            "BitisTebrik",
+            "Tebrikler 0 tane doğru eşleştirdiniz.",
+            52f,
+            new Vector2(0f, 220f),
+            new Vector2(1100f, 120f));
+        tebrik.fontStyle = FontStyles.Bold;
+        tebrik.enableWordWrapping = true;
+        tebrik.overflowMode = TextOverflowModes.Overflow;
+        tebrik.color = Color.white;
+        tebrik.enableVertexGradient = true;
+        tebrik.colorGradient = new VertexGradient(
+            new Color32(255, 220, 40, 255),
+            new Color32(255, 120, 40, 255),
+            new Color32(80, 220, 255, 255),
+            new Color32(180, 90, 255, 255));
+        tebrik.outlineWidth = 0.35f;
+        tebrik.outlineColor = new Color32(20, 10, 40, 255);
+        if (tebrik.fontMaterial != null)
+        {
+            tebrik.fontMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, 0.25f);
+        }
 
         // Yıldız grubu
         GameObject yildizGrup = new GameObject("Yildizlar", typeof(RectTransform));
@@ -462,6 +487,7 @@ public class SepetDemoKurucu : MonoBehaviour
 
         panel.SetActive(false);
         yonetici.bitisPaneli = panel;
+        yonetici.bitisTebrikYazisi = tebrik;
         yonetici.bitisYildizlari = yildizlar;
         yonetici.tekrarDeneButonu = btn;
     }
