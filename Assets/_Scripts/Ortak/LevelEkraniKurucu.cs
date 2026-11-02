@@ -6,7 +6,7 @@ using UnityEditor;
 #endif
 
 /// <summary>
-/// LevelEkranı UI taslağını kurar (arka plan, banner, 3 kart, noktalar).
+/// LevelEkranı UI taslağını kurar (arka plan, banner, 10 kart, noktalar).
 /// Play'de stub sahneyi doldurur; Editor menüsü aynı kurucuyu kullanır.
 /// </summary>
 [DefaultExecutionOrder(-40)]
@@ -18,6 +18,13 @@ public class LevelEkraniKurucu : MonoBehaviour
     public const string ArkaplanYol = "Assets/_Art/Bolum1/Arkaplan/arkaplan_adiyaman.png";
     public const string OkYol = "Assets/_Art/Avatar/UI/ui_icon_sag_ok.png";
     public const string FontYol = "Assets/Resources/Fonts/SoruFontu.asset";
+
+    // Toplam seviye kartı (3–10 kilitli placeholder)
+    private const int ToplamSeviye = 10;
+    // Kartlar arası yatay mesafe
+    private const float KartAralik = 480f;
+    // Bir sayfada görünen kart sayısı (nokta hesabı)
+    private const int SayfaKartSayisi = 3;
 
     private static readonly Color KartKrem = new Color(0.96f, 0.90f, 0.78f, 1f);
     private static readonly Color KartCerceve = new Color(0.45f, 0.28f, 0.14f, 1f);
@@ -123,23 +130,92 @@ public class LevelEkraniKurucu : MonoBehaviour
         baslik.fontStyle = FontStyles.Bold;
         if (font != null) baslik.font = font;
 
-        // Kart satırı
+        // Yatay kaydırılabilir kart alanı
+        GameObject scrollGo = new GameObject("KartScroll", typeof(RectTransform), typeof(ScrollRect));
+        scrollGo.transform.SetParent(canvasRoot, false);
+        RectTransform scrollRt = scrollGo.GetComponent<RectTransform>();
+        scrollRt.anchorMin = new Vector2(0.5f, 0.5f);
+        scrollRt.anchorMax = new Vector2(0.5f, 0.5f);
+        scrollRt.anchoredPosition = new Vector2(0f, -20f);
+        scrollRt.sizeDelta = new Vector2(1600f, 620f);
+
+        // Image: kaydırma raycast + RectMask2D
+        GameObject viewport = new GameObject("Viewport", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(RectMask2D));
+        viewport.transform.SetParent(scrollGo.transform, false);
+        RectTransform viewRt = viewport.GetComponent<RectTransform>();
+        viewRt.anchorMin = Vector2.zero;
+        viewRt.anchorMax = Vector2.one;
+        viewRt.offsetMin = Vector2.zero;
+        viewRt.offsetMax = Vector2.zero;
+        Image viewImg = viewport.GetComponent<Image>();
+        viewImg.color = new Color(1f, 1f, 1f, 0f);
+        viewImg.raycastTarget = true;
+
         GameObject kartSatiri = new GameObject("KartSatiri", typeof(RectTransform));
-        kartSatiri.transform.SetParent(canvasRoot, false);
+        kartSatiri.transform.SetParent(viewport.transform, false);
         RectTransform satirRt = kartSatiri.GetComponent<RectTransform>();
-        satirRt.anchorMin = new Vector2(0.5f, 0.5f);
-        satirRt.anchorMax = new Vector2(0.5f, 0.5f);
-        satirRt.anchoredPosition = new Vector2(0f, -20f);
-        satirRt.sizeDelta = new Vector2(1600f, 620f);
+        satirRt.anchorMin = new Vector2(0f, 0.5f);
+        satirRt.anchorMax = new Vector2(0f, 0.5f);
+        satirRt.pivot = new Vector2(0f, 0.5f);
+        satirRt.anchoredPosition = Vector2.zero;
+        // İçerik genişliği: kart sayısı × aralık
+        satirRt.sizeDelta = new Vector2((ToplamSeviye - 1) * KartAralik + 420f, 620f);
 
-        KartOlustur(kartSatiri.transform, "SeviyeKart1", new Vector2(-480f, 0f), new Vector2(380f, 520f),
-            kapak1, yildiz, font, "Seviye 1", 3, false, false, secim, "SepetOyunu");
-        KartOlustur(kartSatiri.transform, "SeviyeKart2", new Vector2(0f, 10f), new Vector2(420f, 560f),
-            kapak2, yildiz, font, "Seviye 2", 1, true, false, secim, "HarfSecmeOyunu");
-        KartOlustur(kartSatiri.transform, "SeviyeKart3", new Vector2(480f, 0f), new Vector2(380f, 520f),
-            null, yildiz, font, "Seviye 3", 0, false, true, secim, null);
+        ScrollRect scroll = scrollGo.GetComponent<ScrollRect>();
+        scroll.horizontal = true;
+        scroll.vertical = false;
+        scroll.movementType = ScrollRect.MovementType.Elastic;
+        scroll.inertia = true;
+        scroll.decelerationRate = 0.135f;
+        scroll.scrollSensitivity = 40f;
+        scroll.viewport = viewRt;
+        scroll.content = satirRt;
 
-        // Sayfa noktaları
+        // Seviye 1–2 açık; 3–10 Seviye 3 gibi kilitli
+        for (int s = 1; s <= ToplamSeviye; s++)
+        {
+            float x = (s - 1) * KartAralik;
+            bool kilitli = s >= 3;
+            bool secili = s == 2;
+            Vector2 boyut = secili ? new Vector2(420f, 560f) : new Vector2(380f, 520f);
+            float y = secili ? 10f : 0f;
+            Sprite kapak = null;
+            string hedef = null;
+            int yildizSayisi = 0;
+            if (s == 1)
+            {
+                kapak = kapak1;
+                hedef = "SepetOyunu";
+                yildizSayisi = SeviyeIlerleme.YildizOku(1);
+            }
+            else if (s == 2)
+            {
+                kapak = kapak2;
+                hedef = "HarfSecmeOyunu";
+                yildizSayisi = SeviyeIlerleme.YildizOku(2);
+            }
+
+            KartOlustur(
+                kartSatiri.transform,
+                "SeviyeKart" + s,
+                new Vector2(x + boyut.x * 0.5f, y),
+                boyut,
+                kapak,
+                yildiz,
+                font,
+                "Seviye " + s,
+                yildizSayisi,
+                secili,
+                kilitli,
+                secim,
+                hedef);
+        }
+
+        // İlk kartlar solda görünsün
+        scroll.horizontalNormalizedPosition = 0f;
+
+        // Sayfa noktaları (her sayfada 3 kart)
+        int sayfaSayisi = Mathf.CeilToInt(ToplamSeviye / (float)SayfaKartSayisi);
         GameObject noktalar = new GameObject("SayfaNoktalari", typeof(RectTransform));
         noktalar.transform.SetParent(canvasRoot, false);
         RectTransform noktaRt = noktalar.GetComponent<RectTransform>();
@@ -147,10 +223,11 @@ public class LevelEkraniKurucu : MonoBehaviour
         noktaRt.anchorMax = new Vector2(0.5f, 0f);
         noktaRt.pivot = new Vector2(0.5f, 0.5f);
         noktaRt.anchoredPosition = new Vector2(0f, 70f);
-        noktaRt.sizeDelta = new Vector2(200f, 40f);
-        for (int i = 0; i < 3; i++)
+        noktaRt.sizeDelta = new Vector2(sayfaSayisi * 40f + 40f, 40f);
+        float noktaBaslangic = -((sayfaSayisi - 1) * 40f) * 0.5f;
+        for (int i = 0; i < sayfaSayisi; i++)
         {
-            Image nokta = ImageOlustur(noktalar.transform, "Nokta" + (i + 1), new Vector2(-40f + i * 40f, 0f), new Vector2(22f, 22f));
+            Image nokta = ImageOlustur(noktalar.transform, "Nokta" + (i + 1), new Vector2(noktaBaslangic + i * 40f, 0f), new Vector2(22f, 22f));
             nokta.color = i == 0 ? SariSecili : new Color(0.75f, 0.75f, 0.75f, 1f);
             nokta.raycastTarget = false;
         }
@@ -174,6 +251,10 @@ public class LevelEkraniKurucu : MonoBehaviour
         GameObject kart = new GameObject(ad, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
         kart.transform.SetParent(parent, false);
         RectTransform rt = kart.GetComponent<RectTransform>();
+        // Content sol kenarına göre konum (ScrollRect merkez offset'ini önler)
+        rt.anchorMin = new Vector2(0f, 0.5f);
+        rt.anchorMax = new Vector2(0f, 0.5f);
+        rt.pivot = new Vector2(0.5f, 0.5f);
         rt.anchoredPosition = pos;
         rt.sizeDelta = size;
 
