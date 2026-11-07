@@ -33,6 +33,7 @@ public static class LevelEkraniKurulumEditor
 
         SpriteOlarakGarantiEt(LevelEkraniKurucu.Kapak1Yol);
         SpriteOlarakGarantiEt(LevelEkraniKurucu.Kapak2Yol);
+        SpriteOlarakGarantiEt(LevelEkraniKurucu.KilitYol);
         SpriteOlarakGarantiEt(LevelEkraniKurucu.ArkaplanYol);
         SpriteOlarakGarantiEt(LevelEkraniKurucu.YildizYol);
         SpriteOlarakGarantiEt(LevelEkraniKurucu.OkYol);

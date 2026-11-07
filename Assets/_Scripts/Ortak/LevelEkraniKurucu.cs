@@ -14,6 +14,7 @@ public class LevelEkraniKurucu : MonoBehaviour
 {
     public const string Kapak1Yol = "Assets/_Art/Leveller/seviye1_kapak.png";
     public const string Kapak2Yol = "Assets/_Art/Leveller/seviye2_kapak.png";
+    public const string KilitYol = "Assets/_Art/Leveller/kilit_sari.png";
     public const string YildizYol = "Assets/_Art/Bolum2/UI/Dogru_Yildiz.png";
     public const string ArkaplanYol = "Assets/_Art/Bolum1/Arkaplan/arkaplan_adiyaman.png";
     public const string OkYol = "Assets/_Art/Avatar/UI/ui_icon_sag_ok.png";
@@ -39,11 +40,17 @@ public class LevelEkraniKurucu : MonoBehaviour
 
     void Awake()
     {
-        if (kuruldu) return;
-        // Tıklama sesi için ortak yönetici (clip yoksa sessiz)
-        SesYoneticisi.GarantiEt();
+        // Önce UI — ses hatası eski kilidi ekranda bırakmasın
         UiKur(transform);
         kuruldu = true;
+        SesYoneticisi.GarantiEt();
+    }
+
+    void Start()
+    {
+        // Eski sahnede KilitGovde/KilitYazi kaldıysa zorla yenile
+        if (GameObject.Find("KilitGovde") != null || GameObject.Find("KilitYazi") != null)
+            UiKur(transform);
     }
 
     /// <summary>Bu Canvas üzerinde seviye seçim UI'sini kurar (mevcut çocukları siler).</summary>
@@ -72,6 +79,8 @@ public class LevelEkraniKurucu : MonoBehaviour
         Sprite arkaSprite = SpriteYukle(ArkaplanYol);
         Sprite kapak1 = SpriteYukle(Kapak1Yol);
         Sprite kapak2 = SpriteYukle(Kapak2Yol);
+        // Hazır PNG asset (kodla çizilmez)
+        Sprite kilitSprite = KilitSpriteDosyadanYukle();
         Sprite yildiz = SpriteYukle(YildizYol);
         Sprite okSprite = SpriteYukle(OkYol);
         TMP_FontAsset font = FontYukle();
@@ -201,6 +210,7 @@ public class LevelEkraniKurucu : MonoBehaviour
                 new Vector2(x + boyut.x * 0.5f, y),
                 boyut,
                 kapak,
+                kilitSprite,
                 yildiz,
                 font,
                 "Seviye " + s,
@@ -239,6 +249,7 @@ public class LevelEkraniKurucu : MonoBehaviour
         Vector2 pos,
         Vector2 size,
         Sprite kapak,
+        Sprite kilitSprite,
         Sprite yildizSprite,
         TMP_FontAsset font,
         string baslikMetin,
@@ -285,14 +296,19 @@ public class LevelEkraniKurucu : MonoBehaviour
         if (kilitli)
         {
             kapakImg.color = KilitMor;
-            // Sarı kilit gövdesi (emoji fontuna bağımlı olmasın)
-            Image kilitGovde = ImageOlustur(kapakImg.transform, "KilitGovde", Vector2.zero, new Vector2(100f, 120f));
-            kilitGovde.color = SariSecili;
-            kilitGovde.raycastTarget = false;
-            TextMeshProUGUI kilitYazi = TmpOlustur(kapakImg.transform, "KilitYazi", "Kilit", 40f, new Vector2(0f, -100f), new Vector2(200f, 50f));
-            kilitYazi.color = SariSecili;
-            kilitYazi.fontStyle = FontStyles.Bold;
-            if (font != null) kilitYazi.font = font;
+            // Sarı kilit ikonu (yazı yok)
+            Image kilitIkon = ImageOlustur(kapakImg.transform, "KilitIkon", new Vector2(0f, -8f), new Vector2(168f, 192f));
+            if (kilitSprite != null)
+            {
+                kilitIkon.sprite = kilitSprite;
+                kilitIkon.preserveAspect = true;
+                kilitIkon.color = Color.white;
+            }
+            else
+            {
+                kilitIkon.color = SariSecili;
+            }
+            kilitIkon.raycastTarget = false;
             buton.interactable = false;
         }
         else if (kapak != null)
@@ -345,6 +361,30 @@ public class LevelEkraniKurucu : MonoBehaviour
         string ad = System.IO.Path.GetFileNameWithoutExtension(path);
         return Resources.Load<Sprite>("Leveller/" + ad);
 #endif
+    }
+
+    /// <summary>kilit_sari.png dosyasını Application.dataPath üzerinden yükler.</summary>
+    private static Sprite KilitSpriteDosyadanYukle()
+    {
+        string fullPath = System.IO.Path.Combine(Application.dataPath, "_Art/Leveller/kilit_sari.png");
+        if (System.IO.File.Exists(fullPath))
+        {
+            byte[] bytes = System.IO.File.ReadAllBytes(fullPath);
+            Texture2D tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+            if (tex.LoadImage(bytes))
+            {
+                tex.filterMode = FilterMode.Bilinear;
+                tex.wrapMode = TextureWrapMode.Clamp;
+                return Sprite.Create(
+                    tex,
+                    new Rect(0f, 0f, tex.width, tex.height),
+                    new Vector2(0.5f, 0.5f),
+                    100f);
+            }
+        }
+
+        // Son çare: Unity import
+        return SpriteYukle(KilitYol);
     }
 
     private static TMP_FontAsset FontYukle()
