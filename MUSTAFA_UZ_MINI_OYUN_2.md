@@ -37,8 +37,9 @@ Bu dosya **sadece Mustafa Üz** için faz kapılı çalışma planıdır. Kod ya
 | Doğru cevap        | Tıklanan balonun üstünde `correct_check.png`; sonra yeni soru                                                                  |
 | Yanlış ikon        | Tıklanan balonun üstünde `wrong_x.png` (`Assets/_Art/Bolum2/UI/`)                                                               |
 | Ses                | Üz ses çalmaz. Yalnızca null-safe çağrı bırakır; yanlış SFX ve obje klibi **Paket 3**                                          |
-| Süre               | Varsayılan **60** saniye (`kalanSure`)                                                                                         |
-| Bitiş ekranı       | Sade: tebrik + 1–3 yıldız + `Doğru: N` + **Yeniden Dene** (`TekrarOyna`) + Ana Menü — harf rapor listesi **yok**               |
+| Süre               | Varsayılan **60** sn; görsel `GunesSayac` (`Ortak/`, Bolum1 güneş art) — dijital `mm:ss` gizlenir                              |
+| Skor / yıldız      | `dogruPuan=1`; `YildizHesaplayici` (0–1→1, 2–4→2, ≥5→3)                                                                      |
+| Bitiş ekranı       | Sade: tebrik + 1–3 yıldız + `Doğru: N` + **Yeniden Dene** (`TekrarOyna`, `Tekrar_Dene_Mavi.png`) + Ana Menü — harf rapor yok   |
 | Tema               | Arka plan, yazı renkleri, yazı boyut/konum **Inspector’dan değiştirilebilir**; runtime hardcode ezmesin                        |
 | Hedef cihazlar     | **Mobil** ve **Windows akıllı tahta** (büyük ekran) — UI ölçeği kritik                                                         |
 | Balon girişi       | Anında belirme yok; **aşağıdan yukarı** yükseliş; hızlar hafif rastgele farklarla                                              |
@@ -50,29 +51,20 @@ Bu dosya **sadece Mustafa Üz** için faz kapılı çalışma planıdır. Kod ya
 
 
 
-## Mevcut durum özeti (2026-09)
+## Mevcut durum özeti (2026-11-14)
 
-**Yeniden yazım (seçenek 1 — UI + SO + Instantiate):**
-
-- `HarfSecmeYoneticisi` + `SecenekBalonu` sıfırdan: Canvas UI prefab, `HarfObjeVerisi` / `SoruSecici` / skor / geri bildirim
-- Düz Hierarchy + `AutoDoldur` / isim araması **kaldırıldı**
-- Prefab: `Assets/_Prefabs/HarfSecmeOyunu/SecenekBalonu.prefab`
-- Veri: `Assets/_Data/Harfler/Harf_*.asset` (Bolum1 Objeler)
-- Sahne kurulumu: Unity menü **Oyun > Bolum1 Kurulumu (Avatar + HarfSecme)** (veya otomatik eksik kurulum)
+- `HarfSecmeYoneticisi` + `SecenekBalonu`: Canvas UI prefab, `HarfObjeVerisi` / `SoruSecici` / skor / geri bildirim
+- `AutoDoldur` / isim araması **yok** (kod başlığında da belirtilir)
+- Prefab: `Assets/_Prefabs/HarfSecmeOyunu/SecenekBalonu.prefab` **mevcut**
+- **Parite:** `GunesSayac`, `TekrarOyna` + Mavi buton, `HarfSesiCal` / `ObjeSesiCal` / prompt, `dogruPuan=1`, check/x Bolum2, `SesYoneticisi.GarantiEt`
+- Ana Menü hedefi: `LevelEkranı`
 
 **Eksik / sonraki:**
 
-- Faz 4 UI polish (punto / panel) + runtime hardcode kaldırma
-- **Faz 4b:** değiştirilebilir arka plan / yazı renk-boyut-konum + bitişte Yeniden Dene (`Tekrar_Dene_Mavi.png`)
-- **Faz 4c:** tıklanan balonun üstünde tik (`correct_check.png`) / çarpı (`wrong_x.png`) — ses yok, null-safe çağrı
-- Play smoke test (mobil + tahta)
-- Ses clip bağlama (Paket 3/6)
-
-**Bilinen notlar:**
-
-- Ana Menü hedefi: `AvatarOlusturmaEkrani`
-- TMP: `com.unity.ugui` üzerinden TextMeshProUGUI
-- `SoruUiHazirla` / `YeniSoru` içinde hardcoded renk/boyut/pozisyon varsa Faz 4–4b’de kaldır
+- Faz 4 UI polish + runtime hardcode kaldırma (tema Inspector)
+- Faz 4c: tik/çarpı **balon üstünde** (şu an ekran ortası GeriBildirim)
+- Play smoke (`SMOKE_TEST_AVATAR_HARF.md`)
+- Ses clip final bağlama Paket 6
 
 ---
 
@@ -81,17 +73,10 @@ Bu dosya **sadece Mustafa Üz** için faz kapılı çalışma planıdır. Kod ya
 ## Faz akışı
 
 ```
-Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
-  → Faz 1 (Sahne + art — kod yok)         [büyük ölçüde tamam]
-    → Faz 2 (SecenekBalonu + tıklama)     [tamam]
-      → Faz 3 (Yönetici temel + bitiş)    [tamam]
-        → Faz 4 (UI okunabilirlik + ölçek)        ← sıradaki odak
-          → Faz 4b (Tema + Yeniden Dene)
-            → Faz 4c (Balon üstü tik / çarpı)
-              → Faz 5 (Balon yükseliş animasyonu)
-                → Faz 6 (Paket 3 checkpoint)
-                  → Faz 7 (Ortak entegrasyon + ses kancaları)
-                    → Faz 8 (Teslim → main)
+Faz 0–3, 5–7  [kod büyük ölçüde tamam — ses kancaları + TekrarOyna + GunesSayac 2026-11-14]
+Faz 4 / 4b tema Inspector polish          ← sıradaki odak
+Faz 4c balon-üstü tik/çarpı               [ekran ortası ikon var; balon üstü sonra]
+Faz 8 Play + teslim
 ```
 
 ---
@@ -213,7 +198,7 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 - `YeniSoru()` — desteden harf; 1 doğru + 3 çeldirici; Fisher-Yates; 4 slot
 - `SecenekSecildi(bool)` + `SecenekSecildi(bool, SecenekBalonu)`
 - Süre `kalanSure`; bitince `OyunuBitir`
-- Bitiş: tebrik + 1–3 işaret + `Doğru: N` + Ana Menü (harf rapor listesi yok) — **Yeniden Dene Faz 4b**
+- Bitiş: tebrik + 1–3 yıldız + `Doğru: N` + TekrarOyna + Ana Menü (harf rapor listesi yok)
 - Paket 3 olmadan yerel skor sayacı kullanılabilir
 
 
@@ -316,8 +301,8 @@ Faz 0 (Hazırlık)                          [büyük ölçüde tamam]
 - [ ] Arka plan Inspector’dan değiştirilebiliyor
 - [ ] Yazı renkleri değiştirilebiliyor (kod ezmiyor)
 - [ ] Yazı boyut / konum Inspector veya public alanlarla ayarlanabiliyor
-- [ ] `TekrarOyna()` var ve bitiş butonuna bağlı
-- [ ] Play: Yeniden Dene akışı çalışıyor
+- [x] `TekrarOyna()` var ve bitiş butonuna bağlı (Mavi sprite; kurucu + editor)
+- [ ] Play: Yeniden Dene akışı çalışıyor (Play teyidi)
 - [ ] Commit + push yapıldı
 
 **Çıkış:** Tema + yeniden dene hazır. → Faz 4c

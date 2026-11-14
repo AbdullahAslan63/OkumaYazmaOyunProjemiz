@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 /// <summary>
 /// Güneş etrafında ışınlar; her 4 saniyede bir ışın söner (15×4 = 60 sn).
+/// Her iki mini oyunda ortak süre görseli.
 /// </summary>
 public class GunesSayac : MonoBehaviour
 {
@@ -44,10 +45,28 @@ public class GunesSayac : MonoBehaviour
         }
     }
 
-    /// <summary>Sayacı durdurur.</summary>
+    /// <summary>Sayacı tamamen durdurur (oyun sonu).</summary>
     public void Durdur()
     {
         aktif = false;
+    }
+
+    /// <summary>Geri bildirim sırasında sayacı geçici duraklatır; kalan süre korunur.</summary>
+    public void Duraklat()
+    {
+        aktif = false;
+    }
+
+    /// <summary>Duraklatmadan sonra aynı ışın/sayac ile devam eder.</summary>
+    public void DevamEt()
+    {
+        // Oyun bitmişse (ışın kalmadı) yeniden başlatma
+        if (kalanIsin <= 0)
+        {
+            return;
+        }
+
+        aktif = true;
     }
 
     private void Update()

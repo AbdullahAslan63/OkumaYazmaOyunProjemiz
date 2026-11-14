@@ -5,13 +5,13 @@ Bu dosya **sadece Mustafa Yiğit Avan** için faz kapılı çalışma planıdır
 
 **Branch:** `mustafayigit/efektler`
 
-**Önemli:** Ses işi bu branch’te başlar. Avatar, level ve harf seçme sahneleri buradadır. Enes’in SepetOyunu ses kancaları oyun bitene kadar ertelenir. Tıklama sesi tek API’dir; karakter, level ve ana menü aynı çağrıyı kullanır.
+**Önemli:** Ses API’si `SesYoneticisi` (Ortak). Her iki mini oyun aynı harf/obje ses kancalarını kullanır (`AGENTS.md` ortak sözleşme). Tıklama sesi tek API’dir.
 
 ---
 
 ## Katı kurallar
 
-1. `SesYoneticisi` gövdesine Faz 1’den başla. SepetOyunu dosyalarına ses kancası ekleme; o iş “Ertelenen” bölümündedir.
+1. `SesYoneticisi` gövdesine dokunurken yeni ses sistemi yazma. Sepet + Harf aynı API’yi çağırır (parite tamam).
 2. Bir fazın checklist’i bitmeden sonraki faza geçme.
 3. Clip dosyalarını Abdullah Aslan hazırlar; sen API + bağlama + çalma mantığını yazarsın. Clip yokken sessiz geç, kırmızı error üretme. Inspector’da son clip yerleşimi finali Paket 6 ile paylaşılabilir.
 4. Başkasının paket klasörüne yeni oyun scripti ekleme. Ortak ses bileşeni `Assets/_Scripts/Ortak/` altındadır. Avatar butonları kodla kurulduğu için `AvatarSahneKurucu` yalnızca bu bileşeni butona ekler; seçim mantığına dokunulmaz. Mini Oyun 2’ye yalnızca null-safe çağrı gider.
@@ -25,13 +25,13 @@ Bu dosya **sadece Mustafa Yiğit Avan** için faz kapılı çalışma planıdır
 | Konu | Karar |
 | ---- | ----- |
 | Branch | `mustafayigit/efektler` |
-| Kapı (2026-10-13) | Sahneler bu branch’te. Said / Mustafa Üz `main` push’u beklenmez. SepetOyunu sesi ertelenir |
-| Buton SFX | Tek clip + `TiklamaSesiCal()`. Karakter, level ve ana menü aynı bileşeni kullanır |
-| Müzik | Menüde hayvan değişince `hayvanMuzikleri` swap; oyun sahnelerinde `oyunMuzigi` (Sesli Harfler şarkısı). DDOL |
-| MO2 harf | Oyun başında `soruPromptSesi` bir kez; her soruda harf sesi bir kez |
-| MO2 obje | Doğru balonda `ObjeSesiCal`; sprite `elma_0` → clip `elma` |
-| Yanlış SFX | Şimdilik Mini Oyun 2 (`yanlisSes`). SepetOyunu sonra |
-| Doğru obje sesi | Şimdilik Mini Oyun 2’de doğru balon. Klip: `Assets/_Audio/Objeler/<Harf>/<ad>.wav`. Sepet bırakması sonra |
+| Kapı (2026-10-13) | Sahneler branch’te başladı; artık main’de birleşik |
+| Buton SFX | Tek clip + `TiklamaSesiCal()`. Karakter, level, Ana Menü, Tekrar Dene |
+| Müzik | Menüde hayvan değişince `hayvanMuzikleri` swap; oyun sahnelerinde `oyunMuzigi`. DDOL |
+| Harf sesi | Her iki oyun: `HarfSesiCal` (yeni soru) |
+| Obje sesi | Her iki oyun doğru cevapta `ObjeSesiCal`; sprite `elma_0` → clip `elma` |
+| Prompt | Yalnız MO2: `SoruPromptSesiCal` |
+| Yanlış SFX | Her iki oyun `YanlisSesiCal` / `GeriBildirimYoneticisi` |
 | Tik / çarpı görseli | Mustafa Üz koyar (`correct_check.png` / `wrong_x.png`). Bu pakette sprite konumu yok |
 | SesliHarfler | Yalnızca harf adı (Faz 4). Klasör şu an boş; obje klipleri burada değil |
 | Partikül | Tik arkasında patlama; **1.5 saniye** |
@@ -41,9 +41,9 @@ Bu dosya **sadece Mustafa Yiğit Avan** için faz kapılı çalışma planıdır
 
 ## Mevcut durum özeti (2026-10-17)
 
-Kod fazları (1–8) + Unity clip/partikül + MO2 ses akışı düzeltmesi tamam. SepetOyunu ses kancası yazılmaz.
+Kod fazları (1–8) + Unity clip/partikül + MO2 ses akışı tamam. **SepetOyunu ses kancaları da bağlandı** (2026-11-14 parite).
 
-**Sıradaki odak:** Play doğrulama → commit/push → `main` PR. Müzik/SFX gelince menüden yeniden bağla.
+**Sıradaki odak:** Play doğrulama (`SMOKE_TEST_AVATAR_HARF.md`). Müzik/SFX gelince menüden yeniden bağla; final clip Paket 6.
 
 | Script / asset | Durum |
 | -------------- | ----- |
@@ -70,7 +70,7 @@ Kod fazları (1–8) + Unity clip/partikül + MO2 ses akışı düzeltmesi tamam
 Faz −1 … 8  [kod tamam — 2026-10-16]
 Faz 9 Editor bağlama  [tamam — 2026-10-17]
   → Play testi + commit/push + main PR  ← sıradaki
-SepetOyunu ses kancaları → oyun bitince, bu akışın dışında
+SepetOyunu ses kancaları → tamam (parite)
 ```
 
 ---
@@ -326,14 +326,15 @@ Paket 3 efektler (Mustafa Yiğit) teslim
 
 ---
 
-# Ertelenen — SepetOyunu (Enes)
+# SepetOyunu ses kancaları (parite — 2026-11-14)
 
-Oyun bitmeden bu maddeler yapılmaz. `ObjeSurukleme` ve sepet yöneticisine ses satırı eklenmez. Oyun bitince aynı `SesYoneticisi` API’si kullanılır; yeni bir ses sistemi yazılmaz.
+Aynı `SesYoneticisi` API’si; yeni ses sistemi yok. DETAYLI kılavuzdaki “obje toplanınca” ifadesi bu API’ye işaret eder (prompt yalnızca MO2).
 
-- [ ] Yanlış bırakmada `yanlisSes`
-- [ ] Doğru bırakmada obje klibi (`Assets/_Audio/Objeler/`)
-- [ ] Sepet sahnesinde müzik DDOL ile sürüyor
-- [ ] Sepet UI butonlarında `ButonTiklamaSesi`
+- [x] Yanlış bırakmada `YanlisGoster` → `yanlisSes`
+- [x] Doğru bırakmada `ObjeSesiCal` (`Assets/_Audio/Objeler/`)
+- [x] Yeni turda `HarfSesiCal`
+- [x] Sepet sahnesinde müzik DDOL (`OyunSahneAdlari` içinde SepetOyunu)
+- [x] Sepet UI butonlarında `ButonTiklamaSesi` (Tekrar / Ana Menü)
 
 ---
 

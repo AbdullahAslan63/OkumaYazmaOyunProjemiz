@@ -248,12 +248,10 @@ Play'e bas, tüm butonları dene.
 
 **Görev tanımı:**
 
-- Seçili hayvana göre 4 fon müziğinden birini çalmalı.
-- Obje toplanınca ilgili "harf-kelime" seslendirmesini çalabilmeli (ses dosyaları geldiğinde).
-
-**Cursor'a örnek prompt:**
-
-> "Unity için SesYoneticisi adında bir C# script yaz. public AudioSource muzikKaynagi, public AudioClip[] hayvanMuzikleri (4 elemanlı) alanları olsun. Start() içinde AvatarYoneticisi.Instance.seciliHayvanIndex'e göre hayvanMuzikleri dizisinden doğru klibi seçip muzikKaynagi.clip'e atasın ve Play() çağırsın, loop = true olsun. Yorumla açıkla."
+- Seçili hayvana göre fon müziği; oyun sahnelerinde `oyunMuzigi` (DDOL).
+- API: `HarfSesiCal`, `ObjeSesiCal` (sprite adı → clip), `SoruPromptSesiCal` (yalnız MO2), `YanlisSesiCal` / `DogruSesiCal`, `TiklamaSesiCal`.
+- Her iki mini oyun aynı API’yi kullanır (`AGENTS.md` ortak sözleşme). Clip finali Paket 6.
+- Güncel plan: `MUSTAFA_YIGIT_EFEKTLER.md` (DETAYLI’deki eski “obje toplanınca” prompt’u yerine bu API).
 
 ---
 
@@ -266,7 +264,7 @@ Play'e bas, tüm butonları dene.
 1. Yeni sahne `SepetOyunu`. Arkaplanı sürükle (`Order in Layer -10`).
 2. Balonu sabit bir konuma yerleştir, **Box Collider 2D** ekle, **Is Trigger** işaretle, `Balon` tag'i oluşturup ata.
 3. Balonun üzerine 3D Text Mesh Pro ekle: `HarfRozeti`.
-4. Boş obje `Obje`: Sprite Renderer + Box Collider 2D (trigger DEĞİL) ekle. Bunu prefab yap (`Assets/_Prefabs/Obje.prefab`).
+4. Boş obje `Obje`: Sprite Renderer + Box Collider 2D (trigger DEĞİL) ekle. Bunu prefab yap (`Assets/_Prefabs/SepetOyunu/Obje.prefab`) — veya runtime şablon.
 5. Ekranın alt kısmına 4 tane boş obje (`Create Empty`) koy, isimlerini `ObjePozisyon1`, `ObjePozisyon2` diye sırala — bunlar objelerin duracağı sabit yerler olacak.
 
 ### Adım 4.4 — ObjeSurukleme.cs Görev Tanımı
@@ -291,14 +289,14 @@ Play'e bas, tüm butonları dene.
 
 **Ne yapmalı:**
 
-- Oyun süresini (örn. 75 saniye) tutmalı ve ekranda göstermeli, süre bitince oyunu durdurmalı.
+- Oyun süresini (**60** saniye) tutmalı; görsel `GunesSayac` (Ortak); süre bitince oyunu durdurmalı.
 - Rastgele bir harf seçip balonun rozetine yazmalı.
 - Ekrandaki 4 sabit pozisyona, o harfe ait doğru objeler + başka harflerden çeldirici objeler yerleştirmeli (prefab'dan `Instantiate` ile).
 - Bir obje balona doğru bırakıldığında: doğruysa puan ekleyip yeni tur başlatmalı, yanlışsa sadece geri bildirim göstermeli (obje zaten kendi kendine eski yerine dönüyor).
 
 **Olması gereken public alanlar:**
 
-- `SoruSecici soruSecici`, `SkorYoneticisi skorYoneticisi`, `GeriBildirimYoneticisi geriBildirim`, `GameObject objePrefab`, `Transform[] objePozisyonlari`, `TextMeshPro harfRozeti`, `TextMeshProUGUI sureYazisi`, `float kalanSure` (başlangıç değeri örn. 75)
+- `SoruSecici soruSecici`, `SkorYoneticisi skorYoneticisi`, `GeriBildirimYoneticisi geriBildirim`, `GameObject objePrefab`, `Transform[] objePozisyonlari`, `TextMeshPro harfRozeti`, `TextMeshProUGUI sureYazisi`, `float kalanSure` (başlangıç **60**), `GunesSayac gunesSayac`, `int dogruPuan=1`
 
 **Olması gereken fonksiyonlar:**
 

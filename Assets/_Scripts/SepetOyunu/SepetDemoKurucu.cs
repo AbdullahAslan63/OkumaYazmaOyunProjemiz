@@ -53,6 +53,9 @@ public class SepetDemoKurucu : MonoBehaviour
     // Objelerin Start'ından önce sahneyi kur
     private void Awake()
     {
+        // Ortak ses yöneticisi (clip yoksa sessiz)
+        SesYoneticisi.GarantiEt();
+
         // Ana kamerayı al
         Camera kamera = Camera.main;
         // Kamera yoksa kurulumu durdur
@@ -235,9 +238,9 @@ public class SepetDemoKurucu : MonoBehaviour
         }
 
         ses.playOnAwake = false;
-        // Geri bildirim sesi yüksek olsun
+        // Geri bildirim sesi yüksek olsun (asıl SFX SesYoneticisi üzerinden)
         ses.volume = 1f;
-        geri.sesSeviyesi = 1.6f;
+        geri.sesKaynagi = ses;
         // Clip yoksa kısa bip üret (Yiğit / Paket 6 final clip bağlayana kadar)
         if (geri.dogruSes == null)
         {
@@ -428,7 +431,7 @@ public class SepetDemoKurucu : MonoBehaviour
             new Vector2(0f, 145f),
             new Vector2(1400f, 200f));
         tebrik.fontStyle = FontStyles.Bold;
-        tebrik.enableWordWrapping = false;
+        tebrik.textWrappingMode = TextWrappingModes.NoWrap;
         tebrik.overflowMode = TextOverflowModes.Overflow;
         tebrik.alignment = TextAlignmentOptions.Center;
         tebrik.characterSpacing = 4f;
@@ -492,11 +495,48 @@ public class SepetDemoKurucu : MonoBehaviour
         Button btn = btnGo.GetComponent<Button>();
         btn.targetGraphic = bImg;
 
+        // Ana menü (Level ekranı) butonu
+        GameObject anaGo = new GameObject("AnaMenu", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+        anaGo.transform.SetParent(panel.transform, false);
+        RectTransform aRt = anaGo.GetComponent<RectTransform>();
+        aRt.anchorMin = aRt.anchorMax = aRt.pivot = new Vector2(0.5f, 0.5f);
+        aRt.anchoredPosition = new Vector2(0f, -200f);
+        aRt.sizeDelta = new Vector2(320f, 90f);
+        Image aImg = anaGo.GetComponent<Image>();
+        aImg.color = new Color(0.35f, 0.55f, 0.95f, 1f);
+        Button anaBtn = anaGo.GetComponent<Button>();
+        anaBtn.targetGraphic = aImg;
+        TextMeshProUGUI anaYazi = UiTmp(
+            anaGo.transform,
+            "Yazi",
+            "Ana Menü",
+            36f,
+            Vector2.zero,
+            new Vector2(300f, 80f));
+        anaYazi.raycastTarget = false;
+
+        // Ortak tıklama sesi (clip yoksa sessiz)
+        btnGo.AddComponent<ButonTiklamaSesi>();
+        anaGo.AddComponent<ButonTiklamaSesi>();
+
+        // Doğru: N satırı (yıldızların altında, Tekrar Dene üstünde)
+        TextMeshProUGUI bitisSkor = UiTmp(
+            panel.transform,
+            "BitisSkor",
+            "Doğru: 0",
+            40f,
+            new Vector2(0f, -10f),
+            new Vector2(400f, 56f));
+        bitisSkor.color = Color.white;
+
         panel.SetActive(false);
         yonetici.bitisPaneli = panel;
         yonetici.bitisTebrikYazisi = tebrik;
+        yonetici.bitisSkorYazisi = bitisSkor;
         yonetici.bitisYildizlari = yildizlar;
         yonetici.tekrarDeneButonu = btn;
+        yonetici.anaMenuButonu = anaBtn;
+        yonetici.anaMenuSahneAdi = "LevelEkranı";
     }
 
     // UI Image geri bildirim ikonu
@@ -676,7 +716,7 @@ public class SepetDemoKurucu : MonoBehaviour
         MerkezeOturt(arkaplan.transform, cizici.sprite, Vector3.zero, olcek);
 
         // Aynı arkaplanın ikinci kopyasını kapat
-        SpriteRenderer[] hepsi = Object.FindObjectsByType<SpriteRenderer>(FindObjectsSortMode.None);
+        SpriteRenderer[] hepsi = Object.FindObjectsByType<SpriteRenderer>();
         // Her çiziciyi dolaş
         for (int i = 0; i < hepsi.Length; i++)
         {
@@ -812,7 +852,7 @@ public class SepetDemoKurucu : MonoBehaviour
         }
 
         // Sahnedeki tüm çiziciler
-        SpriteRenderer[] hepsi = Object.FindObjectsByType<SpriteRenderer>(FindObjectsSortMode.None);
+        SpriteRenderer[] hepsi = Object.FindObjectsByType<SpriteRenderer>();
         // İsimle yedek ara
         for (int i = 0; i < hepsi.Length; i++)
         {
@@ -1092,7 +1132,7 @@ public class SepetDemoKurucu : MonoBehaviour
         // Kalın görünsün
         tmp.fontStyle = FontStyles.Bold;
         // Satır kaydırma
-        tmp.enableWordWrapping = false;
+        tmp.textWrappingMode = TextWrappingModes.NoWrap;
         // Taşsa da görünsün
         tmp.overflowMode = TextOverflowModes.Overflow;
         // Kontur kenarda kesilmesin

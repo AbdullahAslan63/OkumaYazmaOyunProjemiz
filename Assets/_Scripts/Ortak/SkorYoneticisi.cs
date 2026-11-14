@@ -8,8 +8,8 @@ public class SkorYoneticisi : MonoBehaviour
     // Güncel skor
     public int skor;
 
-    // Her doğru için varsayılan puan
-    public int dogruPuan = 10;
+    // Her doğru için varsayılan puan (ortak sözleşme: +1)
+    public int dogruPuan = 1;
 
     /// <summary>Skora puan ekler.</summary>
     public void SkorEkle(int miktar)

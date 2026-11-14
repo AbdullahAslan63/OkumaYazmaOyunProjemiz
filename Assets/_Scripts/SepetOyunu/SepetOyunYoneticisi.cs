@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -48,11 +49,20 @@ public class SepetOyunYoneticisi : MonoBehaviour
     // Yıldızların üstündeki tebrik yazısı
     public TextMeshProUGUI bitisTebrikYazisi;
 
+    // Bitişte "Doğru: N" satırı (ortak sözleşme)
+    public TextMeshProUGUI bitisSkorYazisi;
+
     // 3 yıldız Image (sarı / soluk)
     public Image[] bitisYildizlari;
 
     // Tekrar Dene butonu
     public Button tekrarDeneButonu;
+
+    // Level ekranına dönen buton
+    public Button anaMenuButonu;
+
+    // Bitiş sonrası dönüş sahnesi
+    public string anaMenuSahneAdi = "LevelEkranı";
 
     // Geri sayım (saniye) — 15 ışın × 4 sn = 60
     public float kalanSure = 60f;
@@ -113,6 +123,13 @@ public class SepetOyunYoneticisi : MonoBehaviour
         {
             tekrarDeneButonu.onClick.RemoveListener(TekrarOyna);
             tekrarDeneButonu.onClick.AddListener(TekrarOyna);
+        }
+
+        // Ana menü (Level ekranı) bağla
+        if (anaMenuButonu != null)
+        {
+            anaMenuButonu.onClick.RemoveListener(AnaMenuyeDon);
+            anaMenuButonu.onClick.AddListener(AnaMenuyeDon);
         }
 
         // Güneş sayacı: 12 ışın bitince oyun biter
@@ -187,6 +204,19 @@ public class SepetOyunYoneticisi : MonoBehaviour
         YeniTurBaslat();
     }
 
+    /// <summary>Level ekranına döner.</summary>
+    public void AnaMenuyeDon()
+    {
+        // Hedef boşsa dokunma
+        if (string.IsNullOrEmpty(anaMenuSahneAdi))
+        {
+            return;
+        }
+
+        // Level seçim sahnesini aç
+        SceneManager.LoadScene(anaMenuSahneAdi);
+    }
+
     /// <summary>Yeni harf seçer, objeleri yeniden dizer (ilk tur / animasyonsuz).</summary>
     public void YeniTurBaslat()
     {
@@ -225,6 +255,8 @@ public class SepetOyunYoneticisi : MonoBehaviour
         ObjeleriTemizle();
         // Yeni 4 objeyi üret
         ObjeleriOlustur();
+        // Harfi seslendir
+        HarfSesiniCal();
     }
 
     // Harfi kuyruk veya rozete yazar
@@ -279,8 +311,24 @@ public class SepetOyunYoneticisi : MonoBehaviour
 
         // Yeni tur objeleri
         ObjeleriOlustur();
+        // Yeni harfi seslendir
+        HarfSesiniCal();
         // Bırakmaya izin
         islemKilitli = false;
+    }
+
+    /// <summary>Aktif harfi bir kez seslendirir (null-safe).</summary>
+    private void HarfSesiniCal()
+    {
+        if (aktifHarf == null)
+        {
+            return;
+        }
+
+        if (SesYoneticisi.Instance != null)
+        {
+            SesYoneticisi.Instance.HarfSesiCal(aktifHarf.harf);
+        }
     }
 
     /// <summary>1 doğru + 3 çeldiriciyi karıştırıp slotlara koyar.</summary>
@@ -477,21 +525,99 @@ public class SepetOyunYoneticisi : MonoBehaviour
                 geriBildirim.DogruGoster();
             }
 
-            // Balon kuyruğu geçişi + yeni soru
-            StartCoroutine(DogruTurGecisi());
+            // Obje adı sesi + süre duraklatma, sonra yeni tur
+            Sprite objeSprite = ObjeSpriteAl(obje);
+            StartCoroutine(DogruCevapSureci(objeSprite));
         }
         else
         {
-            // Çarpı animasyonu + ses
-            if (geriBildirim != null)
-            {
-                // wrong_x
-                geriBildirim.YanlisGoster();
-            }
+            // Yanlışta da kısa süre duraklat
+            StartCoroutine(YanlisCevapSureci(obje));
+        }
+    }
 
-            // Objeyi başlangıç yerine koy
+    /// <summary>Doğru: obje sesi bitene kadar güneş durur, sonra balon geçişi.</summary>
+    private IEnumerator DogruCevapSureci(Sprite objeSprite)
+    {
+        if (gunesSayac != null)
+        {
+            gunesSayac.Duraklat();
+        }
+
+        float objeSure = 0f;
+        if (SesYoneticisi.Instance != null)
+        {
+            objeSure = SesYoneticisi.Instance.ObjeSesiCal(objeSprite);
+        }
+
+        float geriSure = 1.5f;
+        if (geriBildirim != null)
+        {
+            geriSure = geriBildirim.gosterimSuresi;
+        }
+
+        yield return new WaitForSeconds(Mathf.Max(objeSure, geriSure, 1.2f));
+
+        // Balon geçişi bitene kadar güneş duraklatık kalsın
+        yield return DogruTurGecisi();
+
+        if (gunesSayac != null && oyunAktif)
+        {
+            gunesSayac.DevamEt();
+        }
+    }
+
+    /// <summary>Yanlış: çarpı + süre duraklat; obje yuvaya döner.</summary>
+    private IEnumerator YanlisCevapSureci(ObjeSurukleme obje)
+    {
+        islemKilitli = true;
+        if (gunesSayac != null)
+        {
+            gunesSayac.Duraklat();
+        }
+
+        if (geriBildirim != null)
+        {
+            geriBildirim.YanlisGoster();
+        }
+
+        if (obje != null)
+        {
             obje.BaslangicaDon();
         }
+
+        float geriSure = 0.6f;
+        if (geriBildirim != null)
+        {
+            geriSure = Mathf.Max(0.6f, geriBildirim.gosterimSuresi);
+        }
+
+        yield return new WaitForSeconds(geriSure);
+
+        if (gunesSayac != null && oyunAktif)
+        {
+            gunesSayac.DevamEt();
+        }
+
+        islemKilitli = false;
+    }
+
+    /// <summary>Objenin SpriteRenderer sprite'ını alır.</summary>
+    private static Sprite ObjeSpriteAl(ObjeSurukleme obje)
+    {
+        if (obje == null)
+        {
+            return null;
+        }
+
+        SpriteRenderer sr = obje.GetComponent<SpriteRenderer>();
+        if (sr != null)
+        {
+            return sr.sprite;
+        }
+
+        sr = obje.GetComponentInChildren<SpriteRenderer>();
+        return sr != null ? sr.sprite : null;
     }
 
     /// <summary>Süreyi durdurur, objeleri temizler, bitiş panelini açar.</summary>
@@ -541,7 +667,19 @@ public class SepetOyunYoneticisi : MonoBehaviour
             }
         }
 
-        int sariYildiz = YildizSayisiHesapla(puan);
+        // Ortak sözleşme: Doğru: N
+        if (bitisSkorYazisi != null)
+        {
+            bitisSkorYazisi.text = "Doğru: " + puan;
+            bitisSkorYazisi.gameObject.SetActive(true);
+        }
+
+        // Ortak yıldız tablosu (0–1→1, 2–4→2, ≥5→3)
+        int sariYildiz = YildizHesaplayici.Hesapla(puan);
+
+        // Seviye 1 (Sepet) en iyi yıldızını kalıcı kaydet
+        SeviyeIlerleme.KaydetYildiz(1, sariYildiz);
+
         // Soluk / sarı
         Color sari = new Color(1f, 0.85f, 0.15f, 1f);
         Color soluk = new Color(0.45f, 0.45f, 0.5f, 0.55f);
@@ -561,23 +699,6 @@ public class SepetOyunYoneticisi : MonoBehaviour
             bitisYildizlari[i].color = i < sariYildiz ? sari : soluk;
             bitisYildizlari[i].gameObject.SetActive(true);
         }
-    }
-
-    // 0–5 → 1, 6–10 → 2, 11+ → 3 sarı yıldız
-    private int YildizSayisiHesapla(int puan)
-    {
-        if (puan <= 5)
-        {
-            return 1;
-        }
-
-        if (puan <= 10)
-        {
-            return 2;
-        }
-
-        // 15 ve altı veya daha yüksek: 3 yıldız
-        return 3;
     }
 
     // Canlı objeleri yok et

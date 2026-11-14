@@ -80,10 +80,33 @@ Assets/
 │   ├── Ortak/
 │   ├── SepetOyunu/
 │   └── HarfSecmeOyunu/
-└── _Scenes/              # Güncel yol: Assets/Scenes/ (AvatarOlusturmaEkrani, HarfSecmeOyunu, SepetOyunu)
+└── Scenes/               # AvatarOlusturmaEkrani, HarfSecmeOyunu, SepetOyunu, LevelEkranı
 ```
 
 Yeni scripti doğru paket klasörüne koyun. Rastgele `Assets/` köküne script atmayın.
+
+---
+
+## Bölüm 1 ortak oyun sözleşmesi
+
+Mini Oyun 1 (Sepet) ve Mini Oyun 2 (Harf Seçme) aynı çocuk deneyimini paylaşır:
+
+| Konu | Karar |
+| ---- | ----- |
+| Süre | **60** sn; görsel `GunesSayac` (`Assets/_Scripts/Ortak/`, art: `Bolum1/UI/güneş.jpeg` + `ışın.jpeg`) |
+| Dijital süre | Güneş varken `mm:ss` gizlenir; skor ayrı yazıda (`Puan` / `Doğru: N`) |
+| Geri bildirimde süre | Tik/çarpı + ses sırasında güneş **Duraklat** / **DevamEt** |
+| Harf sesi | Her yeni soruda `SesYoneticisi.HarfSesiCal` (her iki oyun) |
+| Obje sesi | Doğru cevapta `SesYoneticisi.ObjeSesiCal` (sprite adına göre; `Assets/_Audio/Objeler/`) |
+| Soru prompt | Yalnız Mini Oyun 2: `SoruPromptSesiCal` (“Hangisinin baş harfi”) — Sepet’te yok |
+| Skor | `dogruPuan = 1` (her doğru = +1) |
+| Yıldız | `YildizHesaplayici`: 0–1 → 1, 2–4 → 2, ≥5 → 3 |
+| Bitiş ekranı | Tebrik + 1–3 yıldız + `Doğru: N` + **TekrarOyna** + Ana Menü |
+| Tekrar butonu | Sepet: `Tekrar_Dene_Turuncu.png` (Bolum1); Harf: `Tekrar_Dene_Mavi.png` (Bolum2) |
+| Tik / çarpı | Sepet Bolum1 UI; Harf Bolum2 UI — aynı dosya adları |
+| Buton SFX | `ButonTiklamaSesi` (Tekrar Dene + Ana Menü) |
+
+Ses API’si yalnızca `SesYoneticisi` (Paket 3); yeni ses sistemi yazılmaz. Inspector clip finali Paket 6.
 
 ---
 
@@ -92,7 +115,7 @@ Yeni scripti doğru paket klasörüne koyun. Rastgele `Assets/` köküne script 
 | Paket | Sorumlu | Branch | Ana dosyalar / plan |
 | ----- | ------- | ------ | ------------------- |
 | 1 — Avatar | Mustafa Said Bayram | `said/avatar` | `AvatarYoneticisi`, `AvatarGorunumu`, `AvatarSecimEkrani`, `RenkSecici`, `AksesuarSecici` (+ `AvatarSahneKurucu`) — detay: `SAID_AVATAR.md` |
-| 3 — Ortak / efektler | Mustafa Yiğit Avan | `mustafayigit/efektler` | `HarfObjeVerisi`, `SoruSecici`, `SkorYoneticisi`, `GeriBildirimYoneticisi`, `SesYoneticisi` — detay: `MUSTAFA_YIGIT_EFEKTLER.md` |
+| 3 — Ortak / efektler | Mustafa Yiğit Avan | `mustafayigit/efektler` | `HarfObjeVerisi`, `SoruSecici`, `SkorYoneticisi`, `GeriBildirimYoneticisi`, `SesYoneticisi`, `GunesSayac`, `YildizHesaplayici` — detay: `MUSTAFA_YIGIT_EFEKTLER.md` |
 | 4 — Mini Oyun 1 | Enes Barış | `enes/level1` | `ObjeSurukleme`, `SepetOyunYoneticisi` — detay: `ENES_MINI_OYUN_1.md` |
 | 5 — Mini Oyun 2 | Mustafa Üz | `mustafauz/level2` | `HarfSecmeYoneticisi`, `SecenekBalonu` (+ `HarfSecmeSahneKurucu`) — detay: `MUSTAFA_UZ_MINI_OYUN_2.md` |
 | 6 — UI / font / entegrasyon | Süleyman Öz | (entegrasyon; genelde `main`) | `SahneGecisi`, font, ses/efekt Inspector bağlama, genel test |
@@ -125,14 +148,13 @@ mustafayigit/efektler ──► main   (sahneler branch’te; main merge’i bek
 ```
 
 1. Said, Enes, Mustafa Üz **paralel** çalışır; bitince kendi branch’ini `main`’e PR/merge eder.
-2. Mustafa Yiğit ses ve partikül işine `mustafayigit/efektler` üzerinde başlar. Avatar, level ve harf seçme sahneleri bu branch’e alınmıştır; Said ve Mustafa Üz’ün sonraki `main` push’u beklenmez. Enes’in SepetOyunu ses kancaları oyun bitene kadar planda ertelenir. Ayrıntı: `MUSTAFA_YIGIT_EFEKTLER.md` Faz −1.
+2. Mustafa Yiğit ses ve partikül işine `mustafayigit/efektler` üzerinde başlar. Avatar, level ve harf seçme sahneleri bu branch’e alınmıştır. SepetOyunu harf/obje ses kancaları ortak sözleşmede her iki oyuna bağlanır (`SesYoneticisi`). Ayrıntı: `MUSTAFA_YIGIT_EFEKTLER.md`.
 3. Ses/partikül **Inspector clip bağlama finali** Paket 6’da kalır.
-4. Paket 4, Paket 3’teki `SoruSecici` / `SkorYoneticisi` / `GeriBildirimYoneticisi` olmadan oyun yöneticisini tamamlamaz. Detay: `ENES_MINI_OYUN_1.md` Faz 3.
-5. Paket 5 çekirdek oynanışı Paket 3’süz ilerleyebilir; **ortak skor / soru seçici / geri bildirim / seslendirme entegrasyonu** checkpoint’ten sonra. Detay: `MUSTAFA_UZ_MINI_OYUN_2.md` Faz 6–7.
+4. Paket 4, Paket 3’teki `SoruSecici` / `SkorYoneticisi` / `GeriBildirimYoneticisi` / `SesYoneticisi` olmadan oyun yöneticisini tamamlamaz. Detay: `ENES_MINI_OYUN_1.md`.
+5. Paket 5 çekirdek oynanışı Paket 3’süz ilerleyebilir; **ortak skor / soru seçici / geri bildirim / seslendirme / GunesSayac / TekrarOyna** ortak sözleşmeye uyar. Detay: `MUSTAFA_UZ_MINI_OYUN_2.md`.
 
 ```
-Paket 3 çekirdek (main’de) + sahneler (efektler branch)  →  Yiğit ses/partikül  →  main  →  Paket 6
-SepetOyunu ses kancası Enes oyunu bitince
+Paket 3 çekirdek + SesYoneticisi + GunesSayac (Ortak)  →  her iki mini oyun aynı ses/süre sözleşmesi  →  Paket 6 clip finali
 ```
 
 ---
@@ -180,6 +202,7 @@ Kod yazıldıktan sonra ilgili kişinin faz planındaki “Unity Editor” liste
 - Objeler ekranın **altında sabit pozisyonlarda** durur.
 - Oyuncu objeyi sürükleyip balonun üzerine bırakır.
 - Yanlış bırakınca obje başlangıç yerine döner; doğruysa puan + yeni tur.
+- Her yeni harfte `HarfSesiCal`; doğru bırakmada `ObjeSesiCal` (prompt yok). Süre: `GunesSayac`. Bitiş: TekrarOyna + Ana Menü.
 
 ### İptal edilen dosya
 

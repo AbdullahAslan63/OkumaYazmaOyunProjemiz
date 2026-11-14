@@ -31,15 +31,19 @@ public class HarfSecmeYoneticisi : MonoBehaviour
     public TextMeshProUGUI bitisTebrikYazisi;
     public TextMeshProUGUI bitisSkorYazisi;
     public Image[] bitisYildizlari;
+    public Button tekrarDeneButonu;
+    public Button anaMenuButonu;
     public TMP_FontAsset soruFontu;
     public string soruBaslikMetni = "Hangisinin baş harfi";
 
     [Header("Süre")]
     public float oyunSuresi = 60f;
     public float kalanSure;
+    // Ortak güneş sayacı (15×4 = 60 sn); varsa dijital süre gizlenir
+    public GunesSayac gunesSayac;
 
     [Header("Sahne")]
-    public string anaMenuSahneAdi = "AvatarOlusturmaEkrani";
+    public string anaMenuSahneAdi = "LevelEkranı";
 
     [Header("Animasyon")]
     public float yukselmeSuresi = 0.45f;
@@ -57,6 +61,8 @@ public class HarfSecmeYoneticisi : MonoBehaviour
     // Intro + animasyon bitene kadar süre durur
     private bool sureAkiyor;
     private int dogruSayisi;
+    // İlk tur / TekrarOyna sonrası güneşi Baslat (yoksa yalnızca DevamEt)
+    private bool gunesYenidenBaslat = true;
 
     void Awake()
     {
@@ -80,10 +86,32 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         dogruSayisi = 0;
         sureAkiyor = false;
         if (skorYoneticisi != null)
+        {
+            skorYoneticisi.dogruPuan = 1;
             skorYoneticisi.SkoruSifirla();
+        }
 
         if (bitisPaneli != null)
             bitisPaneli.SetActive(false);
+
+        // Tekrar Dene / Ana Menü dinleyicileri
+        if (tekrarDeneButonu != null)
+        {
+            tekrarDeneButonu.onClick.RemoveListener(TekrarOyna);
+            tekrarDeneButonu.onClick.AddListener(TekrarOyna);
+        }
+
+        if (anaMenuButonu != null)
+        {
+            anaMenuButonu.onClick.RemoveListener(AnaMenuyeDon);
+            anaMenuButonu.onClick.AddListener(AnaMenuyeDon);
+        }
+
+        // Güneş varsa dijital mm:ss gizlenir; skor satırı kalır
+        if (gunesSayac != null && sureYazisi != null)
+        {
+            // Yalnızca Doğru sayacı gösterilecek
+        }
 
         SoruUiHazirla();
         SlotlariEkranaGoreAyarla();
@@ -328,12 +356,45 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         // Intro / balon animasyonu / cevap beklerken süre durur
         if (!sureAkiyor || islemYapiliyor) return;
 
+        // Güneş sayacı varsa o yönetir (SureBitti → OyunuBitir)
+        if (gunesSayac != null)
+            return;
+
         kalanSure -= Time.deltaTime;
         if (kalanSure < 0f) kalanSure = 0f;
         SureYazisiniGuncelle();
 
         if (kalanSure <= 0f && !islemYapiliyor)
             OyunuBitir();
+    }
+
+    /// <summary>Bitiş panelinden oyunu sıfırlayıp yeniden başlar.</summary>
+    public void TekrarOyna()
+    {
+        StopAllCoroutines();
+        SecenekleriTemizle();
+
+        if (bitisPaneli != null)
+            bitisPaneli.SetActive(false);
+
+        oyunBitti = false;
+        islemYapiliyor = false;
+        sureAkiyor = false;
+        dogruSayisi = 0;
+        kalanSure = oyunSuresi;
+
+        if (skorYoneticisi != null)
+            skorYoneticisi.SkoruSifirla();
+
+        if (gunesSayac != null)
+        {
+            gunesSayac.SureBitti = OyunuBitir;
+            gunesSayac.Durdur();
+        }
+
+        gunesYenidenBaslat = true;
+        SureYazisiniGuncelle();
+        StartCoroutine(OyunBaslat());
     }
 
     /// <summary>Yeni rastgele soru: 1 doğru + 3 çeldirici → 4 slot.</summary>
@@ -486,9 +547,26 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         }
 
         islemYapiliyor = false;
-        // Balonlar hazır — süre artık aksın
+        // Balonlar hazır — süre / güneş artık aksın
         if (!oyunBitti)
+        {
             sureAkiyor = true;
+            if (gunesSayac != null)
+            {
+                if (gunesSayac.SureBitti == null)
+                    gunesSayac.SureBitti = OyunuBitir;
+
+                if (gunesYenidenBaslat)
+                {
+                    gunesSayac.Baslat();
+                    gunesYenidenBaslat = false;
+                }
+                else
+                {
+                    gunesSayac.DevamEt();
+                }
+            }
+        }
     }
 
     List<SecenekVerisi> SecenekListesiOlustur()
@@ -532,6 +610,9 @@ public class HarfSecmeYoneticisi : MonoBehaviour
     {
         islemYapiliyor = true;
         sureAkiyor = false;
+        if (gunesSayac != null)
+            gunesSayac.Duraklat();
+
         dogruSayisi++;
 
         if (skorYoneticisi != null)
@@ -556,11 +637,11 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         yield return new WaitForSeconds(icerikBitis);
         yield return new WaitForSeconds(sesArasiBosluk);
 
-        if (kalanSure <= 0f)
-            OyunuBitir();
-        else
-            YeniSoru();
+        if (oyunBitti)
+            yield break;
 
+        // Güneş, yeni balonlar yerleşene kadar duraklatık kalır
+        YeniSoru();
         islemYapiliyor = false;
     }
 
@@ -568,6 +649,8 @@ public class HarfSecmeYoneticisi : MonoBehaviour
     {
         islemYapiliyor = true;
         sureAkiyor = false;
+        if (gunesSayac != null)
+            gunesSayac.Duraklat();
 
         float geriSure = 0.6f;
         if (geriBildirim != null)
@@ -578,11 +661,13 @@ public class HarfSecmeYoneticisi : MonoBehaviour
 
         yield return new WaitForSeconds(geriSure);
 
+        if (oyunBitti)
+            yield break;
+
         // Yanlışta aynı soru kalır — seçenekler yerinde
-        if (kalanSure <= 0f)
-            OyunuBitir();
-        else
-            sureAkiyor = true;
+        if (gunesSayac != null)
+            gunesSayac.DevamEt();
+        sureAkiyor = true;
 
         islemYapiliyor = false;
     }
@@ -592,13 +677,20 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         if (oyunBitti) return;
         oyunBitti = true;
         islemYapiliyor = true;
+        sureAkiyor = false;
         StopAllCoroutines();
         SecenekleriTemizle();
+
+        if (gunesSayac != null)
+            gunesSayac.Durdur();
+
+        kalanSure = 0f;
+        SureYazisiniGuncelle();
 
         if (bitisPaneli != null)
             bitisPaneli.SetActive(true);
 
-        int yildiz = YildizHesapla(dogruSayisi);
+        int yildiz = YildizHesaplayici.Hesapla(dogruSayisi);
         // Seviye 2 en iyi yıldızını kalıcı kaydet
         SeviyeIlerleme.KaydetYildiz(2, yildiz);
         if (bitisTebrikYazisi != null)
@@ -632,15 +724,15 @@ public class HarfSecmeYoneticisi : MonoBehaviour
     void SureYazisiniGuncelle()
     {
         if (sureYazisi == null) return;
+        // Güneş varken yalnızca doğru sayısı
+        if (gunesSayac != null)
+        {
+            sureYazisi.text = "Doğru: " + dogruSayisi;
+            return;
+        }
+
         int sn = Mathf.CeilToInt(kalanSure);
         sureYazisi.text = string.Format("{0:00}:{1:00}   Doğru: {2}", sn / 60, sn % 60, dogruSayisi);
-    }
-
-    int YildizHesapla(int dogru)
-    {
-        if (dogru >= 5) return 3;
-        if (dogru >= 2) return 2;
-        return 1;
     }
 
     string TebrikMetni(int yildiz)

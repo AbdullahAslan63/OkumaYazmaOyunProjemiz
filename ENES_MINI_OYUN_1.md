@@ -33,24 +33,28 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 | Scriptler      | `ObjeSurukleme.cs` + `SepetOyunYoneticisi.cs`            |
 | Giriş          | Fare + touch/parmak                                      |
 | Yanlış bırakma | Geri bildirim + obje başlangıç pozisyonuna döner         |
-| Süre           | Varsayılan **60** saniye (`kalanSure`)                   |
-| Doğru puan     | Varsayılan **+10** (`dogruPuan`)                         |
+| Süre           | Varsayılan **60** sn; görsel `GunesSayac` (`Ortak/`)     |
+| Doğru puan     | Varsayılan **+1** (`dogruPuan`)                          |
+| Yıldız         | `YildizHesaplayici`: 0–1→1, 2–4→2, ≥5→3                  |
+| Ses            | Yeni harfte `HarfSesiCal`; doğru bırakmada `ObjeSesiCal` (prompt yok) |
+| Bitiş          | Tebrik + yıldız + `Doğru: N` + TekrarOyna + Ana Menü     |
 | Sahne yolu     | Güncel: `Assets/Scenes/SepetOyunu.unity` (eski `_Scenes` notu geçersiz) |
-| Paket 3        | Skor/soru/geri bildirim olmadan yönetici yazılmaz        |
+| Paket 3        | Skor/soru/geri bildirim/ses olmadan yönetici yazılmaz    |
 
 
 ---
 
 
 
-## Mevcut durum özeti (2026-10-17)
+## Mevcut durum özeti (2026-11-14)
 
-- Branch: **`enes/level1`**.
-- **Faz 0–2:** Sahne + `ObjeSurukleme` + `SepetDemoKurucu` (Play’de kurulum).
-- **Faz 3–4 (kod):** `SepetOyunYoneticisi` eklendi. Play’de `SepetDemoKurucu` SoruSecici / Skor / GeriBildirim + üst puan barı + `correct_check` / `wrong_x` (pop + bip) bağlar. Doğru = +1 puan + yeni tur; yanlış = çarpı + objeyi geri koy.
-- Prefab `Obje.prefab` hâlâ yok (runtime şablon). Final SFX clip’leri Yiğit / Paket 6.
+- Branch: **`main`** (`enes/level1` + `suleyman/level_ekrani` merge edildi).
+- **Faz 0–4 (kod):** `SepetOyunYoneticisi`, `BalonKuyrugu`, `EgimliYazi` main’de. `GunesSayac` → `Assets/_Scripts/Ortak/`. `ObjeSurukleme` → `ObjeBirakildi`. `SepetDemoKurucu` Play’de sistemleri kurar + `SesYoneticisi.GarantiEt()`.
+- **Parite (2026-11-14):** Harf/obje ses kancaları, güneş duraklatma, `TekrarOyna` + `ButonTiklamaSesi`, `bitisSkorYazisi`, ortak yıldız tablosu.
+- **Entegrasyon:** Bitişte `SeviyeIlerleme.KaydetYildiz(1, …)`; Ana Menü → `LevelEkranı`.
+- Prefab `Obje.prefab` hâlâ yok (runtime şablon). Final müzik/SFX Inspector bağlama Paket 6.
 
-**Sıradaki tek iş:** Unity’de Play — yanlışta `wrong_x`, doğruda tik + puan + yeni harf/objeler. Bitince “Play’de çalıştı” yaz.
+**Sıradaki tek iş:** Unity Play smoke — harf sesi + doğru bırakmada obje adı + güneş; bitince “Play’de çalıştı” yaz.
 
 ---
 
@@ -62,10 +66,10 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 Faz 0 (Hazırlık)                         [tamam]
   → Faz 1 (Sahne)                        [demo ile tamam]
     → Faz 2 (ObjeSurukleme + touch)      [tamam]
-      → Faz 3 (Paket 3 checkpoint)       [API + Play runtime bağ]
-        → Faz 4 (SepetOyunYoneticisi)    [kod tamam — Play teyidi sırada]
-          → Faz 5 (Bağlama + entegrasyon)  ← Play test
-            → Faz 6 (Teslim → main)
+      → Faz 3 (Paket 3 checkpoint)       [tamam — runtime bağ]
+        → Faz 4 (SepetOyunYoneticisi)    [kod main’de]
+          → Faz 5 (Bağlama + entegrasyon)  ← Play teyidi sırada
+            → Faz 6 (Teslim → main)      [merge main’e alındı]
 ```
 
 ---
@@ -368,7 +372,7 @@ Planı oku, onayla, sonra kod prompt’una geç.
 | `harfRozeti`       | `TextMeshPro`            | dünya uzayı TMP |
 | `sureYazisi`       | `TextMeshProUGUI`        | UI              |
 | `kalanSure`        | `float`                  | **60**          |
-| `dogruPuan`        | `int`                    | **10**          |
+| `dogruPuan`        | `int`                    | **1**           |
 
 
 **Fonksiyonlar:**
@@ -384,7 +388,7 @@ Planı oku, onayla, sonra kod prompt’una geç.
 
 ## 4.C — Cursor’a örnek prompt (plan onayından sonra)
 
-> Planı onayladım. `SepetOyunYoneticisi` C# kodunu yaz. AGENTS.md’ye uy. Public alanlar: soruSecici, skorYoneticisi, geriBildirim, objePrefab, Transform[] objePozisyonlari, TextMeshPro harfRozeti, TextMeshProUGUI sureYazisi, float kalanSure=60f, int dogruPuan=10. Singleton Instance. Start’ta YeniTurBaslat. Update’te süre. ObjeleriOlustur: aktif harfin dogruObjeler’inden 1–2, diğer harflerden 2–3 çeldirici, karıştır, pozisyonlara Instantiate et, her ObjeSurukleme’ye sprite/objeAdi/dogruHarf ata. ObjeBirakildi: doğruysa SkorEkle(dogruPuan), DogruGoster, YeniTurBaslat; yanlışsa YanlisGoster. OyunuBitir süre bitince. Avatar kodu yok. Her satıra Türkçe yorum.
+> Planı onayladım. `SepetOyunYoneticisi` C# kodunu yaz. AGENTS.md’ye uy. Public alanlar: soruSecici, skorYoneticisi, geriBildirim, objePrefab, Transform[] objePozisyonlari, TextMeshPro harfRozeti, TextMeshProUGUI sureYazisi, float kalanSure=60f, int dogruPuan=1, GunesSayac. Singleton Instance. Start’ta YeniTurBaslat + HarfSesiCal. Doğru bırakmada ObjeSesiCal + DogruTurGecisi. OyunuBitir süre bitince. Avatar kodu yok. Her satıra Türkçe yorum.
 
 
 
@@ -467,7 +471,7 @@ Sadece compile kontrolü yeterli olabilir; tam bağlama **Faz 5**. En azından:
 5. `objePozisyonlari` Size = 4 → `ObjePozisyon1`…`4` Transform’ları
 6. `harfRozeti` → Balon child TMP
 7. `sureYazisi` → Canvas’taki TMP
-8. `kalanSure` = 60, `dogruPuan` = 10 (gerekirse düzelt)
+8. `kalanSure` = 60, `dogruPuan` = 1
 
 
 
@@ -496,13 +500,13 @@ Play’e bas ve sırayla dene:
 
 ## Tamamlandı kontrol listesi
 
-- [ ] Tüm Inspector referansları dolu (None yok)
+- [x] Runtime bağlama `SepetDemoKurucu` ile (Inspector None’suz Play kurulumu)
 - [ ] Play test checklist’inin tamamı geçti
-- [ ] Sahne kayıtlı
-- [ ] Build Settings’te `SepetOyunu` var
-- [ ] Commit + push yapıldı
+- [x] Sahne kayıtlı (`Assets/Scenes/SepetOyunu.unity`)
+- [x] Build Settings’te `SepetOyunu` var
+- [ ] Commit + push yapıldı (entegrasyon glue — kullanıcı isteğiyle)
 
-**Çıkış:** Mini Oyun 1 oynanabilir. → Faz 6
+**Çıkış:** Mini Oyun 1 kodu main’de. → Play teyidi + Faz 6 notları
 
 ---
 
@@ -516,27 +520,28 @@ Play’e bas ve sırayla dene:
 
 ```
 Mini Oyun 1 (Enes) teslim
-- Branch: enes/level1 → main PR
+- Branch: enes/level1 → main (merge 2026-11-14)
 - Sahne: Assets/Scenes/SepetOyunu.unity
-- Scriptler: ObjeSurukleme.cs, SepetOyunYoneticisi.cs
-- Prefab: Assets/_Prefabs/SepetOyunu/Obje.prefab
-- Süre varsayılan 60 sn, doğru +10
+- Scriptler: ObjeSurukleme.cs, SepetOyunYoneticisi.cs (+ BalonKuyrugu, GunesSayac, EgimliYazi, SepetDemoKurucu)
+- Prefab: runtime şablon (Obje.prefab yok)
+- Süre varsayılan 60 sn, doğru +1; yıldız → SeviyeIlerleme seviye 1
+- Ana Menü → LevelEkranı
 - Avatar bu sahnede yok
 - SepetHareketi YOK (iptal)
 
 Paket 6’dan beklenenler:
 - [ ] Font’un skor / süre / HarfRozeti’ne uygulanması
-- [ ] Ses clip’lerinin GeriBildirim / SesYoneticisi alanlarına bağlanması
-- [ ] Avatar seçim ekranından SepetOyunu’na SahneGecisi butonu
-- [ ] Build Settings son kontrolü
+- [ ] Ses clip’lerinin GeriBildirim / SesYoneticisi alanlarına bağlanması (müzik finali)
+- [x] Avatar → LevelEkranı → Sepet/Harf akışı (Build Settings + Level kartları)
+- [x] Build Settings son kontrolü (4 sahne)
 ```
 
 
 
 ## Tamamlandı kontrol listesi
 
-- [ ] Faz 0–5 listeleri bu dosyada işaretli
-- [ ] Teslim notu Süleyman’a iletildi (chat / dosya / sözlü)
+- [x] Faz 0–4 listeleri bu dosyada işaretli; Faz 5 Play teyidi açık
+- [x] `enes/level1` main’e merge edildi
 - [ ] Commit + push + `main` PR açıldı
 - [ ] Bilinen bug’lar varsa bu bölüme yazıldı:
 

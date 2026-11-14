@@ -20,6 +20,7 @@ public static class SesEfektKurulumEditor
     private const string PrefabYol = PrefabKlasor + "/SesYoneticisi.prefab";
     private const string AvatarSahne = "Assets/Scenes/AvatarOlusturmaEkrani.unity";
     private const string HarfSahne = "Assets/Scenes/HarfSecmeOyunu.unity";
+    private const string SepetSahne = "Assets/Scenes/SepetOyunu.unity";
     private const string LevelSahne = "Assets/Scenes/LevelEkranı.unity";
     private const string ForceMarker = "Assets/_Scripts/Ortak/Editor/SES_EFEKT_KURULUM.force";
 
@@ -101,6 +102,7 @@ public static class SesEfektKurulumEditor
         AvatarSahnesineYerlestir();
         LevelSahnesineTiklamaEkle();
         HarfSahnesinePartikulBagla();
+        SepetSahnesinePartikulBagla();
 
         if (File.Exists(ForceMarker))
             AssetDatabase.DeleteAsset(ForceMarker);
@@ -110,7 +112,7 @@ public static class SesEfektKurulumEditor
         EditorPrefs.SetBool(PrefsAnahtar, true);
 
         Debug.Log(
-            "SesEfektKurulum: prefab + Avatar sahnesi + HarfSecme partikül tamam. " +
+            "SesEfektKurulum: prefab + Avatar + Harf/Sepet partikül tamam. " +
             "Eksik clip'ler (Muzik/SFX) null-safe bırakıldı.");
 
         // Batchmode'da EditorApplication.Exit ile kapanır
@@ -360,6 +362,65 @@ public static class SesEfektKurulumEditor
         EditorSceneManager.MarkSceneDirty(scene);
         EditorSceneManager.SaveScene(scene, HarfSahne);
         Debug.Log("HarfSecmeOyunu: parlıltıEfekti bağlandı, gosterimSuresi=1.5.");
+    }
+
+    /// <summary>SepetOyunu: tik arkası partikül (Harf ile aynı sözleşme).</summary>
+    private static void SepetSahnesinePartikulBagla()
+    {
+        if (!File.Exists(SepetSahne))
+        {
+            Debug.LogWarning("SepetOyunu sahnesi yok: " + SepetSahne);
+            return;
+        }
+
+        Scene scene = EditorSceneManager.OpenScene(SepetSahne, OpenSceneMode.Single);
+
+        GeriBildirimYoneticisi geri = UnityEngine.Object.FindAnyObjectByType<GeriBildirimYoneticisi>();
+        if (geri == null)
+        {
+            Debug.LogWarning("SepetOyunu: GeriBildirimYoneticisi yok (Play'de SepetDemoKurucu ekler).");
+            return;
+        }
+
+        Transform tikParent = geri.dogruGorsel != null
+            ? geri.dogruGorsel.transform
+            : geri.transform;
+
+        ParticleSystem mevcutPs = geri.parlıltıEfekti;
+        if (mevcutPs == null)
+        {
+            Transform eskiCocuk = tikParent.Find("ParlıltıEfekti");
+            if (eskiCocuk != null)
+                UnityEngine.Object.DestroyImmediate(eskiCocuk.gameObject);
+
+            GameObject psGo = new GameObject("ParlıltıEfekti");
+            psGo.transform.SetParent(tikParent, false);
+            psGo.transform.SetAsFirstSibling();
+            psGo.transform.localPosition = Vector3.zero;
+            ParticleSystem ps = psGo.AddComponent<ParticleSystem>();
+            ParlikliAyarla(ps);
+            mevcutPs = ps;
+        }
+        else
+        {
+            ParlikliAyarla(mevcutPs);
+        }
+
+        Undo.RecordObject(geri, "Sepet GeriBildirim partikül");
+        geri.parlıltıEfekti = mevcutPs;
+        geri.gosterimSuresi = 1.5f;
+        EditorUtility.SetDirty(geri);
+
+        Button[] butonlar = UnityEngine.Object.FindObjectsByType<Button>();
+        for (int i = 0; i < butonlar.Length; i++)
+        {
+            if (butonlar[i].GetComponent<ButonTiklamaSesi>() != null) continue;
+            butonlar[i].gameObject.AddComponent<ButonTiklamaSesi>();
+        }
+
+        EditorSceneManager.MarkSceneDirty(scene);
+        EditorSceneManager.SaveScene(scene, SepetSahne);
+        Debug.Log("SepetOyunu: parlıltıEfekti bağlandı (varsa).");
     }
 
     /// <summary>1.5 sn süren basit UI parıltı partikülü.</summary>

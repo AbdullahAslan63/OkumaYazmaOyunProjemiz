@@ -616,6 +616,7 @@ public static class Bolum1KurulumEditor
         GameObject ortak = new GameObject("OrtakSistemler");
         SoruSecici soru = ortak.AddComponent<SoruSecici>();
         SkorYoneticisi skor = ortak.AddComponent<SkorYoneticisi>();
+        skor.dogruPuan = 1;
         GeriBildirimYoneticisi geri = ortak.AddComponent<GeriBildirimYoneticisi>();
 
         // 8 harf asset
@@ -642,7 +643,7 @@ public static class Bolum1KurulumEditor
         // Büyük harf + sabit soru başlığı
         TextMeshProUGUI buyuk = TmpOlustur(canvasGo.transform, "BuyukHarf", "A", 190, new Vector2(0, 400));
         TextMeshProUGUI baslik = TmpOlustur(canvasGo.transform, "SoruBaslik", "Hangisinin baş harfi", 52, new Vector2(0, 500));
-        TextMeshProUGUI sure = TmpOlustur(canvasGo.transform, "SureYazisi", "01:00   Doğru: 0", 48, new Vector2(0, 560));
+        TextMeshProUGUI sure = TmpOlustur(canvasGo.transform, "SureYazisi", "Doğru: 0", 40, new Vector2(-200, 480));
         baslik.fontStyle = FontStyles.Bold;
         baslik.color = Color.white;
 
@@ -692,15 +693,25 @@ public static class Bolum1KurulumEditor
             if (ys != null) yi.sprite = ys;
             yildizlar[i] = yi;
         }
-        Button anaMenu = UiButonOlustur(bitis.transform, "AnaMenuButon", new Vector2(0, -180), new Vector2(320, 90), null);
+        // Tekrar Dene (Mavi) — ortak sözleşme
+        Button tekrar = UiButonOlustur(bitis.transform, "TekrarDene", new Vector2(0, -90), new Vector2(360, 110),
+            SpriteYukle("Assets/_Art/Bolum2/UI/Tekrar_Dene_Mavi.png"));
+        if (tekrar.GetComponent<Image>().sprite == null)
+            tekrar.GetComponent<Image>().color = new Color(0.35f, 0.55f, 0.95f, 1f);
+        tekrar.gameObject.AddComponent<ButonTiklamaSesi>();
+
+        Button anaMenu = UiButonOlustur(bitis.transform, "AnaMenuButon", new Vector2(0, -200), new Vector2(320, 90), null);
         anaMenu.GetComponent<Image>().color = new Color(0.98f, 0.55f, 0.25f);
         TextMeshProUGUI anaText = TmpOlustur(anaMenu.transform, "Text", "Ana Menü", 40, Vector2.zero);
         anaText.color = Color.white;
+        anaMenu.gameObject.AddComponent<ButonTiklamaSesi>();
         bitis.SetActive(false);
 
-        // Oyun yöneticisi
+        // Oyun yöneticisi + runtime parite kurucu (GunesSayac vb.)
         GameObject oyun = new GameObject("OyunYoneticisi");
         HarfSecmeYoneticisi hy = oyun.AddComponent<HarfSecmeYoneticisi>();
+        HarfSecmeSahneKurucu kurucu = oyun.AddComponent<HarfSecmeSahneKurucu>();
+        kurucu.yonetici = hy;
         hy.soruSecici = soru;
         hy.skorYoneticisi = skor;
         hy.geriBildirim = geri;
@@ -717,7 +728,10 @@ public static class Bolum1KurulumEditor
         hy.bitisTebrikYazisi = tebrik;
         hy.bitisSkorYazisi = bitisSkor;
         hy.bitisYildizlari = yildizlar;
-        hy.anaMenuSahneAdi = "AvatarOlusturmaEkrani";
+        hy.tekrarDeneButonu = tekrar;
+        hy.anaMenuButonu = anaMenu;
+        hy.anaMenuSahneAdi = "LevelEkranı";
+        UnityEventTools.AddPersistentListener(tekrar.onClick, hy.TekrarOyna);
         UnityEventTools.AddPersistentListener(anaMenu.onClick, hy.AnaMenuyeDon);
 
         EditorSceneManager.SaveScene(scene, HarfSahne);

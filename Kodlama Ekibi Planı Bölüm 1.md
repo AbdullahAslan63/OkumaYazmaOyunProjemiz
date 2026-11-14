@@ -75,9 +75,11 @@ Assets/_Scripts/
 
 **`SkorYoneticisi.cs`** — `skor` adında bir sayı tutar, `SkorEkle(int miktar)` diye bir fonksiyonu vardır, ekrandaki yazıyı günceller.
 
-**`GeriBildirimYoneticisi.cs`** — Doğru/yanlış olduğunda: ikon gösterir, ses çalar, avatarın ifadesini (mutlu/üzgün) birkaç saniyeliğine değiştirir sonra normale döner. Parıltı efektini (Adım 8'deki görsel, Unity'nin `ParticleSystem`'iyle) tetikler.
+**`GeriBildirimYoneticisi.cs`** — Doğru/yanlış olduğunda: tik/çarpı ikon gösterir, kısa SFX (`SesYoneticisi` tercih), isteğe bağlı parıltı partikülü. Avatar ifade değişimi bu pakette yoktur.
 
-**`SesYoneticisi.cs`** — Seçili hayvana göre fon müziği çalar, obje toplanınca "harf-kelime" seslendirmesini çalar (ses dosyaları hazır olduğunda eklenecek — şimdilik boş bırakılabilir, sonra doldurulur).
+**`SesYoneticisi.cs`** — Fon müziği + `HarfSesiCal` / `ObjeSesiCal` / `SoruPromptSesiCal` / yanlış-doğru SFX / tıklama. Her iki mini oyun aynı API.
+
+**`GunesSayac.cs` + `YildizHesaplayici`** — Ortak 60 sn güneş sayacı + ortak yıldız eşiği.
 
 **Çocuklara anlatılması gerekenler:** `List<>` (bir liste tutma), `Random.Range` (rastgele seçim), `AudioSource.Play`, basit bir zamanlayıcı (`Invoke` veya `Coroutine` — "X saniye sonra şunu yap").
 
@@ -88,11 +90,11 @@ Assets/_Scripts/
 **`ObjeSurukleme.cs`** — Objeyi sürükleyip sabit balona bırakma (eski `SepetHareketi` iptal).
 
 **`SepetOyunYoneticisi.cs`** — Bu oyunun "beyni":
-- Süre sayacı (örn. 60-90 saniye — kesin sayıyı sen belirle)
-- `SoruSecici`'den harf alır, balonun üstündeki boş rozet alanına o harfi yazar
-- Ekranın üstünden karışık obje düşürür (doğru + yanlış karışık)
-- Bir obje balona değince: doğru mu yanlış mı kontrol eder, `SkorYoneticisi` ve `GeriBildirimYoneticisi`'ni çağırır, yeni harf ister
-- Süre bitince oyunu durdurur, sonuç ekranına geçer
+- Süre **60** sn (`GunesSayac`); geri bildirimde duraklatılır
+- `SoruSecici`'den harf alır, balon rozetine yazar + `HarfSesiCal`
+- Altta 4 sabit pozisyona 1 doğru + 3 çeldirici objeyi dizer (üstten düşmez)
+- Balona bırakınca: skor/geri bildirim; doğruda `ObjeSesiCal` + yeni tur
+- Süre bitince bitiş: tebrik + yıldız + TekrarOyna + Ana Menü
 
 **Çocuklara anlatılması gerekenler:** `Collider2D` + "trigger" modu (iki nesne birbirine değince haber alma), objeyi ekranda oluşturup yok etme (`Instantiate`/`Destroy`), basit bir zamanlayıcı.
 
@@ -111,13 +113,14 @@ Assets/_Scripts/
 
 ---
 
-## ❓ Senin Netleştirmen Gereken Kararlar
+## ✅ Onaylanmış kararlar (eski “netleştir” listesi)
 
-1. Her iki oyunda da süre kaç saniye? (İkisinde de aynı olması, kod tekrarını azaltır.)
-2. Yanlış cevapta can/hayat azalıyor mu, yoksa sınırsız deneme mi?
-3. Mini Oyun 2'de yanlış cevapta soru değişiyor mu, aynı soru mu kalıyor?
-4. Ses dosyaları (müzik, harf seslendirmeleri, efekt sesleri) ne zaman, kimden gelecek?
-5. Skor/harf rozeti/büyük harf için hangi font kullanılacak? (Grafik ekibinin Adım 6'da seçeceği font.)
+1. Süre: her iki oyunda **60** sn (`GunesSayac`).
+2. Yanlışta can yok — sınırsız deneme; obje/seçenek yerinde kalır veya yuvaya döner.
+3. Mini Oyun 2: yanlışta **aynı soru** kalır.
+4. Ses clip’leri Abdullah; API Paket 3; Inspector final Paket 6.
+5. Font: TMP / `SoruFontu` (Paket 6 + avatar/harf kurulumları).
+6. `dogruPuan = 1`; yıldız: 0–1→1, 2–4→2, ≥5→3. Detay: `AGENTS.md` ortak sözleşme.
 
 ---
 
@@ -139,7 +142,7 @@ Paketler, birbirine mümkün olduğunca az bağımlı ve farklı sahnelerde çal
 ### Merge sırası
 
 1. Said / Enes / Mustafa Üz **paralel** → her biri bitince `main`’e PR.
-2. Mustafa Yiğit **ancak** üçü `main`’deyken + Abdullah ses clip’leri gelince `mustafayigit/efektler` üzerinde çalışır.
+2. Mustafa Yiğit ses/partikül işine sahneler hazırken başlar (`AGENTS.md` Faz −1); üç paketin main merge’ini beklemek zorunlu değildir. Sepet + Harf ses kancaları ortak sözleşmede.
 3. Sonra Paket 6 (Süleyman) Inspector / font / sahne geçişi finali.
 
 Detay: `AGENTS.md` → Branch sahipleri + Merge / bağımlılık sırası. Her faz çıkışında commit + push hatırlatması zorunlu.
@@ -153,8 +156,8 @@ Detay: `AGENTS.md` → Branch sahipleri + Merge / bağımlılık sırası. Her f
 
 ### 📦 Paket 3 — Ortak Sistemler (+ efektler)
 **Sorumlu:** Mustafa Yiğit Avan · **Branch:** `mustafayigit/efektler` · **Plan:** `MUSTAFA_YIGIT_EFEKTLER.md`
-**Dosyalar:** `HarfObjeVerisi.cs`, `SoruSecici.cs`, `SkorYoneticisi.cs`, `GeriBildirimYoneticisi.cs`, `SesYoneticisi.cs`
-**Bağımlılık:** Çekirdek skor/soru API’leri erken; **ses + partikül** Said/Enes/Üz `main` merge’ünden sonra.
+**Dosyalar:** `HarfObjeVerisi.cs`, `SoruSecici.cs`, `SkorYoneticisi.cs`, `GeriBildirimYoneticisi.cs`, `SesYoneticisi.cs`, `GunesSayac.cs`, `YildizHesaplayici.cs`
+**Bağımlılık:** Çekirdek skor/soru API’leri erken; ses kapısı `AGENTS.md` / `MUSTAFA_YIGIT_EFEKTLER.md` (main merge beklemek zorunlu değil).
 **Bilmesi gerekenler:** ScriptableObject (veri kartı) kavramı, `List<>`, `Random.Range`, `AudioSource`, ParticleSystem
 **Kullanacağı asset:** Adım 7 (objeler), Adım 8 (efekt), Abdullah harf/kelime clip’leri
 **Not:** Bu paketi en sistemli düşünen çocuğa vermen faydalı olur — çünkü hem Mini Oyun 1 hem 2 buna dayanıyor.
@@ -169,7 +172,7 @@ Detay: `AGENTS.md` → Branch sahipleri + Merge / bağımlılık sırası. Her f
 ### 📦 Paket 5 — Mini Oyun 2: Hangisinin Baş Harfi
 **Sorumlu:** Mustafa Üz · **Branch:** `mustafauz/level2` · **Plan:** `MUSTAFA_UZ_MINI_OYUN_2.md`
 **Dosyalar:** `HarfSecmeYoneticisi.cs`, `SecenekBalonu.cs`
-**Bağımlılık:** Paket 3 (harf/obje verisi) bitmiş olmalı; tema + Yeniden Dene Faz 4b
+**Bağımlılık:** Paket 3 harf/obje verisi; çekirdek oynanış Paket 3’süz ilerleyebilir. TekrarOyna + GunesSayac + ses kancaları ortak sözleşmede (kodda mevcut).
 **Bilmesi gerekenler:** Prefab + `Instantiate`, `OnMouseDown`, liste karıştırma
 **Kullanacağı asset:** Adım 7 (objeler) — arkaplan için Adım 4'ü paylaşabilir ya da ayrı istenebilir (netleştir)
 
