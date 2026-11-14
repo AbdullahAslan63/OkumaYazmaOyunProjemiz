@@ -3,9 +3,6 @@ guid: 4beefc29eaeda4cb5b3959f3353a5ed6
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3498576645401286133
-    second: ugurbocegi_0
-  - first:
       213: 2470642579521183894
     second: ugurbocegi_1
   externalObjects: {}
@@ -103,28 +100,6 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ugurbocegi_0
-      rect:
-        serializedVersion: 2
-        x: 380
-        y: 476
-        width: 8
-        height: 9
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b0ae067c31f827fc0800000000000000
-      internalID: -3498576645401286133
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
       name: ugurbocegi_1
       rect:
         serializedVersion: 2
@@ -133,7 +108,7 @@ TextureImporter:
         width: 444
         height: 435
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -160,7 +135,6 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ugurbocegi_0: -3498576645401286133
       ugurbocegi_1: 2470642579521183894
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0

@@ -1,10 +1,15 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem.UI;
+#endif
+using UnityEngine.EventSystems;
 
 /// <summary>
-/// Demo turu: rastgele sesli harf, balon gövdesinde çok renkli harf, altta 4 obje.
-/// Objelerden tam biri seçilen harfle başlar.
+/// Play'de sahneyi hazırlar: balon, UI puan barı, tik/çarpı, SepetOyunYoneticisi bağları.
+/// Tur ve skor yönetimini SepetOyunYoneticisi yapar.
 /// </summary>
 [DefaultExecutionOrder(-50)]
 public class SepetDemoKurucu : MonoBehaviour
@@ -15,10 +20,28 @@ public class SepetDemoKurucu : MonoBehaviour
     // Balon yoksa kullanılacak görsel
     private const string BalonYolu = "Assets/_Art/Bolum1/Balon/Balon_01.png";
 
+    // Doğru tik görseli
+    private const string DogruIkonYolu = "Assets/_Art/Bolum1/UI/correct_check.png";
+
+    // Yanlış çarpı görseli
+    private const string YanlisIkonYolu = "Assets/_Art/Bolum1/UI/wrong_x.png";
+
+    // Güneş sayacı
+    private const string GunesYolu = "Assets/_Art/Bolum1/UI/güneş.jpeg";
+
+    // Işın
+    private const string IsinYolu = "Assets/_Art/Bolum1/UI/ışın.jpeg";
+
+    // Tekrar Dene butonu
+    private const string TekrarDeneYolu = "Assets/_Art/Bolum1/UI/Tekrar_Dene_Turuncu.png";
+
+    // Yıldız (Bolum1'de yok; Bolum2'deki kullanılır)
+    private const string YildizYolu = "Assets/_Art/Bolum2/UI/Dogru_Yildiz.png";
+
     // Bir turda kaç obje
     private const int ObjeSayisi = 4;
 
-    // Seçilen sprite ve onun baş harfi
+    // Seçilen sprite ve onun baş harfi (eski demo yardımcıları)
     private struct SecilenObje
     {
         // Obje görseli
@@ -45,11 +68,9 @@ public class SepetDemoKurucu : MonoBehaviour
         ArkaplaniHazirla(kamera);
         // Ortadaki deneme arabasını kapat
         DenemeArabasiniKapat();
-        // Balonu bul veya oluştur, ekranın üstüne oturt
-        GameObject balon = BalonuHazirla(kamera);
         // Harf kartlarını yükle
         List<HarfObjeVerisi> harfler = DoluHarfleriYukle();
-        // Kart yoksa obje çıkarma
+        // Kart yoksa sistem kurma
         if (harfler.Count == 0)
         {
             // Eksik veri uyarısı
@@ -58,16 +79,544 @@ public class SepetDemoKurucu : MonoBehaviour
             return;
         }
 
-        // Rastgele sesli harf seç
-        HarfObjeVerisi aktif = harfler[Random.Range(0, harfler.Count)];
-        // Harfi balon gövdesine, çok renkli yaz
-        HarfiYaz(balon, aktif.harf, kamera);
-        // 1 doğru + 3 çeldirici üret
-        List<SecilenObje> secilenler = SecimleriOlustur(aktif, harfler);
-        // Seçimleri karıştır
-        Karistir(secilenler);
-        // Alt sıraya yerleştir
-        ObjeleriYerlestir(kamera, secilenler);
+        // 4 balon kuyruğu (01–04): solda küçükler + ortada ana
+        BalonKuyrugu kuyruk = BalonKuyrugunuKur(kamera);
+        // Oyun yöneticisi + UI + ortak sistemler
+        OyunSistemleriniKur(kamera, kuyruk, harfler);
+    }
+
+    // BalonKuyrugu objesini oluşturur
+    private BalonKuyrugu BalonKuyrugunuKur(Camera kamera)
+    {
+        // Varsa kullan
+        BalonKuyrugu mevcut = FindAnyObjectByType<BalonKuyrugu>();
+        if (mevcut != null)
+        {
+            mevcut.Kur(kamera);
+            return mevcut;
+        }
+
+        // Yeni kuyruk
+        GameObject go = new GameObject("BalonKuyrugu");
+        BalonKuyrugu kuyruk = go.AddComponent<BalonKuyrugu>();
+        kuyruk.Kur(kamera);
+        return kuyruk;
+    }
+
+    // SepetOyunYoneticisi, skor barı, tik/çarpı ve slotları bağlar
+    private void OyunSistemleriniKur(Camera kamera, BalonKuyrugu kuyruk, List<HarfObjeVerisi> harfler)
+    {
+        // Yönetici objesi (yoksa oluştur)
+        SepetOyunYoneticisi yonetici = FindAnyObjectByType<SepetOyunYoneticisi>();
+        if (yonetici == null)
+        {
+            // Boş yönetici
+            GameObject go = new GameObject("OyunYoneticisi");
+            // Bileşen
+            yonetici = go.AddComponent<SepetOyunYoneticisi>();
+        }
+
+        // Ortak bileşenler aynı objede dursun
+        GameObject ortak = yonetici.gameObject;
+        // Soru seçici
+        SoruSecici soru = ortak.GetComponent<SoruSecici>();
+        if (soru == null)
+        {
+            soru = ortak.AddComponent<SoruSecici>();
+        }
+
+        // Skor
+        SkorYoneticisi skor = ortak.GetComponent<SkorYoneticisi>();
+        if (skor == null)
+        {
+            skor = ortak.AddComponent<SkorYoneticisi>();
+        }
+
+        // Her doğru +1
+        skor.dogruPuan = 1;
+        // Geri bildirim
+        GeriBildirimYoneticisi geri = ortak.GetComponent<GeriBildirimYoneticisi>();
+        if (geri == null)
+        {
+            geri = ortak.AddComponent<GeriBildirimYoneticisi>();
+        }
+
+        // Harf listesini doldur
+        soru.tumHarfler = harfler.ToArray();
+        // UI Canvas + puan barı + ikonlar
+        CanvasUiKur(geri, yonetici);
+        // Alt 4 slot
+        Transform[] slotlar = ObjeSlotlariniKur(kamera);
+        // Gizli obje şablonu
+        GameObject prefab = ObjePrefabSablonuKur(yonetici.transform);
+        // Yönetici alanlarını bağla
+        yonetici.soruSecici = soru;
+        yonetici.skorYoneticisi = skor;
+        yonetici.geriBildirim = geri;
+        yonetici.balonKuyrugu = kuyruk;
+        yonetici.objePrefab = prefab;
+        yonetici.objePozisyonlari = slotlar;
+        yonetici.harfRozeti = kuyruk != null ? kuyruk.HarfRozeti : null;
+        yonetici.dogruPuan = 1;
+        yonetici.kalanSure = 60f;
+    }
+
+    // Canvas, üst orta puan barı, süre, correct_check / wrong_x
+    private void CanvasUiKur(GeriBildirimYoneticisi geri, SepetOyunYoneticisi yonetici)
+    {
+        // EventSystem (UI tıklaması için)
+        if (FindAnyObjectByType<EventSystem>() == null)
+        {
+            GameObject es = new GameObject("EventSystem");
+            es.AddComponent<EventSystem>();
+#if ENABLE_INPUT_SYSTEM
+            es.AddComponent<InputSystemUIInputModule>();
+#else
+            es.AddComponent<StandaloneInputModule>();
+#endif
+        }
+
+        // Mevcut canvas veya yeni
+        Canvas canvas = FindAnyObjectByType<Canvas>();
+        GameObject canvasGo;
+        if (canvas == null)
+        {
+            canvasGo = new GameObject("SepetCanvas");
+            canvas = canvasGo.AddComponent<Canvas>();
+            canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+            CanvasScaler scaler = canvasGo.AddComponent<CanvasScaler>();
+            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            scaler.referenceResolution = new Vector2(1920f, 1080f);
+            canvasGo.AddComponent<GraphicRaycaster>();
+        }
+        else
+        {
+            canvasGo = canvas.gameObject;
+        }
+
+        // Üst orta küçük puan barı
+        GameObject bar = new GameObject("PuanBari", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        bar.transform.SetParent(canvasGo.transform, false);
+        RectTransform barRt = bar.GetComponent<RectTransform>();
+        // Sol üst köşe
+        barRt.anchorMin = new Vector2(0f, 1f);
+        barRt.anchorMax = new Vector2(0f, 1f);
+        barRt.pivot = new Vector2(0f, 1f);
+        barRt.anchoredPosition = new Vector2(24f, -24f);
+        barRt.sizeDelta = new Vector2(280f, 64f);
+        Image barImg = bar.GetComponent<Image>();
+        barImg.color = new Color(0.12f, 0.18f, 0.32f, 0.82f);
+
+        // Puan yazısı
+        TextMeshProUGUI skorTmp = UiTmp(bar.transform, "SkorYazisi", "Puan: 0", 36f, Vector2.zero, new Vector2(260f, 56f));
+        skorTmp.color = Color.white;
+        // Eski metin süre gizlenir (yerine güneş sayacı)
+        TextMeshProUGUI sureTmp = UiTmp(canvasGo.transform, "SureYazisi", "01:00", 40f, new Vector2(720f, 480f), new Vector2(220f, 56f));
+        sureTmp.color = Color.white;
+        sureTmp.gameObject.SetActive(false);
+
+        // Sağ üst: güneş + 12 ışın
+        GunesSayac gunes = GunesSayaciniKur(canvasGo.transform, yonetici);
+
+        // Bitiş paneli: 3 yıldız + Tekrar Dene
+        BitisPaneliniKur(canvasGo.transform, yonetici);
+
+        // Doğru / yanlış ikonları (ekran ortası üst)
+        GameObject dogruFb = FeedbackImage(canvasGo.transform, "DogruGeriBildirim", DogruIkonYolu);
+        GameObject yanlisFb = FeedbackImage(canvasGo.transform, "YanlisGeriBildirim", YanlisIkonYolu);
+        dogruFb.SetActive(false);
+        yanlisFb.SetActive(false);
+
+        // Ses kaynağı
+        AudioSource ses = geri.GetComponent<AudioSource>();
+        if (ses == null)
+        {
+            ses = geri.gameObject.AddComponent<AudioSource>();
+        }
+
+        ses.playOnAwake = false;
+        // Geri bildirim sesi yüksek olsun
+        ses.volume = 1f;
+        geri.sesSeviyesi = 1.6f;
+        // Clip yoksa kısa bip üret (Yiğit / Paket 6 final clip bağlayana kadar)
+        if (geri.dogruSes == null)
+        {
+            geri.dogruSes = KisaBipOlustur(880f, 0.14f);
+        }
+
+        if (geri.yanlisSes == null)
+        {
+            geri.yanlisSes = KisaBipOlustur(220f, 0.2f);
+        }
+
+        // Geri bildirim bağları
+        geri.dogruGorsel = dogruFb;
+        geri.yanlisGorsel = yanlisFb;
+        geri.skorYazisi = skorTmp;
+        geri.sesKaynagi = ses;
+        // Yönetici UI
+        yonetici.skorYazisi = skorTmp;
+        yonetici.sureYazisi = sureTmp;
+        yonetici.gunesSayac = gunes;
+    }
+
+    // Sağ üst güneş + çevresinde 12 ışın (siyah arka plan silinir)
+    private GunesSayac GunesSayaciniKur(Transform canvas, SepetOyunYoneticisi yonetici)
+    {
+        GameObject kok = new GameObject("GunesSayac", typeof(RectTransform));
+        kok.transform.SetParent(canvas, false);
+        RectTransform kokRt = kok.GetComponent<RectTransform>();
+        kokRt.anchorMin = new Vector2(1f, 1f);
+        kokRt.anchorMax = new Vector2(1f, 1f);
+        kokRt.pivot = new Vector2(1f, 1f);
+        kokRt.anchoredPosition = new Vector2(-28f, -12f);
+        // Daha büyük sayaç
+        kokRt.sizeDelta = new Vector2(320f, 320f);
+
+        GunesSayac sayac = kok.AddComponent<GunesSayac>();
+        // JPEG siyahlıkları şeffaf olsun
+        Sprite gunesSp = SiyahligiSeffafYap(ArtSpriteYukle(GunesYolu));
+        Sprite isinSp = SiyahligiSeffafYap(ArtSpriteYukle(IsinYolu));
+
+        // Ortadaki güneş
+        GameObject gunesGo = new GameObject("Gunes", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        gunesGo.transform.SetParent(kok.transform, false);
+        RectTransform gRt = gunesGo.GetComponent<RectTransform>();
+        gRt.anchorMin = gRt.anchorMax = gRt.pivot = new Vector2(0.5f, 0.5f);
+        gRt.anchoredPosition = Vector2.zero;
+        gRt.sizeDelta = new Vector2(120f, 120f);
+        Image gImg = gunesGo.GetComponent<Image>();
+        gImg.sprite = gunesSp;
+        gImg.preserveAspect = true;
+        gImg.color = Color.white;
+        sayac.gunesGorsel = gImg;
+
+        // 15 ışın: eşit aralık (her 24°), biraz küçük, dışa bakacak
+        const int isinAdet = 15;
+        Image[] isinlar = new Image[isinAdet];
+        // Güneş kenarı ile ışın tabanı arası boşluk
+        float icYaricap = 70f;
+        float aciAdim = 360f / isinAdet;
+        for (int i = 0; i < isinAdet; i++)
+        {
+            GameObject isinGo = new GameObject("Isin_" + (i + 1), typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            isinGo.transform.SetParent(kok.transform, false);
+            RectTransform iRt = isinGo.GetComponent<RectTransform>();
+            iRt.anchorMin = iRt.anchorMax = new Vector2(0.5f, 0.5f);
+            // Pivot alt orta: ışın güneşten dışarı uzansın
+            iRt.pivot = new Vector2(0.5f, 0f);
+            // Biraz daha küçük ışın
+            iRt.sizeDelta = new Vector2(28f, 48f);
+            // Saat yönünde eşit açı
+            float aci = i * aciAdim;
+            float rad = aci * Mathf.Deg2Rad;
+            iRt.anchoredPosition = new Vector2(Mathf.Sin(rad) * icYaricap, Mathf.Cos(rad) * icYaricap);
+            // Yukarı bakan kapsülü dışa çevir
+            iRt.localRotation = Quaternion.Euler(0f, 0f, -aci);
+            Image iImg = isinGo.GetComponent<Image>();
+            iImg.sprite = isinSp;
+            iImg.preserveAspect = true;
+            iImg.raycastTarget = false;
+            iImg.color = Color.white;
+            isinlar[i] = iImg;
+        }
+
+        sayac.isinlar = isinlar;
+        sayac.isinSuresi = 4f;
+        // Güneş ışınların üstünde
+        gunesGo.transform.SetAsLastSibling();
+        return sayac;
+    }
+
+    // JPEG siyah arka planı şeffaf yapar (UI sayaç için)
+    private Sprite SiyahligiSeffafYap(Sprite kaynak)
+    {
+        if (kaynak == null || kaynak.texture == null)
+        {
+            return kaynak;
+        }
+
+        Texture2D okunabilir = TextureOkunabilirKopyala(kaynak.texture);
+        if (okunabilir == null)
+        {
+            return kaynak;
+        }
+
+        // Sprite'ın textureRect alanını işle
+        Rect r = kaynak.textureRect;
+        int x0 = Mathf.FloorToInt(r.x);
+        int y0 = Mathf.FloorToInt(r.y);
+        int w = Mathf.FloorToInt(r.width);
+        int h = Mathf.FloorToInt(r.height);
+        if (w <= 0 || h <= 0)
+        {
+            return kaynak;
+        }
+
+        Color[] px = okunabilir.GetPixels(x0, y0, w, h);
+        for (int i = 0; i < px.Length; i++)
+        {
+            // Koyu / siyah pikselleri tamamen şeffaf yap
+            float parlak = (px[i].r + px[i].g + px[i].b) / 3f;
+            if (parlak < 0.18f)
+            {
+                px[i].a = 0f;
+            }
+            else if (parlak < 0.32f)
+            {
+                // Yumuşak kenar
+                px[i].a = Mathf.Clamp01((parlak - 0.18f) / 0.14f);
+            }
+        }
+
+        Texture2D yeni = new Texture2D(w, h, TextureFormat.RGBA32, false);
+        yeni.filterMode = FilterMode.Bilinear;
+        yeni.wrapMode = TextureWrapMode.Clamp;
+        yeni.SetPixels(px);
+        yeni.Apply();
+        return Sprite.Create(yeni, new Rect(0f, 0f, w, h), new Vector2(0.5f, 0.5f), 100f);
+    }
+
+    // GPU üzerinden okunabilir Texture2D kopyası
+    private Texture2D TextureOkunabilirKopyala(Texture kaynak)
+    {
+        if (kaynak == null)
+        {
+            return null;
+        }
+
+        int w = kaynak.width;
+        int h = kaynak.height;
+        RenderTexture rt = RenderTexture.GetTemporary(w, h, 0, RenderTextureFormat.ARGB32);
+        Graphics.Blit(kaynak, rt);
+        RenderTexture onceki = RenderTexture.active;
+        RenderTexture.active = rt;
+        Texture2D kopya = new Texture2D(w, h, TextureFormat.RGBA32, false);
+        kopya.ReadPixels(new Rect(0, 0, w, h), 0, 0);
+        kopya.Apply();
+        RenderTexture.active = onceki;
+        RenderTexture.ReleaseTemporary(rt);
+        return kopya;
+    }
+
+    // Ortada bitiş: tebrik yazısı + 3 yıldız + Tekrar Dene
+    private void BitisPaneliniKur(Transform canvas, SepetOyunYoneticisi yonetici)
+    {
+        GameObject panel = new GameObject("BitisPaneli", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        panel.transform.SetParent(canvas, false);
+        RectTransform pRt = panel.GetComponent<RectTransform>();
+        pRt.anchorMin = Vector2.zero;
+        pRt.anchorMax = Vector2.one;
+        pRt.offsetMin = Vector2.zero;
+        pRt.offsetMax = Vector2.zero;
+        panel.GetComponent<Image>().color = new Color(0.05f, 0.08f, 0.15f, 0.72f);
+
+        // Yıldız grubu (önce konum; yazı yıldız kemeri üzerine oturacak)
+        GameObject yildizGrup = new GameObject("Yildizlar", typeof(RectTransform));
+        yildizGrup.transform.SetParent(panel.transform, false);
+        RectTransform ygRt = yildizGrup.GetComponent<RectTransform>();
+        ygRt.anchorMin = ygRt.anchorMax = ygRt.pivot = new Vector2(0.5f, 0.5f);
+        ygRt.anchoredPosition = new Vector2(0f, 40f);
+        ygRt.sizeDelta = new Vector2(420f, 120f);
+
+        // Yıldızların solundan sağına doğru eğimli (kemer) tebrik yazısı — geniş + dikkat çekici
+        TextMeshProUGUI tebrik = UiTmp(
+            panel.transform,
+            "BitisTebrik",
+            "Tebrikler 0 tane doğru eşleştirdiniz.",
+            64f,
+            new Vector2(0f, 145f),
+            new Vector2(1400f, 200f));
+        tebrik.fontStyle = FontStyles.Bold;
+        tebrik.enableWordWrapping = false;
+        tebrik.overflowMode = TextOverflowModes.Overflow;
+        tebrik.alignment = TextAlignmentOptions.Center;
+        tebrik.characterSpacing = 4f;
+        tebrik.color = Color.white;
+        tebrik.enableVertexGradient = true;
+        tebrik.colorGradient = new VertexGradient(
+            new Color32(255, 240, 60, 255),
+            new Color32(255, 80, 40, 255),
+            new Color32(40, 255, 160, 255),
+            new Color32(120, 80, 255, 255));
+        tebrik.outlineWidth = 0.55f;
+        tebrik.outlineColor = new Color32(15, 5, 30, 255);
+        if (tebrik.fontMaterial != null)
+        {
+            tebrik.fontMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, 0.42f);
+        }
+
+        // Daha belirgin yay
+        EgimliYazi egim = tebrik.gameObject.AddComponent<EgimliYazi>();
+        egim.yayYuksekligi = 110f;
+        egim.karakterleriDondur = true;
+
+        Sprite yildizSp = ArtSpriteYukle(YildizYolu);
+        Image[] yildizlar = new Image[3];
+        float[] xPos = { -140f, 0f, 140f };
+        for (int i = 0; i < 3; i++)
+        {
+            GameObject y = new GameObject("Yildiz" + (i + 1), typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            y.transform.SetParent(yildizGrup.transform, false);
+            RectTransform yrt = y.GetComponent<RectTransform>();
+            yrt.anchorMin = yrt.anchorMax = yrt.pivot = new Vector2(0.5f, 0.5f);
+            yrt.anchoredPosition = new Vector2(xPos[i], 0f);
+            yrt.sizeDelta = new Vector2(110f, 110f);
+            Image yi = y.GetComponent<Image>();
+            yi.sprite = yildizSp;
+            yi.preserveAspect = true;
+            yi.color = new Color(0.45f, 0.45f, 0.5f, 0.55f);
+            yildizlar[i] = yi;
+        }
+
+        // Tekrar Dene butonu (yıldızların altında)
+        GameObject btnGo = new GameObject("TekrarDene", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+        btnGo.transform.SetParent(panel.transform, false);
+        RectTransform bRt = btnGo.GetComponent<RectTransform>();
+        bRt.anchorMin = bRt.anchorMax = bRt.pivot = new Vector2(0.5f, 0.5f);
+        bRt.anchoredPosition = new Vector2(0f, -80f);
+        bRt.sizeDelta = new Vector2(360f, 110f);
+        Image bImg = btnGo.GetComponent<Image>();
+        Sprite tekrarSp = ArtSpriteYukle(TekrarDeneYolu);
+        if (tekrarSp != null)
+        {
+            bImg.sprite = tekrarSp;
+            bImg.preserveAspect = true;
+            bImg.color = Color.white;
+        }
+        else
+        {
+            bImg.color = new Color(0.98f, 0.55f, 0.25f, 1f);
+        }
+
+        Button btn = btnGo.GetComponent<Button>();
+        btn.targetGraphic = bImg;
+
+        panel.SetActive(false);
+        yonetici.bitisPaneli = panel;
+        yonetici.bitisTebrikYazisi = tebrik;
+        yonetici.bitisYildizlari = yildizlar;
+        yonetici.tekrarDeneButonu = btn;
+    }
+
+    // UI Image geri bildirim ikonu
+    private GameObject FeedbackImage(Transform parent, string ad, string yol)
+    {
+        GameObject go = new GameObject(ad, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        go.transform.SetParent(parent, false);
+        RectTransform rt = go.GetComponent<RectTransform>();
+        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition = new Vector2(0f, 120f);
+        rt.sizeDelta = new Vector2(160f, 160f);
+        Image img = go.GetComponent<Image>();
+        Sprite sp = ArtSpriteYukle(yol);
+        if (sp != null)
+        {
+            img.sprite = sp;
+            img.preserveAspect = true;
+            img.color = Color.white;
+        }
+        else
+        {
+            // Sprite yoksa renkli kare
+            img.color = ad.Contains("Yanlis") ? new Color(0.9f, 0.3f, 0.3f, 0.9f) : new Color(0.3f, 0.85f, 0.4f, 0.9f);
+        }
+
+        return go;
+    }
+
+    // Basit UI TMP
+    private TextMeshProUGUI UiTmp(Transform parent, string ad, string metin, float size, Vector2 pos, Vector2 boyut)
+    {
+        GameObject go = new GameObject(ad);
+        go.transform.SetParent(parent, false);
+        TextMeshProUGUI tmp = go.AddComponent<TextMeshProUGUI>();
+        tmp.text = metin;
+        tmp.fontSize = size;
+        tmp.alignment = TextAlignmentOptions.Center;
+        tmp.color = Color.white;
+        RectTransform rt = tmp.rectTransform;
+        rt.anchorMin = rt.anchorMax = new Vector2(0.5f, 0.5f);
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition = pos;
+        rt.sizeDelta = boyut;
+        return tmp;
+    }
+
+    // Alt şeritte 4 boş slot; localScale.x = hedef dünya boyutu
+    private Transform[] ObjeSlotlariniKur(Camera kamera)
+    {
+        // Grup
+        GameObject grup = GameObject.Find("ObjePozisyonlari");
+        if (grup == null)
+        {
+            grup = new GameObject("ObjePozisyonlari");
+        }
+
+        float yukseklik = kamera.orthographicSize * 2f;
+        float genislik = yukseklik * kamera.aspect;
+        float kenar = genislik * 0.04f;
+        float slot = (genislik - kenar * 2f) / ObjeSayisi;
+        float objeMax = Mathf.Min(slot * 0.78f, yukseklik * 0.22f);
+        float altY = -kamera.orthographicSize + objeMax * 0.62f;
+
+        Transform[] slotlar = new Transform[ObjeSayisi];
+        for (int i = 0; i < ObjeSayisi; i++)
+        {
+            string ad = "ObjePozisyon" + (i + 1);
+            Transform mevcut = grup.transform.Find(ad);
+            GameObject slotGo = mevcut != null ? mevcut.gameObject : new GameObject(ad);
+            if (mevcut == null)
+            {
+                slotGo.transform.SetParent(grup.transform, true);
+            }
+
+            float x = -genislik * 0.5f + kenar + slot * (i + 0.5f);
+            slotGo.transform.position = new Vector3(x, altY, 0f);
+            // SepetOyunYoneticisi ölçek için localScale.x kullanır
+            slotGo.transform.localScale = new Vector3(objeMax, objeMax, 1f);
+            slotlar[i] = slotGo.transform;
+        }
+
+        return slotlar;
+    }
+
+    // Instantiate için gizli şablon
+    private GameObject ObjePrefabSablonuKur(Transform parent)
+    {
+        Transform eski = parent.Find("ObjeSablon");
+        if (eski != null)
+        {
+            return eski.gameObject;
+        }
+
+        GameObject go = new GameObject("ObjeSablon");
+        go.transform.SetParent(parent, false);
+        go.AddComponent<SpriteRenderer>();
+        go.AddComponent<BoxCollider2D>();
+        go.AddComponent<ObjeSurukleme>();
+        go.SetActive(false);
+        return go;
+    }
+
+    // Kısa sinüs bip (geçici SFX)
+    private static AudioClip KisaBipOlustur(float frekans, float sure)
+    {
+        int ornekHiz = 22050;
+        int ornekSayisi = Mathf.CeilToInt(ornekHiz * sure);
+        AudioClip clip = AudioClip.Create("Bip_" + frekans, ornekSayisi, 1, ornekHiz, false);
+        float[] ornekler = new float[ornekSayisi];
+        for (int i = 0; i < ornekSayisi; i++)
+        {
+            float t = i / (float)ornekHiz;
+            float zarf = 1f - (t / sure);
+            // Daha yüksek genlik (duyulur bip)
+            ornekler[i] = Mathf.Sin(2f * Mathf.PI * frekans * t) * 0.85f * zarf;
+        }
+
+        clip.SetData(ornekler, 0);
+        return clip;
     }
 
     // Adı Arkaplan olan objeye görseli verir ve ekranı kaplatır
@@ -207,31 +756,47 @@ public class SepetDemoKurucu : MonoBehaviour
         // Sprite yoksa konumlama yapma
         if (cizici.sprite == null)
         {
+            // Yine de hafif sallanma ekle
+            BalonSallanmasiniEkle(balon);
             // Balonu olduğu gibi bırak
             return balon;
         }
 
         // Sahnedeki balon bu konum ve ölçekte kalsın
-        if (sahnedeVardi)
+        if (!sahnedeVardi)
         {
-            // Play açılınca yeniden oturtma
-            return balon;
+            // Ekran yüksekliği
+            float yukseklik = kamera.orthographicSize * 2f;
+            // Balon yüksekliği ekranın üçte biri
+            float hedef = yukseklik / 3f;
+            // Sprite yüksekliği
+            float spriteH = cizici.sprite.bounds.size.y;
+            // Sıfıra bölme
+            float olcek = spriteH > 0.001f ? hedef / spriteH : 1f;
+            // Üst ortaya yakın merkez
+            float merkezY = kamera.orthographicSize - hedef * 0.55f;
+            // Görsel merkezi bu noktaya gelsin
+            MerkezeOturt(balon.transform, cizici.sprite, new Vector3(0f, merkezY, 0f), olcek);
         }
 
-        // Ekran yüksekliği
-        float yukseklik = kamera.orthographicSize * 2f;
-        // Balon yüksekliği ekranın üçte biri
-        float hedef = yukseklik / 3f;
-        // Sprite yüksekliği
-        float spriteH = cizici.sprite.bounds.size.y;
-        // Sıfıra bölme
-        float olcek = spriteH > 0.001f ? hedef / spriteH : 1f;
-        // Üst ortaya yakın merkez
-        float merkezY = kamera.orthographicSize - hedef * 0.55f;
-        // Görsel merkezi bu noktaya gelsin
-        MerkezeOturt(balon.transform, cizici.sprite, new Vector3(0f, merkezY, 0f), olcek);
+        // Hafif sağa-sola sallanma
+        BalonSallanmasiniEkle(balon);
         // Hazır balonu döndür
         return balon;
+    }
+
+    // Balona yavaş sallanma bileşeni ekler
+    private void BalonSallanmasiniEkle(GameObject balon)
+    {
+        // Zaten varsa tekrar ekleme
+        if (balon.GetComponent<BalonSallanma>() != null)
+        {
+            // Çık
+            return;
+        }
+
+        // Hafif salınım
+        balon.AddComponent<BalonSallanma>();
     }
 
     // Tag Balon veya adı Balon ile başlayan objeyi bulur
@@ -1026,18 +1591,81 @@ public class HarfPariltisi : MonoBehaviour
         float carpan = Mathf.Lerp(0.9f, 1.1f, nabiz);
         // Taban ölçeğe uygula
         transform.localScale = tabanOlcek * carpan;
-        // Çizici varsa parlaklık da nabızlasın
+        // Çizici varsa parlaklık da nabızlasın (daha güçlü)
         if (cizici != null)
         {
             // Mevcut renk
             Color renk = cizici.color;
-            // Eski parlaklığın yarısı
-            renk.a = Mathf.Lerp(0.39f, 0.5f, nabiz);
+            // Yüksek alfa aralığı
+            renk.a = Mathf.Lerp(0.72f, 0.95f, nabiz);
             // Rengi yaz
             cizici.color = renk;
         }
 
         // Yıldız kolları yavaş dönsün
         transform.Rotate(0f, 0f, 16f * Time.deltaTime);
+    }
+}
+
+/// <summary>
+/// Balonu yavaş ve hafif sağa-sola sallar (salıncak gibi).
+/// </summary>
+public class BalonSallanma : MonoBehaviour
+{
+    // Yatay salınım genliği (dünya birimi)
+    public float yatayGenlik = 0.12f;
+
+    // Dönüş genliği (derece)
+    public float donusGenlik = 3.5f;
+
+    // Salınım hızı (düşük = yavaş)
+    public float hiz = 1.15f;
+
+    // Animasyon sırasında kapatılır
+    public bool sallanmaAktif = true;
+
+    // Play başındaki konum
+    private Vector3 tabanKonum;
+
+    // Play başındaki Z dönüşü
+    private float tabanDonus;
+
+    // Başlangıç konumunu kaydet
+    private void Start()
+    {
+        // Orta nokta
+        tabanKonum = transform.position;
+        // Başlangıç açısı
+        tabanDonus = transform.eulerAngles.z;
+    }
+
+    /// <summary>Salınım merkezini günceller.</summary>
+    public void TabanAyarla(Vector3 konum)
+    {
+        tabanKonum = konum;
+        transform.position = konum;
+        tabanDonus = transform.eulerAngles.z;
+    }
+
+    // Her karede hafif sağa-sola
+    private void Update()
+    {
+        // Kapalıysa dokunma
+        if (!sallanmaAktif)
+        {
+            return;
+        }
+
+        // -1..1 yavaş sinüs
+        float s = Mathf.Sin(Time.time * hiz);
+        // Yatay kaydır
+        Vector3 konum = tabanKonum;
+        konum.x += s * yatayGenlik;
+        // 2D düzlem
+        konum.z = 0f;
+        // Konumu yaz
+        transform.position = konum;
+        // Hafif eğilme
+        transform.rotation = Quaternion.Euler(0f, 0f, tabanDonus + s * donusGenlik);
     }
 }
