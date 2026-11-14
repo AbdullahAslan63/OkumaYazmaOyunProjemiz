@@ -599,6 +599,8 @@ public class HarfSecmeYoneticisi : MonoBehaviour
             bitisPaneli.SetActive(true);
 
         int yildiz = YildizHesapla(dogruSayisi);
+        // Seviye 2 en iyi yıldızını kalıcı kaydet
+        SeviyeIlerleme.KaydetYildiz(2, yildiz);
         if (bitisTebrikYazisi != null)
             bitisTebrikYazisi.text = TebrikMetni(yildiz);
         if (bitisSkorYazisi != null)
