@@ -32,8 +32,10 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
         if (yonetici == null)
             yonetici = gameObject.AddComponent<HarfSecmeYoneticisi>();
 
-        // Ortak ses örneği
-        SesYoneticisi.GarantiEt();
+        // Clip'li ses yöneticisi + Level 2 müziği
+        SesYoneticisi ses = SesYoneticisi.GarantiEt();
+        if (ses != null)
+            ses.SahneMuziginiAyarla("HarfSecmeOyunu");
 
         // Tam kurulum gerekiyorsa
         bool eksik = yonetici.secenekPrefab == null ||

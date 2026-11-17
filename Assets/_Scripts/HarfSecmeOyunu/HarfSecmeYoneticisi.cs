@@ -127,8 +127,9 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         sureAkiyor = false;
 
         SesYoneticisi ses = SesYoneticisi.GarantiEt();
+        // Level 2 fon müziği (kısık loop); harf/obje SFX üstte kalsın
         if (ses != null)
-            ses.OyunMuziginiCal();
+            ses.SahneMuziginiAyarla("HarfSecmeOyunu");
 
         // "Hangisinin baş harfi" bir kez, sonra kısa nefes, sonra harf
         float promptSure = 0f;
@@ -689,6 +690,10 @@ public class HarfSecmeYoneticisi : MonoBehaviour
 
         if (bitisPaneli != null)
             bitisPaneli.SetActive(true);
+
+        // Bitiş panelinde Level 2 müziği loop ile devam etsin
+        if (SesYoneticisi.Instance != null)
+            SesYoneticisi.Instance.OyunMuziginiSurdur();
 
         int yildiz = YildizHesaplayici.Hesapla(dogruSayisi);
         // Seviye 2 en iyi yıldızını kalıcı kaydet

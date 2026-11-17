@@ -53,8 +53,13 @@ public class SepetDemoKurucu : MonoBehaviour
     // Objelerin Start'ından önce sahneyi kur
     private void Awake()
     {
-        // Ortak ses yöneticisi (clip yoksa sessiz)
-        SesYoneticisi.GarantiEt();
+        // Clip'li SesYoneticisi (prefab); boş GO oluşturmayı önler
+        SesYoneticisi ses = SesYoneticisi.GarantiEt();
+        // Level 1 fon müziğini hemen başlat (DDOL Start kaçsa bile)
+        if (ses != null)
+        {
+            ses.SahneMuziginiAyarla("SepetOyunu");
+        }
 
         // Ana kamerayı al
         Camera kamera = Camera.main;

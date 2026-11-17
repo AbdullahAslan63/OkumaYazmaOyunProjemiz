@@ -24,10 +24,18 @@ public class SesYoneticisi : MonoBehaviour
     public AudioClip[] hayvanMuzikleri = new AudioClip[4];
 
     [Header("Oyun müziği")]
-    // Genel / diğer mini oyunlar (Level 2 vb.)
+    // Genel yedek (level clip yoksa)
     public AudioClip oyunMuzigi;
-    // Level 1 (SepetOyunu) Kapadokya/Anadolu fon müziği — bitiş panelinde de loop sürer
+    // Level 1 (SepetOyunu) — bitiş panelinde de loop sürer
     public AudioClip level1Muzigi;
+    // Level 2 (HarfSecmeOyunu) — bitiş panelinde de loop sürer
+    public AudioClip level2Muzigi;
+
+    [Header("Ses seviyeleri")]
+    // Fon müzik düşük kalsın; harf/obje sesleri duyulsun
+    [Range(0f, 1f)] public float muzikSesSeviyesi = 0.18f;
+    // SFX (harf, obje, tıklama, doğru/yanlış)
+    [Range(0f, 1f)] public float efektSesSeviyesi = 1f;
 
     [Header("SFX")]
     // Ortak buton tıklama
@@ -57,7 +65,10 @@ public class SesYoneticisi : MonoBehaviour
     // Obje clip sözlüğü (isim → clip)
     private Dictionary<string, AudioClip> objeSozlugu;
 
-    /// <summary>Sahnedeki / Instance kopyasını döner; yoksa oluşturur (clip'ler prefab / Editor kurulumunda).</summary>
+    /// <summary>
+    /// Sahnedeki / Instance kopyasını döner.
+    /// Yoksa clip'li prefab'dan üretir (boş GO ile sessiz kalmayı önler).
+    /// </summary>
     public static SesYoneticisi GarantiEt()
     {
         if (Instance != null) return Instance;
@@ -70,6 +81,24 @@ public class SesYoneticisi : MonoBehaviour
             return sahnede;
         }
 
+        // Clip'li prefab: Resources veya Editor yolu
+        GameObject prefab = Resources.Load<GameObject>("SesYoneticisi");
+#if UNITY_EDITOR
+        if (prefab == null)
+        {
+            prefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>(
+                "Assets/_Prefabs/Ortak/SesYoneticisi.prefab");
+        }
+#endif
+        if (prefab != null)
+        {
+            GameObject ornek = Object.Instantiate(prefab);
+            ornek.name = "SesYoneticisi";
+            SesYoneticisi ses = ornek.GetComponent<SesYoneticisi>();
+            if (ses != null) return ses;
+        }
+
+        // Son çare: boş yönetici (clip'ler runtime'da doldurulmaya çalışılır)
         GameObject go = new GameObject("SesYoneticisi");
         return go.AddComponent<SesYoneticisi>();
     }
@@ -88,6 +117,8 @@ public class SesYoneticisi : MonoBehaviour
 
         // Kaynaklar yoksa oluştur
         KaynaklariGarantiEt();
+        // Prefab/Inspector boşsa level1.wav'ı yüklemeyi dene
+        EksikMuzikClipleriniDoldur();
         ObjeSozlugunuKur();
     }
 
@@ -116,7 +147,7 @@ public class SesYoneticisi : MonoBehaviour
             Instance = null;
     }
 
-    /// <summary>Eksik AudioSource'ları ekler.</summary>
+    /// <summary>Eksik AudioSource'ları ekler; müzik kısık, SFX tam ses.</summary>
     void KaynaklariGarantiEt()
     {
         if (muzikKaynagi == null)
@@ -131,12 +162,19 @@ public class SesYoneticisi : MonoBehaviour
             muzikKaynagi.playOnAwake = false;
         }
 
+        // Harf/obje seslerinin üstüne binmesin
+        muzikKaynagi.volume = Mathf.Clamp01(muzikSesSeviyesi);
+        muzikKaynagi.mute = false;
+
         if (efektKaynagi == null)
         {
             efektKaynagi = gameObject.AddComponent<AudioSource>();
             efektKaynagi.playOnAwake = false;
             efektKaynagi.loop = false;
         }
+
+        efektKaynagi.volume = Mathf.Clamp01(efektSesSeviyesi);
+        efektKaynagi.mute = false;
     }
 
     /// <summary>Obje clip dizisinden isim sözlüğü kurar.</summary>
@@ -178,14 +216,58 @@ public class SesYoneticisi : MonoBehaviour
         }
     }
 
+    /// <summary>Inspector/prefab'da eksik müzik clip'lerini Resources veya Editor'dan doldurur.</summary>
+    void EksikMuzikClipleriniDoldur()
+    {
+        if (level1Muzigi == null)
+        {
+            level1Muzigi = Resources.Load<AudioClip>("Muzik/level1");
+#if UNITY_EDITOR
+            if (level1Muzigi == null)
+            {
+                level1Muzigi = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>(
+                    "Assets/_Audio/Muzik/level1.wav");
+            }
+#endif
+        }
+
+        if (level2Muzigi == null)
+        {
+            level2Muzigi = Resources.Load<AudioClip>("Muzik/level2");
+#if UNITY_EDITOR
+            if (level2Muzigi == null)
+            {
+                level2Muzigi = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>(
+                    "Assets/_Audio/Muzik/level2.wav");
+            }
+#endif
+        }
+
+        if (oyunMuzigi == null)
+            oyunMuzigi = level2Muzigi != null ? level2Muzigi : level1Muzigi;
+    }
+
+    /// <summary>Aktif oyun sahnesine göre doğru level klibini seçer.</summary>
+    AudioClip SahneMuzikClipiniSec(string sahneAdi)
+    {
+        if (sahneAdi == "SepetOyunu")
+            return level1Muzigi != null ? level1Muzigi : oyunMuzigi;
+        if (sahneAdi == "HarfSecmeOyunu")
+            return level2Muzigi != null ? level2Muzigi : oyunMuzigi;
+        return null;
+    }
+
     /// <summary>Oyun sahnesinde şarkı, menüde hayvan müziği.</summary>
     public void SahneMuziginiAyarla(string sahneAdi)
     {
-        // Level 1: level1Muzigi (yoksa oyunMuzigi yedek)
-        if (sahneAdi == "SepetOyunu")
+        EksikMuzikClipleriniDoldur();
+        KaynaklariGarantiEt();
+
+        // Level 1 / Level 2 fon müziği
+        AudioClip oyunClip = SahneMuzikClipiniSec(sahneAdi);
+        if (oyunClip != null)
         {
-            AudioClip sepetClip = level1Muzigi != null ? level1Muzigi : oyunMuzigi;
-            MuzikClipiniCal(sepetClip);
+            MuzikClipiniCal(oyunClip);
             return;
         }
 
@@ -226,13 +308,17 @@ public class SesYoneticisi : MonoBehaviour
 
         muzikKaynagi.clip = clip;
         muzikKaynagi.loop = true;
+        muzikKaynagi.volume = Mathf.Clamp01(muzikSesSeviyesi);
         muzikKaynagi.Play();
     }
 
-    /// <summary>Oyun içinde genel oyun şarkısını çalar.</summary>
+    /// <summary>Oyun içinde genel oyun şarkısını çalar (aktif sahneye göre level clip tercih).</summary>
     public void OyunMuziginiCal()
     {
-        MuzikClipiniCal(oyunMuzigi);
+        EksikMuzikClipleriniDoldur();
+        AudioClip clip = SahneMuzikClipiniSec(SceneManager.GetActiveScene().name);
+        if (clip == null) clip = oyunMuzigi;
+        MuzikClipiniCal(clip);
     }
 
     /// <summary>
@@ -241,19 +327,17 @@ public class SesYoneticisi : MonoBehaviour
     /// </summary>
     public void OyunMuziginiSurdur()
     {
+        EksikMuzikClipleriniDoldur();
+        KaynaklariGarantiEt();
         if (muzikKaynagi == null) return;
 
         // Loop bayrağı her zaman açık kalsın
         muzikKaynagi.loop = true;
+        muzikKaynagi.volume = Mathf.Clamp01(muzikSesSeviyesi);
 
-        // Aktif sahneye göre doğru clip'i seç (Sepet → level1)
+        // Aktif sahneye göre doğru clip'i seç
         string sahneAdi = SceneManager.GetActiveScene().name;
-        AudioClip hedef = null;
-        if (sahneAdi == "SepetOyunu")
-            hedef = level1Muzigi != null ? level1Muzigi : oyunMuzigi;
-        else if (OyunSahneAdlari.Contains(sahneAdi))
-            hedef = oyunMuzigi;
-
+        AudioClip hedef = SahneMuzikClipiniSec(sahneAdi);
         if (hedef == null)
             hedef = muzikKaynagi.clip;
         if (hedef == null) return;
@@ -269,14 +353,28 @@ public class SesYoneticisi : MonoBehaviour
     void MuzikClipiniCal(AudioClip clip)
     {
         if (muzikKaynagi == null) return;
-        if (clip == null) return;
-
-        if (muzikKaynagi.clip == clip && muzikKaynagi.isPlaying)
+        if (clip == null)
+        {
+            Debug.LogWarning("SesYoneticisi: müzik clip null — level1/level2.wav bağlı mı?");
             return;
+        }
+
+        // Aynı clip zaten çalıyorsa yalnızca loop + kısık sesi garanti et
+        if (muzikKaynagi.clip == clip && muzikKaynagi.isPlaying)
+        {
+            muzikKaynagi.loop = true;
+            muzikKaynagi.volume = Mathf.Clamp01(muzikSesSeviyesi);
+            return;
+        }
 
         muzikKaynagi.clip = clip;
         muzikKaynagi.loop = true;
+        muzikKaynagi.volume = Mathf.Clamp01(muzikSesSeviyesi);
+        muzikKaynagi.mute = false;
         muzikKaynagi.Play();
+
+        if (!muzikKaynagi.isPlaying)
+            Debug.LogWarning("SesYoneticisi: Play çağrıldı ama müzik çalmıyor (" + clip.name + ")");
     }
 
     /// <summary>Doğru cevap kısa SFX (obje adı sesinin yerine geçmez).</summary>
@@ -361,11 +459,13 @@ public class SesYoneticisi : MonoBehaviour
         return null;
     }
 
-    /// <summary>efektKaynagi üzerinden OneShot; null ise sessiz.</summary>
+    /// <summary>efektKaynagi üzerinden OneShot; null ise sessiz. SFX müzikten yüksek kalır.</summary>
     void EfektCal(AudioClip clip)
     {
         if (efektKaynagi == null || clip == null) return;
-        efektKaynagi.PlayOneShot(clip);
+        efektKaynagi.volume = Mathf.Clamp01(efektSesSeviyesi);
+        // PlayOneShot kendi volume çarpanı: 1 = kaynak volume
+        efektKaynagi.PlayOneShot(clip, 1f);
     }
 
     /// <summary>Karşılaştırma için küçük harf + trim + Multiple sprite sonek temizliği.</summary>

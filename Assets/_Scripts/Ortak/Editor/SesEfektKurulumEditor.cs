@@ -97,6 +97,10 @@ public static class SesEfektKurulumEditor
         GameObject prefabKok = PrefabiOlusturVeyaGuncelle();
         ClippleriDoldur(prefabKok.GetComponent<SesYoneticisi>());
         PrefabUtility.SaveAsPrefabAsset(prefabKok, PrefabYol);
+        // Runtime GarantiEt: Resources.Load("SesYoneticisi")
+        if (!AssetDatabase.IsValidFolder("Assets/Resources"))
+            AssetDatabase.CreateFolder("Assets", "Resources");
+        PrefabUtility.SaveAsPrefabAsset(prefabKok, "Assets/Resources/SesYoneticisi.prefab");
         UnityEngine.Object.DestroyImmediate(prefabKok);
 
         AvatarSahnesineYerlestir();
@@ -166,15 +170,20 @@ public static class SesEfektKurulumEditor
         }
         ses.harfSesleri = harfler.ToArray();
 
-        // Oyun müziği: Level 1 ayrı; genel oyunMuzigi yedek / diğer sahneler
+        // Oyun müziği: Level 1 / Level 2 ayrı; oyunMuzigi yedek
         AudioClip[] muzikler = ClipleriYukle(MuzikKlasor);
         ses.level1Muzigi = MuzikClipiniSec(muzikler, "level1", "sepet", "kapadokya", "anadolu");
-        ses.oyunMuzigi = MuzikClipiniSec(muzikler, "oyun", "sesli", "harf", "sarki", "şarkı", "level2");
-        // level1 tek parça ise hem level1 hem genel yedek olarak bağla
-        if (ses.level1Muzigi == null && muzikler.Length > 0)
-            ses.level1Muzigi = muzikler[0];
+        ses.level2Muzigi = MuzikClipiniSec(muzikler, "level2", "harf", "harfsecme");
+        ses.oyunMuzigi = MuzikClipiniSec(muzikler, "oyun", "sesli", "sarki", "şarkı");
+        if (ses.level1Muzigi == null)
+            ses.level1Muzigi = MuzikClipiniSec(muzikler, "level1");
+        if (ses.level2Muzigi == null)
+            ses.level2Muzigi = MuzikClipiniSec(muzikler, "level2");
         if (ses.oyunMuzigi == null)
-            ses.oyunMuzigi = ses.level1Muzigi;
+            ses.oyunMuzigi = ses.level2Muzigi != null ? ses.level2Muzigi : ses.level1Muzigi;
+        // Harf/obje duyulsun diye fon kısık
+        ses.muzikSesSeviyesi = 0.18f;
+        ses.efektSesSeviyesi = 1f;
 
         // Hayvan menü müzikleri (0..3) — isimde kedi/tavsan/kus/rakun veya sıra
         ses.hayvanMuzikleri = new AudioClip[4];
@@ -182,7 +191,7 @@ public static class SesEfektKurulumEditor
         ses.hayvanMuzikleri[1] = MuzikClipiniSec(muzikler, "tavsan", "tavşan", "rabbit");
         ses.hayvanMuzikleri[2] = MuzikClipiniSec(muzikler, "kus", "kuş", "bird");
         ses.hayvanMuzikleri[3] = MuzikClipiniSec(muzikler, "rakun", "raccoon");
-        // İsim eşleşmezse sırayla doldur (oyun / level1 hariç — menüde level müziği çalmasın)
+        // İsim eşleşmezse sırayla doldur (oyun / level klipleri hariç)
         int siradaki = 0;
         for (int i = 0; i < 4; i++)
         {
@@ -190,7 +199,8 @@ public static class SesEfektKurulumEditor
             while (siradaki < muzikler.Length)
             {
                 AudioClip aday = muzikler[siradaki++];
-                if (aday == null || aday == ses.oyunMuzigi || aday == ses.level1Muzigi) continue;
+                if (aday == null || aday == ses.oyunMuzigi || aday == ses.level1Muzigi || aday == ses.level2Muzigi)
+                    continue;
                 ses.hayvanMuzikleri[i] = aday;
                 break;
             }
@@ -215,7 +225,9 @@ public static class SesEfektKurulumEditor
             " harf=" + (ses.harfSesleri?.Length ?? 0) +
             " prompt=" + (ses.soruPromptSesi != null ? ses.soruPromptSesi.name : "yok") +
             " level1Muzigi=" + (ses.level1Muzigi != null ? ses.level1Muzigi.name : "yok") +
+            " level2Muzigi=" + (ses.level2Muzigi != null ? ses.level2Muzigi.name : "yok") +
             " oyunMuzigi=" + (ses.oyunMuzigi != null ? ses.oyunMuzigi.name : "yok") +
+            " muzikVol=" + ses.muzikSesSeviyesi +
             " tiklama=" + (ses.tiklamaSesi != null ? ses.tiklamaSesi.name : "yok") +
             " dogru=" + (ses.dogruSes != null ? ses.dogruSes.name : "yok") +
             " yanlis=" + (ses.yanlisSes != null ? ses.yanlisSes.name : "yok"));

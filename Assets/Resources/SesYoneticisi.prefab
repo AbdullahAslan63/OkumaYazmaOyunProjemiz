@@ -1,0 +1,112 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1488067436571866439
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5458743377210651631}
+  - component: {fileID: 3442098649819564494}
+  m_Layer: 0
+  m_Name: SesYoneticisi
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5458743377210651631
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488067436571866439}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3442098649819564494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488067436571866439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1b2c3d4e5f64789a0b1c2d3e4f50617, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SesYoneticisi
+  muzikKaynagi: {fileID: 0}
+  efektKaynagi: {fileID: 0}
+  hayvanMuzikleri:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  oyunMuzigi: {fileID: 8300000, guid: 4f5a7979ba014f0909339eb19efbbbfa, type: 3}
+  level1Muzigi: {fileID: 8300000, guid: c4a81f2e9b7d4e6a8c1d0f3e5a7b9c2d, type: 3}
+  level2Muzigi: {fileID: 8300000, guid: 4f5a7979ba014f0909339eb19efbbbfa, type: 3}
+  muzikSesSeviyesi: 0.18
+  efektSesSeviyesi: 1
+  tiklamaSesi: {fileID: 8300000, guid: 6d6a1cb04b296a84da4d1572d7c00c70, type: 3}
+  dogruSes: {fileID: 8300000, guid: 0712fdfa2659bb34f9914fb66263d7b3, type: 3}
+  yanlisSes: {fileID: 8300000, guid: 191f467f963009343bdff9f6b0071878, type: 3}
+  soruPromptSesi: {fileID: 8300000, guid: 3f54c38eae90a6c47944ea277d533819, type: 3}
+  harfSesleri:
+  - {fileID: 8300000, guid: 06323135f6483254abfac2940d9ff8a1, type: 3}
+  - {fileID: 8300000, guid: dd0247b0b07bb1840bb89a3e4664e734, type: 3}
+  - {fileID: 8300000, guid: b4b670a93e480ae409f38b2386257015, type: 3}
+  - {fileID: 8300000, guid: 33999b37f260a354cb6ffaa446685bbe, type: 3}
+  - {fileID: 8300000, guid: 91b41bbc7cbd26141b5ca29a676c8c29, type: 3}
+  - {fileID: 8300000, guid: 6dbff1d1e6ef97e4999f55eca34dd2e1, type: 3}
+  - {fileID: 8300000, guid: 9d7978b24f52886499881b3f6dadaaa3, type: 3}
+  - {fileID: 8300000, guid: f87642211889328468637f163ed5e375, type: 3}
+  objeSesleri:
+  - {fileID: 8300000, guid: c02d25ecb63e9df468f5949ec0dcac4a, type: 3}
+  - {fileID: 8300000, guid: 7bec05085f91a014eb7cd86e6546d5cc, type: 3}
+  - {fileID: 8300000, guid: 19113e497d7618a4a820960794506a51, type: 3}
+  - {fileID: 8300000, guid: 71a2d9fa46796e44e8138cb367f44484, type: 3}
+  - {fileID: 8300000, guid: 16fad26d953cae5469ddd7e3dc047e40, type: 3}
+  - {fileID: 8300000, guid: 2eeb3147293200d4f8ccec112c15aca6, type: 3}
+  - {fileID: 8300000, guid: 610fff5e32cd34e42b44b8b623630807, type: 3}
+  - {fileID: 8300000, guid: 41692302ffb17014faedeba4981330e5, type: 3}
+  - {fileID: 8300000, guid: f7bccc901c709224ebce404a88dd8e8b, type: 3}
+  - {fileID: 8300000, guid: 980feabdef3fd84419a0cdaca7a96fd7, type: 3}
+  - {fileID: 8300000, guid: 5517f5c131b4946408eae3994a742758, type: 3}
+  - {fileID: 8300000, guid: d62fd9d05b40bb641ad399910ef7cb3b, type: 3}
+  - {fileID: 8300000, guid: 54731409d0bc7554e8b35a829181644d, type: 3}
+  - {fileID: 8300000, guid: a55011ebd0a44ac4b8167f88b37d9b13, type: 3}
+  - {fileID: 8300000, guid: b6559c678703ed048bc275f408dba6bf, type: 3}
+  - {fileID: 8300000, guid: 5228ff774ebcb0e4f8ef2917366c8fc5, type: 3}
+  - {fileID: 8300000, guid: 6196d3dd3ce9d6c41b1a62757a21b7fd, type: 3}
+  - {fileID: 8300000, guid: 90a945ba829c528469c542bdccb12b8c, type: 3}
+  - {fileID: 8300000, guid: a8053cb19b976354d9ecee533da69697, type: 3}
+  - {fileID: 8300000, guid: 93c7ef8426deb15449a111ed76a61199, type: 3}
+  - {fileID: 8300000, guid: 0aad87a0e9db60d40a94010eaee6b017, type: 3}
+  - {fileID: 8300000, guid: 3670fe781d9b66449b9bd30a019286c9, type: 3}
+  - {fileID: 8300000, guid: 9af1bb9febed7ff49b591505ac5859b6, type: 3}
+  - {fileID: 8300000, guid: e587d0aef06b92044a83302bd8000a4c, type: 3}
+  - {fileID: 8300000, guid: b99626320f5ae374ba5309d48395c854, type: 3}
+  - {fileID: 8300000, guid: 91f0c9e70be659644984b0f9a57c8899, type: 3}
+  - {fileID: 8300000, guid: 35c080c2e95cd2d49bc6bff5b9ee11ab, type: 3}
+  - {fileID: 8300000, guid: fda61ebc6f7550348ba706abd787edb0, type: 3}
+  - {fileID: 8300000, guid: 6f133aaa04222bb4f8b42ea00f8b8333, type: 3}
+  - {fileID: 8300000, guid: 4ddb29ffa82b3ab4dbe53d3065a1eb00, type: 3}
+  - {fileID: 8300000, guid: ad06b4c86138e7643a892301d78f4bc3, type: 3}
+  - {fileID: 8300000, guid: 76c140a64700f074084b664a7da6876d, type: 3}
+  - {fileID: 8300000, guid: 04769f18f126b4b4f9a1f9d00650c706, type: 3}
+  - {fileID: 8300000, guid: 725cdce69b94dcb479e28e008aff631a, type: 3}
+  - {fileID: 8300000, guid: a244f65a2b1d27347b80f005e41c746c, type: 3}
+  - {fileID: 8300000, guid: de9f7805035656b469051bcaf37b2280, type: 3}
+  - {fileID: 8300000, guid: 44eab9b9dc6869b4c8f6c1a0d5b3cc7b, type: 3}
+  - {fileID: 8300000, guid: f0a954cc329c5004caf645cd3b3de10c, type: 3}
+  - {fileID: 8300000, guid: cbd9bcf4b8b7dd34ba9880e30c9381ef, type: 3}
+  - {fileID: 8300000, guid: 8042b0014c77dbc4a8b85b2ad25bb67e, type: 3}

@@ -112,6 +112,13 @@ public class SepetOyunYoneticisi : MonoBehaviour
     // İlk turu başlat
     private void Start()
     {
+        // Level 1 fon müziği (clip'li yönetici + loop)
+        SesYoneticisi ses = SesYoneticisi.GarantiEt();
+        if (ses != null)
+        {
+            ses.SahneMuziginiAyarla("SepetOyunu");
+        }
+
         // Bitiş paneli kapalı
         if (bitisPaneli != null)
         {
