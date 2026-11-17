@@ -24,8 +24,10 @@ public class SesYoneticisi : MonoBehaviour
     public AudioClip[] hayvanMuzikleri = new AudioClip[4];
 
     [Header("Oyun müziği")]
-    // Mini oyunda çalan Sesli Harfler şarkısı
+    // Genel / diğer mini oyunlar (Level 2 vb.)
     public AudioClip oyunMuzigi;
+    // Level 1 (SepetOyunu) Kapadokya/Anadolu fon müziği — bitiş panelinde de loop sürer
+    public AudioClip level1Muzigi;
 
     [Header("SFX")]
     // Ortak buton tıklama
@@ -179,6 +181,14 @@ public class SesYoneticisi : MonoBehaviour
     /// <summary>Oyun sahnesinde şarkı, menüde hayvan müziği.</summary>
     public void SahneMuziginiAyarla(string sahneAdi)
     {
+        // Level 1: level1Muzigi (yoksa oyunMuzigi yedek)
+        if (sahneAdi == "SepetOyunu")
+        {
+            AudioClip sepetClip = level1Muzigi != null ? level1Muzigi : oyunMuzigi;
+            MuzikClipiniCal(sepetClip);
+            return;
+        }
+
         if (OyunSahneAdlari.Contains(sahneAdi))
         {
             OyunMuziginiCal();
@@ -219,16 +229,52 @@ public class SesYoneticisi : MonoBehaviour
         muzikKaynagi.Play();
     }
 
-    /// <summary>Oyun içinde Sesli Harfler şarkısını çalar.</summary>
+    /// <summary>Oyun içinde genel oyun şarkısını çalar.</summary>
     public void OyunMuziginiCal()
     {
-        if (muzikKaynagi == null) return;
-        if (oyunMuzigi == null) return;
+        MuzikClipiniCal(oyunMuzigi);
+    }
 
-        if (muzikKaynagi.clip == oyunMuzigi && muzikKaynagi.isPlaying)
+    /// <summary>
+    /// Bitiş / game over panelinde fon müziğin loop ile sürmesini sağlar.
+    /// Clip yoksa veya zaten çalıyorsa dokunmaz; durmuşsa aynı clip ile devam eder.
+    /// </summary>
+    public void OyunMuziginiSurdur()
+    {
+        if (muzikKaynagi == null) return;
+
+        // Loop bayrağı her zaman açık kalsın
+        muzikKaynagi.loop = true;
+
+        // Aktif sahneye göre doğru clip'i seç (Sepet → level1)
+        string sahneAdi = SceneManager.GetActiveScene().name;
+        AudioClip hedef = null;
+        if (sahneAdi == "SepetOyunu")
+            hedef = level1Muzigi != null ? level1Muzigi : oyunMuzigi;
+        else if (OyunSahneAdlari.Contains(sahneAdi))
+            hedef = oyunMuzigi;
+
+        if (hedef == null)
+            hedef = muzikKaynagi.clip;
+        if (hedef == null) return;
+
+        if (muzikKaynagi.clip == hedef && muzikKaynagi.isPlaying)
             return;
 
-        muzikKaynagi.clip = oyunMuzigi;
+        muzikKaynagi.clip = hedef;
+        muzikKaynagi.Play();
+    }
+
+    /// <summary>Verilen klibi loop ile çalar; null veya aynı clip çalıyorsa sessiz/dokunma.</summary>
+    void MuzikClipiniCal(AudioClip clip)
+    {
+        if (muzikKaynagi == null) return;
+        if (clip == null) return;
+
+        if (muzikKaynagi.clip == clip && muzikKaynagi.isPlaying)
+            return;
+
+        muzikKaynagi.clip = clip;
         muzikKaynagi.loop = true;
         muzikKaynagi.Play();
     }

@@ -166,12 +166,15 @@ public static class SesEfektKurulumEditor
         }
         ses.harfSesleri = harfler.ToArray();
 
-        // Oyun müziği: önce Muzik klasörü, yoksa SesliHarfler içindeki Hangisinin prompt'u loop değil —
-        // plan: oyunMuzigi = Sesli Harfler şarkısı. Muzik klasöründe varsa onu kullan.
+        // Oyun müziği: Level 1 ayrı; genel oyunMuzigi yedek / diğer sahneler
         AudioClip[] muzikler = ClipleriYukle(MuzikKlasor);
-        ses.oyunMuzigi = MuzikClipiniSec(muzikler, "oyun", "sesli", "harf", "sarki", "şarkı");
-        if (ses.oyunMuzigi == null && muzikler.Length > 0)
-            ses.oyunMuzigi = muzikler[0];
+        ses.level1Muzigi = MuzikClipiniSec(muzikler, "level1", "sepet", "kapadokya", "anadolu");
+        ses.oyunMuzigi = MuzikClipiniSec(muzikler, "oyun", "sesli", "harf", "sarki", "şarkı", "level2");
+        // level1 tek parça ise hem level1 hem genel yedek olarak bağla
+        if (ses.level1Muzigi == null && muzikler.Length > 0)
+            ses.level1Muzigi = muzikler[0];
+        if (ses.oyunMuzigi == null)
+            ses.oyunMuzigi = ses.level1Muzigi;
 
         // Hayvan menü müzikleri (0..3) — isimde kedi/tavsan/kus/rakun veya sıra
         ses.hayvanMuzikleri = new AudioClip[4];
@@ -179,7 +182,7 @@ public static class SesEfektKurulumEditor
         ses.hayvanMuzikleri[1] = MuzikClipiniSec(muzikler, "tavsan", "tavşan", "rabbit");
         ses.hayvanMuzikleri[2] = MuzikClipiniSec(muzikler, "kus", "kuş", "bird");
         ses.hayvanMuzikleri[3] = MuzikClipiniSec(muzikler, "rakun", "raccoon");
-        // İsim eşleşmezse sırayla doldur (oyun şarkısı hariç)
+        // İsim eşleşmezse sırayla doldur (oyun / level1 hariç — menüde level müziği çalmasın)
         int siradaki = 0;
         for (int i = 0; i < 4; i++)
         {
@@ -187,7 +190,7 @@ public static class SesEfektKurulumEditor
             while (siradaki < muzikler.Length)
             {
                 AudioClip aday = muzikler[siradaki++];
-                if (aday == null || aday == ses.oyunMuzigi) continue;
+                if (aday == null || aday == ses.oyunMuzigi || aday == ses.level1Muzigi) continue;
                 ses.hayvanMuzikleri[i] = aday;
                 break;
             }
@@ -211,6 +214,7 @@ public static class SesEfektKurulumEditor
             "SesYoneticisi clip: obje=" + (ses.objeSesleri?.Length ?? 0) +
             " harf=" + (ses.harfSesleri?.Length ?? 0) +
             " prompt=" + (ses.soruPromptSesi != null ? ses.soruPromptSesi.name : "yok") +
+            " level1Muzigi=" + (ses.level1Muzigi != null ? ses.level1Muzigi.name : "yok") +
             " oyunMuzigi=" + (ses.oyunMuzigi != null ? ses.oyunMuzigi.name : "yok") +
             " tiklama=" + (ses.tiklamaSesi != null ? ses.tiklamaSesi.name : "yok") +
             " dogru=" + (ses.dogruSes != null ? ses.dogruSes.name : "yok") +

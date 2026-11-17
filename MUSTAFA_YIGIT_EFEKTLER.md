@@ -57,7 +57,7 @@ Kod fazları (1–8) + Unity clip/partikül + MO2 ses akışı tamam. **SepetOyu
 | Editor menü | `Oyun > Ses ve Efektleri Bagla (Faz 9)` |
 | `_Audio/Objeler/` | Bağlandı (40 wav) |
 | `_Audio/SesliHarfler/` | Harf 8 + `Hangisinin_baş_harfi!.wav` → `soruPromptSesi` |
-| `_Audio/Muzik/` | Boş — null-safe |
+| `_Audio/Muzik/` | `level1.wav` → `SesYoneticisi.level1Muzigi` (SepetOyunu + bitiş loop) |
 | `_Audio/SFX/` | Boş — null-safe (Paket 6 / Abdullah) |
 
 **Play checklist (MO2):** Devam → “Hangisinin baş harfi” duyulur → süre o sırada durur → harf → doğru kelime duyulur → tik bitmeden yeni harf gelmez.

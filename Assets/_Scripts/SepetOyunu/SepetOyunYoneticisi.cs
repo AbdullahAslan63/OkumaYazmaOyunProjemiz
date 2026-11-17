@@ -641,6 +641,13 @@ public class SepetOyunYoneticisi : MonoBehaviour
 
         ObjeleriTemizle();
         BitisPaneliniGoster();
+
+        // Game over panelinde Level 1 fon müziği loop ile çalmaya devam etsin
+        if (SesYoneticisi.Instance != null)
+        {
+            SesYoneticisi.Instance.OyunMuziginiSurdur();
+        }
+
         Debug.Log("SepetOyunu bitti. Skor: " + (skorYoneticisi != null ? skorYoneticisi.skor : 0));
     }
 
