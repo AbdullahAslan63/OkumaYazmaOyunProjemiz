@@ -13,7 +13,7 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 2. Kod üretildikten sonra o fazın **Unity Editor** bölümünü bitirmeden fazı kapatma.
 3. Paket 3 çekirdek API’leri (`SoruSecici` / `SkorYoneticisi` / `GeriBildirimYoneticisi`) olmadan **Faz 4’e** (`SepetOyunYoneticisi`) geçme. Ses/partikül finali Yiğit’in `mustafayigit/efektler` kapısından sonra gelebilir; yöneticiyi skor/geri bildirim ile yazabilirsin.
 4. `SepetHareketi.cs` yazma — iptal edildi; yerine `ObjeSurukleme.cs`.
-5. Bu sahnede avatar gösterme (avatar entegrasyonu yok).
+5. Seçili karakter sağ altta (`OyunKarakteri`); doğruda mutlu+zıpla, yanlışta üzgün; DDOL seçim avatarı gizlenir.
 6. Cursor’a bir seferde tek script ver; yönetici için önce Plan Mode.
 7. Checklist’i çocuğun tek başına doldurmasını bekleme — `AGENTS.md` → **İlerleme takibi**: sık durum bildir, olgu sor, onaylara göre bu dosyadaki `[ ]` kutularını agent günceller.
 8. “Ne durumdayım?” sorusuna `AGENTS.md` → **yönlendirici cevap** şablonuyla yanıt ver; karar aldırma, plandaki sıradaki **tek işi** yaptır.
@@ -30,7 +30,8 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 | -------------- | -------------------------------------------------------- |
 | Branch         | `enes/level1`                                            |
 | Mekanik        | Balon sabit; altta 4 pozisyon; objeler balona sürüklenir |
-| Scriptler      | `ObjeSurukleme.cs` + `SepetOyunYoneticisi.cs`            |
+| Scriptler      | `ObjeSurukleme` + `SepetOyunYoneticisi` + `BalonKuyrugu` (+ `Ortak/OyunKarakteri`) |
+| Köşe karakter  | Sağ alt `OyunKarakteri`; doğru mutlu+zıpla, yanlış üzgün |
 | Giriş          | Fare + touch/parmak                                      |
 | Yanlış bırakma | Geri bildirim + obje başlangıç pozisyonuna döner         |
 | Süre           | Varsayılan **60** sn; görsel `GunesSayac` (`Ortak/`)     |
@@ -46,15 +47,15 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 
 
 
-## Mevcut durum özeti (2026-11-14)
+## Mevcut durum özeti (2026-11-18)
 
 - Branch: **`main`** (`enes/level1` + `suleyman/level_ekrani` merge edildi).
-- **Faz 0–4 (kod):** `SepetOyunYoneticisi`, `BalonKuyrugu`, `EgimliYazi` main’de. `GunesSayac` → `Assets/_Scripts/Ortak/`. `ObjeSurukleme` → `ObjeBirakildi`. `SepetDemoKurucu` Play’de sistemleri kurar + `SesYoneticisi.GarantiEt()`.
+- **Faz 0–4 (kod):** `SepetOyunYoneticisi`, `BalonKuyrugu`, `EgimliYazi`. `GunesSayac` + `OyunKarakteri` → `Ortak/`. `ObjeSurukleme` → `ObjeBirakildi`. `SepetDemoKurucu` Play’de sistemleri kurar + `SesYoneticisi.GarantiEt()` + sağ alt köşe karakteri.
 - **Parite (2026-11-14):** Harf/obje ses kancaları, güneş duraklatma, `TekrarOyna` + `ButonTiklamaSesi`, `bitisSkorYazisi`, ortak yıldız tablosu.
 - **Entegrasyon:** Bitişte `SeviyeIlerleme.KaydetYildiz(1, …)`; Ana Menü → `LevelEkranı`.
 - Prefab `Obje.prefab` hâlâ yok (runtime şablon). Final müzik/SFX Inspector bağlama Paket 6.
 
-**Sıradaki tek iş:** Unity Play smoke — harf sesi + doğru bırakmada obje adı + güneş; bitince “Play’de çalıştı” yaz.
+**Sıradaki tek iş:** Unity Play — Avatar seç → Sepet; sağ alt karakter + doğru/yanlış tepki; bitince “Play’de çalıştı” yaz.
 
 ---
 
@@ -417,9 +418,10 @@ Sadece compile kontrolü yeterli olabilir; tam bağlama **Faz 5**. En azından:
 - [x] Public alan isimleri tablodakiyle aynı (+ `skorYazisi` puan barı)
 - [x] `kalanSure` varsayılan 60; `dogruPuan` **1** (istek: her doğruda +1)
 - [x] `ObjeSurukleme` → `ObjeBirakildi` bağlandı
-- [x] Avatar referansı yok
+- [x] Sağ alt köşe karakter (`OyunKarakteri`) + doğru/yanlış tepki
 - [ ] Commit + push yapıldı
 - [ ] Play teyidi: yanlış → wrong_x; doğru → check + puan + yeni tur
+- [ ] Play teyidi: sağ alt karakter; doğru mutlu+zıpla; yanlış üzgün
 
 **Çıkış:** Kod hazır. → Faz 5 Play test
 
@@ -522,11 +524,11 @@ Play’e bas ve sırayla dene:
 Mini Oyun 1 (Enes) teslim
 - Branch: enes/level1 → main (merge 2026-11-14)
 - Sahne: Assets/Scenes/SepetOyunu.unity
-- Scriptler: ObjeSurukleme.cs, SepetOyunYoneticisi.cs (+ BalonKuyrugu, GunesSayac, EgimliYazi, SepetDemoKurucu)
+- Scriptler: ObjeSurukleme.cs, SepetOyunYoneticisi.cs (+ BalonKuyrugu, GunesSayac, EgimliYazi, SepetDemoKurucu; Ortak/OyunKarakteri)
 - Prefab: runtime şablon (Obje.prefab yok)
 - Süre varsayılan 60 sn, doğru +1; yıldız → SeviyeIlerleme seviye 1
 - Ana Menü → LevelEkranı
-- Avatar bu sahnede yok
+- Sağ alt köşe karakter (doğru mutlu+zıpla, yanlış üzgün)
 - SepetHareketi YOK (iptal)
 
 Paket 6’dan beklenenler:

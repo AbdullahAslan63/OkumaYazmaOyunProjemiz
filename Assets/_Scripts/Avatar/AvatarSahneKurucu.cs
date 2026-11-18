@@ -1,19 +1,48 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem.UI;
 #endif
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 /// <summary>
 /// Avatar seçim UI'sini Roblox tipi dolap düzenine kurar:
 /// solda karakter / renk / aksesuar sekmeleri, sağda 2D karakter.
-/// Mevcut hayvan ve aksesuar listelerine dokunmaz.
+/// Aksesuar listesi boşsa art klasöründen doldurur.
 /// </summary>
 [DefaultExecutionOrder(-50)]
 public class AvatarSahneKurucu : MonoBehaviour
 {
     public AvatarGorunumu avatarGorunumu;
+
+    // Bolum1KurulumEditor ile aynı sıra (UI index)
+    private static readonly string[] AksesuarDosyaAdlari =
+    {
+        "gozluk_kus",
+        "kaplan_arkadan_takmali_sapka",
+        "kaplan_gozluk",
+        "kaplan_gunes_gozlugu",
+        "kaplan_kova_sapka",
+        "kaplan_kulakli_sapka",
+        "kaplan_logolu_sapka",
+        "kaplan_sapka",
+        "kaplan_yuvarlak_gozluk",
+        "kulaklik_maymun",
+        "sapka_kus"
+    };
+
+    private static readonly string[] HayvanAksesuarKlasor =
+    {
+        "kedi", "tavsan", "kus", "rakun"
+    };
+
+    // Şapka / gözlük varsayılan Y (hayvan sırası)
+    private static readonly float[] SapkaY = { 2.25f, 1.56f, 2.30f, 2.38f };
+    private static readonly float[] GozlukY = { 1.64f, 1.21f, 1.75f, 1.88f };
 
     // Paylaşılan basit kare / daire / yuvarlak kare sprite'ları
     private static Sprite kareSprite;
@@ -205,6 +234,9 @@ public class AvatarSahneKurucu : MonoBehaviour
     /// <summary>Soldaki katalog paneli + sekmeleri + seçenek ızgaralarını kurar.</summary>
     static void SolPaneliKur(AvatarSecimEkrani secim, AvatarGorunumu gorunum)
     {
+        // Aksesuar sprite'ları yoksa art'tan doldur
+        AksesuarVerisiniGarantiEt(gorunum);
+
         Transform canvas = secim.transform;
 
         GameObject sol = Panel(canvas, "SolPanel", new Color(0.94f, 0.95f, 0.98f, 1f));
@@ -379,6 +411,124 @@ public class AvatarSahneKurucu : MonoBehaviour
             SecimVurgusuEkle(rb.gameObject, SecimVurgusu.Tur.Renk, i, renkler[i]);
         }
     }
+
+    /// <summary>
+    /// aksesuarlar / hayvan aksesuarAyarlari boş veya spritesizse art klasöründen doldurur.
+    /// </summary>
+    static void AksesuarVerisiniGarantiEt(AvatarGorunumu gorunum)
+    {
+        if (gorunum == null)
+            return;
+
+#if UNITY_EDITOR
+        bool katalogEksik = gorunum.aksesuarlar == null || gorunum.aksesuarlar.Length == 0;
+        if (!katalogEksik)
+        {
+            katalogEksik = true;
+            for (int i = 0; i < gorunum.aksesuarlar.Length; i++)
+            {
+                if (gorunum.aksesuarlar[i] != null && gorunum.aksesuarlar[i].sprite != null)
+                {
+                    katalogEksik = false;
+                    break;
+                }
+            }
+        }
+
+        if (katalogEksik)
+            gorunum.aksesuarlar = AksesuarKatalogYukle();
+
+        if (gorunum.hayvanlar != null)
+        {
+            for (int h = 0; h < gorunum.hayvanlar.Length && h < HayvanAksesuarKlasor.Length; h++)
+            {
+                HayvanGorseli hayvan = gorunum.hayvanlar[h];
+                if (hayvan == null)
+                    continue;
+
+                bool satirEksik = hayvan.aksesuarAyarlari == null ||
+                    hayvan.aksesuarAyarlari.Length == 0 ||
+                    HayvanAksesuarSpriteEksik(hayvan);
+                if (satirEksik)
+                {
+                    hayvan.aksesuarAyarlari = HayvanAksesuarSatirlariniYukle(
+                        HayvanAksesuarKlasor[h], SapkaY[h], GozlukY[h]);
+                }
+            }
+        }
+
+        gorunum.AksesuarAyarlariniSenkronizeEt();
+        gorunum.SablonOlarakKaydet();
+        gorunum.Guncelle();
+#endif
+    }
+
+#if UNITY_EDITOR
+    static bool HayvanAksesuarSpriteEksik(HayvanGorseli hayvan)
+    {
+        if (hayvan.aksesuarAyarlari == null || hayvan.aksesuarAyarlari.Length == 0)
+            return true;
+        for (int i = 0; i < hayvan.aksesuarAyarlari.Length; i++)
+        {
+            if (hayvan.aksesuarAyarlari[i] != null && hayvan.aksesuarAyarlari[i].sprite != null)
+                return false;
+        }
+        return true;
+    }
+
+    static AksesuarGorseli[] AksesuarKatalogYukle()
+    {
+        string klasor = "Assets/_Art/Avatar/Aksesuar/kedi";
+        List<AksesuarGorseli> list = new List<AksesuarGorseli>();
+        for (int i = 0; i < AksesuarDosyaAdlari.Length; i++)
+        {
+            Sprite s = ArtSpriteYukle(klasor + "/" + AksesuarDosyaAdlari[i] + ".png");
+            if (s == null)
+                continue;
+            list.Add(new AksesuarGorseli
+            {
+                sprite = s,
+                olcek = 1f,
+                yerelOfset = Vector2.zero
+            });
+        }
+        return list.ToArray();
+    }
+
+    static HayvanAksesuarAyari[] HayvanAksesuarSatirlariniYukle(string klasorAdi, float sapkaY, float gozlukY)
+    {
+        string klasor = "Assets/_Art/Avatar/Aksesuar/" + klasorAdi;
+        HayvanAksesuarAyari[] satirlar = new HayvanAksesuarAyari[AksesuarDosyaAdlari.Length];
+        for (int i = 0; i < AksesuarDosyaAdlari.Length; i++)
+        {
+            string ad = AksesuarDosyaAdlari[i];
+            bool gozluk = ad.Contains("gozluk") || ad.Contains("gunes");
+            satirlar[i] = new HayvanAksesuarAyari
+            {
+                aksesuarAdi = ad,
+                sprite = ArtSpriteYukle(klasor + "/" + ad + ".png"),
+                ofset = new Vector2(0f, gozluk ? gozlukY : sapkaY),
+                olcekCarpani = 1f
+            };
+        }
+        return satirlar;
+    }
+
+    static Sprite ArtSpriteYukle(string yol)
+    {
+        Object[] hepsi = AssetDatabase.LoadAllAssetsAtPath(yol);
+        if (hepsi != null)
+        {
+            for (int i = 0; i < hepsi.Length; i++)
+            {
+                Sprite s = hepsi[i] as Sprite;
+                if (s != null)
+                    return s;
+            }
+        }
+        return AssetDatabase.LoadAssetAtPath<Sprite>(yol);
+    }
+#endif
 
     /// <summary>Inspector'daki aksesuar listesini kart olarak ekler; ayarları değiştirmez.</summary>
     static void AksesuarKartlariniKur(Transform parent, AvatarGorunumu gorunum)

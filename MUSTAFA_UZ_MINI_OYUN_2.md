@@ -51,19 +51,20 @@ Bu dosya **sadece Mustafa Üz** için faz kapılı çalışma planıdır. Kod ya
 
 
 
-## Mevcut durum özeti (2026-11-14)
+## Mevcut durum özeti (2026-11-18)
 
 - `HarfSecmeYoneticisi` + `SecenekBalonu`: Canvas UI prefab, `HarfObjeVerisi` / `SoruSecici` / skor / geri bildirim
 - `AutoDoldur` / isim araması **yok** (kod başlığında da belirtilir)
 - Prefab: `Assets/_Prefabs/HarfSecmeOyunu/SecenekBalonu.prefab` **mevcut**
 - **Parite:** `GunesSayac`, `TekrarOyna` + Mavi buton, `HarfSesiCal` / `ObjeSesiCal` / prompt, `dogruPuan=1`, check/x Bolum2, `SesYoneticisi.GarantiEt`
+- **Köşe karakter:** `OyunKarakteri` sağ alt; doğru mutlu+zıpla, yanlış üzgün (`HarfSecmeSahneKurucu` + yönetici)
 - Ana Menü hedefi: `LevelEkranı`
 
 **Eksik / sonraki:**
 
 - Faz 4 UI polish + runtime hardcode kaldırma (tema Inspector)
 - Faz 4c: tik/çarpı **balon üstünde** (şu an ekran ortası GeriBildirim)
-- Play smoke (`SMOKE_TEST_AVATAR_HARF.md`)
+- Play smoke: sağ alt karakter tepkileri + `SMOKE_TEST_AVATAR_HARF.md`
 - Ses clip final bağlama Paket 6
 
 ---
@@ -514,6 +515,8 @@ Paket 6’dan beklenenler:
 
 ## Tamamlandı kontrol listesi
 
+- [x] Sağ alt `OyunKarakteri` + doğru/yanlış tepki (kod)
+- [ ] Play: sağ alt karakter; doğru mutlu+zıpla; yanlış üzgün
 - [ ] Faz 0–7 ilgili maddeler bu dosyada işaretli
 - [ ] Teslim notu Süleyman’a iletildi
 - [ ] Commit + push + `main` PR açıldı
@@ -557,7 +560,7 @@ Paket 6’dan beklenenler:
 | `GeriBildirimYoneticisi` partikül/ses component gövdesi              | Paket 3                           |
 | Proje genel font atlas / tüm sahnelerde font unify                   | Paket 6                           |
 | Menü ↔ oyun `SahneGecisi` buton ağı finali                           | Paket 6                           |
-| Avatar’ın bu sahnede zorunlu görünmesi                               | Paket 1 + 6 (şu an zorunlu değil) |
+| Sağ alt köşe karakter (`OyunKarakteri`) + doğru/yanlış tepki         | Ortak + bu yönetici (bağlı)       |
 
 
 > Plan notu (paket planı yazılırken): Paket 3’e “harf sorusu + obje adı seslendirme API’si”; Paket 6’ya “clip bağlama + çoklu çözünürlük smoke test” maddeleri eklenmeli.

@@ -208,6 +208,11 @@ public class SepetOyunYoneticisi : MonoBehaviour
         }
 
         SureYazisiniGuncelle();
+        if (OyunKarakteri.Instance != null)
+        {
+            OyunKarakteri.Instance.NormalPoz();
+        }
+
         YeniTurBaslat();
     }
 
@@ -232,6 +237,12 @@ public class SepetOyunYoneticisi : MonoBehaviour
         {
             // Çık
             return;
+        }
+
+        // Köşe karakteri normal poz
+        if (OyunKarakteri.Instance != null)
+        {
+            OyunKarakteri.Instance.NormalPoz();
         }
 
         // Kilidi aç (yeni turda bırakmaya izin)
@@ -532,6 +543,12 @@ public class SepetOyunYoneticisi : MonoBehaviour
                 geriBildirim.DogruGoster();
             }
 
+            // Mutlu poz + zıpla
+            if (OyunKarakteri.Instance != null)
+            {
+                OyunKarakteri.Instance.DogruTepki();
+            }
+
             // Obje adı sesi + süre duraklatma, sonra yeni tur
             Sprite objeSprite = ObjeSpriteAl(obje);
             StartCoroutine(DogruCevapSureci(objeSprite));
@@ -565,6 +582,12 @@ public class SepetOyunYoneticisi : MonoBehaviour
 
         yield return new WaitForSeconds(Mathf.Max(objeSure, geriSure, 1.2f));
 
+        // Geri bildirim bitti: normal poz
+        if (OyunKarakteri.Instance != null)
+        {
+            OyunKarakteri.Instance.NormalPoz();
+        }
+
         // Balon geçişi bitene kadar güneş duraklatık kalsın
         yield return DogruTurGecisi();
 
@@ -588,6 +611,12 @@ public class SepetOyunYoneticisi : MonoBehaviour
             geriBildirim.YanlisGoster();
         }
 
+        // Üzgün poz
+        if (OyunKarakteri.Instance != null)
+        {
+            OyunKarakteri.Instance.YanlisTepki();
+        }
+
         if (obje != null)
         {
             obje.BaslangicaDon();
@@ -600,6 +629,11 @@ public class SepetOyunYoneticisi : MonoBehaviour
         }
 
         yield return new WaitForSeconds(geriSure);
+
+        if (OyunKarakteri.Instance != null)
+        {
+            OyunKarakteri.Instance.NormalPoz();
+        }
 
         if (gunesSayac != null && oyunAktif)
         {
@@ -640,6 +674,11 @@ public class SepetOyunYoneticisi : MonoBehaviour
         islemKilitli = true;
         kalanSure = 0f;
         SureYazisiniGuncelle();
+
+        if (OyunKarakteri.Instance != null)
+        {
+            OyunKarakteri.Instance.NormalPoz();
+        }
 
         if (gunesSayac != null)
         {

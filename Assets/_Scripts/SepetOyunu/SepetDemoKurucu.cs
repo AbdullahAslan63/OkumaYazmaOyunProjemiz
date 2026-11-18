@@ -76,6 +76,11 @@ public class SepetDemoKurucu : MonoBehaviour
         ArkaplaniHazirla(kamera);
         // Ortadaki deneme arabasını kapat
         DenemeArabasiniKapat();
+        // Seçim hafızası + şablon (köşe karakteri için)
+        AvatarYoneticisiniGarantiEt();
+        OyunKarakteri.SablonuGarantiEt();
+        // DDOL büyük seçim avatarını gizle (köşede küçük kopya var)
+        SecimAvatariniGizle();
         // Harf kartlarını yükle
         List<HarfObjeVerisi> harfler = DoluHarfleriYukle();
         // Kart yoksa sistem kurma
@@ -89,8 +94,51 @@ public class SepetDemoKurucu : MonoBehaviour
 
         // 4 balon kuyruğu (01–04): solda küçükler + ortada ana
         BalonKuyrugu kuyruk = BalonKuyrugunuKur(kamera);
+        // Sağ alt köşe seçili karakter
+        OyunKarakteri.GarantiEt(kamera);
         // Oyun yöneticisi + UI + ortak sistemler
         OyunSistemleriniKur(kamera, kuyruk, harfler);
+    }
+
+    // PlayerPrefs'li AvatarYoneticisi yoksa oluştur
+    private void AvatarYoneticisiniGarantiEt()
+    {
+        // Singleton zaten varsa çık
+        if (AvatarYoneticisi.Instance != null)
+        {
+            return;
+        }
+
+        // Sahnede / DDOL'da ara
+        AvatarYoneticisi mevcut = FindAnyObjectByType<AvatarYoneticisi>();
+        if (mevcut != null)
+        {
+            return;
+        }
+
+        // Boş yönetici (Awake PlayerPrefs yükler)
+        GameObject go = new GameObject("AvatarYoneticisi");
+        go.AddComponent<AvatarYoneticisi>();
+    }
+
+    // Karakter ekranından gelen büyük AvatarGorunumu'yu kapat
+    private void SecimAvatariniGizle()
+    {
+        AvatarYoneticisi yonetici = AvatarYoneticisi.Instance;
+        if (yonetici == null)
+        {
+            return;
+        }
+
+        // Yalnızca yönetici altındaki seçim görünümleri
+        AvatarGorunumu[] list = yonetici.GetComponentsInChildren<AvatarGorunumu>(true);
+        for (int i = 0; i < list.Length; i++)
+        {
+            if (list[i] != null)
+            {
+                list[i].gameObject.SetActive(false);
+            }
+        }
     }
 
     // BalonKuyrugu objesini oluşturur
@@ -153,8 +201,10 @@ public class SepetDemoKurucu : MonoBehaviour
         soru.tumHarfler = harfler.ToArray();
         // UI Canvas + puan barı + ikonlar
         CanvasUiKur(geri, yonetici);
-        // Alt 4 slot
+        // Alt 4 slot (ortada sık küme)
         Transform[] slotlar = ObjeSlotlariniKur(kamera);
+        // Objelerin arkasında turuncu yuvarlak plaka
+        ObjeSiraArkaPlakasiKur(kamera, slotlar);
         // Gizli obje şablonu
         GameObject prefab = ObjePrefabSablonuKur(yonetici.transform);
         // Yönetici alanlarını bağla
@@ -589,7 +639,7 @@ public class SepetDemoKurucu : MonoBehaviour
         return tmp;
     }
 
-    // Alt şeritte 4 boş slot; localScale.x = hedef dünya boyutu
+    // Alt ortada 4 sık slot; localScale.x = hedef dünya boyutu
     private Transform[] ObjeSlotlariniKur(Camera kamera)
     {
         // Grup
@@ -601,9 +651,10 @@ public class SepetDemoKurucu : MonoBehaviour
 
         float yukseklik = kamera.orthographicSize * 2f;
         float genislik = yukseklik * kamera.aspect;
-        float kenar = genislik * 0.04f;
-        float slot = (genislik - kenar * 2f) / ObjeSayisi;
-        float objeMax = Mathf.Min(slot * 0.78f, yukseklik * 0.22f);
+        // Ortada dar küme (~ekranın yarısı)
+        float clusterW = genislik * 0.48f;
+        float adim = clusterW / ObjeSayisi;
+        float objeMax = Mathf.Min(adim * 0.88f, yukseklik * 0.24f);
         float altY = -kamera.orthographicSize + objeMax * 0.62f;
 
         Transform[] slotlar = new Transform[ObjeSayisi];
@@ -617,7 +668,7 @@ public class SepetDemoKurucu : MonoBehaviour
                 slotGo.transform.SetParent(grup.transform, true);
             }
 
-            float x = -genislik * 0.5f + kenar + slot * (i + 0.5f);
+            float x = -clusterW * 0.5f + adim * (i + 0.5f);
             slotGo.transform.position = new Vector3(x, altY, 0f);
             // SepetOyunYoneticisi ölçek için localScale.x kullanır
             slotGo.transform.localScale = new Vector3(objeMax, objeMax, 1f);
@@ -625,6 +676,95 @@ public class SepetDemoKurucu : MonoBehaviour
         }
 
         return slotlar;
+    }
+
+    // Objelerin arkasında turuncu yumuşak daire
+    private void ObjeSiraArkaPlakasiKur(Camera kamera, Transform[] slotlar)
+    {
+        if (kamera == null || slotlar == null || slotlar.Length == 0)
+        {
+            return;
+        }
+
+        GameObject plaka = GameObject.Find("ObjeArkaPlaka");
+        if (plaka == null)
+        {
+            plaka = new GameObject("ObjeArkaPlaka");
+        }
+
+        SpriteRenderer sr = plaka.GetComponent<SpriteRenderer>();
+        if (sr == null)
+        {
+            sr = plaka.AddComponent<SpriteRenderer>();
+        }
+
+        sr.sprite = TuruncuDaireSpriteAl();
+        sr.color = new Color(1f, 0.604f, 0.235f, 0.85f); // #FF9A3C
+        sr.sortingOrder = 4;
+
+        float yukseklik = kamera.orthographicSize * 2f;
+        float genislik = yukseklik * kamera.aspect;
+        float clusterW = genislik * 0.48f;
+        float adim = clusterW / ObjeSayisi;
+        float objeMax = Mathf.Min(adim * 0.88f, yukseklik * 0.24f);
+        float altY = slotlar[0] != null
+            ? slotlar[0].position.y
+            : -kamera.orthographicSize + objeMax * 0.62f;
+
+        plaka.transform.position = new Vector3(0f, altY, 0f);
+
+        // Sprite ~1 dünya birimi; cluster + padding
+        float hedefW = clusterW * 1.15f;
+        float hedefH = objeMax * 1.35f;
+        float spriteW = sr.sprite != null ? sr.sprite.bounds.size.x : 1f;
+        float spriteH = sr.sprite != null ? sr.sprite.bounds.size.y : 1f;
+        if (spriteW < 0.001f) spriteW = 1f;
+        if (spriteH < 0.001f) spriteH = 1f;
+        plaka.transform.localScale = new Vector3(hedefW / spriteW, hedefH / spriteH, 1f);
+    }
+
+    // Yumuşak kenarlı beyaz daire (SpriteRenderer rengi ile turuncu boyanır)
+    private static Sprite turuncuDaireSprite;
+
+    private static Sprite TuruncuDaireSpriteAl()
+    {
+        if (turuncuDaireSprite != null)
+        {
+            return turuncuDaireSprite;
+        }
+
+        const int size = 128;
+        Texture2D tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
+        tex.wrapMode = TextureWrapMode.Clamp;
+        tex.filterMode = FilterMode.Bilinear;
+        float cx = (size - 1) * 0.5f;
+        float r = cx * 0.98f;
+        for (int y = 0; y < size; y++)
+        {
+            for (int x = 0; x < size; x++)
+            {
+                float nx = (x - cx) / r;
+                float ny = (y - cx) / r;
+                float d = Mathf.Sqrt(nx * nx + ny * ny);
+                float a = 0f;
+                if (d < 1f)
+                {
+                    float t = 1f - d;
+                    a = Mathf.Clamp01(Mathf.Pow(t, 1.05f) * 1.25f);
+                }
+
+                tex.SetPixel(x, y, new Color(1f, 1f, 1f, a));
+            }
+        }
+
+        tex.Apply(false, true);
+        turuncuDaireSprite = Sprite.Create(
+            tex,
+            new Rect(0f, 0f, size, size),
+            new Vector2(0.5f, 0.5f),
+            100f);
+        turuncuDaireSprite.name = "ObjeTuruncuDaire";
+        return turuncuDaireSprite;
     }
 
     // Instantiate için gizli şablon
@@ -1472,12 +1612,11 @@ public class SepetDemoKurucu : MonoBehaviour
         float yukseklik = kamera.orthographicSize * 2f;
         // Ekran genişliği
         float genislik = yukseklik * kamera.aspect;
-        // Kenar boşluğu
-        float kenar = genislik * 0.04f;
-        // Dört slota bölünen iç genişlik
-        float slot = (genislik - kenar * 2f) / ObjeSayisi;
+        // Ortada dar küme
+        float clusterW = genislik * 0.48f;
+        float adim = clusterW / ObjeSayisi;
         // Objenin sığacağı en büyük kenar
-        float objeMax = Mathf.Min(slot * 0.78f, yukseklik * 0.22f);
+        float objeMax = Mathf.Min(adim * 0.88f, yukseklik * 0.24f);
         // Alt şeridin dikey merkezi
         float altY = -kamera.orthographicSize + objeMax * 0.62f;
 
@@ -1486,8 +1625,8 @@ public class SepetDemoKurucu : MonoBehaviour
         // Her seçimi kendi slotuna koy
         for (int i = 0; i < secilenler.Count && i < ObjeSayisi; i++)
         {
-            // Bu slotun yatay merkezi
-            float x = -genislik * 0.5f + kenar + slot * (i + 0.5f);
+            // Bu slotun yatay merkezi (alt orta küme)
+            float x = -clusterW * 0.5f + adim * (i + 0.5f);
             // Objeyi üret
             GameObject obje = ObjeOlustur(secilenler[i]);
             // Grubun çocuğu yap

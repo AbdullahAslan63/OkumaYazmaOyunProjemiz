@@ -126,6 +126,10 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         islemYapiliyor = true;
         sureAkiyor = false;
 
+        // Köşe karakteri normal
+        if (OyunKarakteri.Instance != null)
+            OyunKarakteri.Instance.NormalPoz();
+
         SesYoneticisi ses = SesYoneticisi.GarantiEt();
         // Level 2 fon müziği (kısık loop); harf/obje SFX üstte kalsın
         if (ses != null)
@@ -395,6 +399,8 @@ public class HarfSecmeYoneticisi : MonoBehaviour
 
         gunesYenidenBaslat = true;
         SureYazisiniGuncelle();
+        if (OyunKarakteri.Instance != null)
+            OyunKarakteri.Instance.NormalPoz();
         StartCoroutine(OyunBaslat());
     }
 
@@ -632,6 +638,10 @@ public class HarfSecmeYoneticisi : MonoBehaviour
             geriBildirim.SkorYazisiniGuncelle(dogruSayisi);
         }
 
+        // Mutlu + zıpla
+        if (OyunKarakteri.Instance != null)
+            OyunKarakteri.Instance.DogruTepki();
+
         SureYazisiniGuncelle();
         // 1) Obje / tik bitsin  2) Doğal nefes  3) Sonra yeni harf
         float icerikBitis = Mathf.Max(objeSure, geriSure, 1.2f);
@@ -640,6 +650,9 @@ public class HarfSecmeYoneticisi : MonoBehaviour
 
         if (oyunBitti)
             yield break;
+
+        if (OyunKarakteri.Instance != null)
+            OyunKarakteri.Instance.NormalPoz();
 
         // Güneş, yeni balonlar yerleşene kadar duraklatık kalır
         YeniSoru();
@@ -660,10 +673,17 @@ public class HarfSecmeYoneticisi : MonoBehaviour
             geriBildirim.YanlisGoster();
         }
 
+        // Üzgün poz
+        if (OyunKarakteri.Instance != null)
+            OyunKarakteri.Instance.YanlisTepki();
+
         yield return new WaitForSeconds(geriSure);
 
         if (oyunBitti)
             yield break;
+
+        if (OyunKarakteri.Instance != null)
+            OyunKarakteri.Instance.NormalPoz();
 
         // Yanlışta aynı soru kalır — seçenekler yerinde
         if (gunesSayac != null)
@@ -681,6 +701,9 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         sureAkiyor = false;
         StopAllCoroutines();
         SecenekleriTemizle();
+
+        if (OyunKarakteri.Instance != null)
+            OyunKarakteri.Instance.NormalPoz();
 
         if (gunesSayac != null)
             gunesSayac.Durdur();

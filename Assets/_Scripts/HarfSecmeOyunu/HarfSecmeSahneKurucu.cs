@@ -37,6 +37,11 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
         if (ses != null)
             ses.SahneMuziginiAyarla("HarfSecmeOyunu");
 
+        // Seçili karakter (sağ alt) + DDOL büyük avatar gizle
+        AvatarYoneticisiniGarantiEt();
+        SecimAvatariniGizle();
+        OyunKarakteri.GarantiEt(Camera.main);
+
         // Tam kurulum gerekiyorsa
         bool eksik = yonetici.secenekPrefab == null ||
             yonetici.secenekPozisyonlari == null ||
@@ -51,6 +56,35 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
 
         // Her durumda parite parçalarını tamamla
         PariteyiGarantiEt();
+    }
+
+    // PlayerPrefs'li AvatarYoneticisi yoksa oluştur
+    void AvatarYoneticisiniGarantiEt()
+    {
+        if (AvatarYoneticisi.Instance != null)
+            return;
+
+        AvatarYoneticisi mevcut = FindAnyObjectByType<AvatarYoneticisi>();
+        if (mevcut != null)
+            return;
+
+        GameObject go = new GameObject("AvatarYoneticisi");
+        go.AddComponent<AvatarYoneticisi>();
+    }
+
+    // Karakter ekranından gelen büyük AvatarGorunumu'yu kapat
+    void SecimAvatariniGizle()
+    {
+        AvatarYoneticisi yon = AvatarYoneticisi.Instance;
+        if (yon == null)
+            return;
+
+        AvatarGorunumu[] list = yon.GetComponentsInChildren<AvatarGorunumu>(true);
+        for (int i = 0; i < list.Length; i++)
+        {
+            if (list[i] != null)
+                list[i].gameObject.SetActive(false);
+        }
     }
 
     void Kur()
@@ -232,27 +266,37 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
             yonetici.tekrarDeneButonu.gameObject.AddComponent<ButonTiklamaSesi>();
         }
 
-        // Geri bildirim sprite ikonları (renkli panel yerine)
+        // Geri bildirim sprite ikonları (Multiple spriteMode için LoadAll)
         if (yonetici.geriBildirim != null)
         {
-            if (yonetici.geriBildirim.dogruGorsel == null ||
-                yonetici.geriBildirim.dogruGorsel.GetComponent<Image>() == null ||
-                yonetici.geriBildirim.dogruGorsel.GetComponent<Image>().sprite == null)
+            yonetici.geriBildirim.dogruGorsel = FeedbackIkonunuGarantiEt(
+                canvasT, yonetici.geriBildirim.dogruGorsel, "DogruFB", DogruIkonYolu);
+            yonetici.geriBildirim.yanlisGorsel = FeedbackIkonunuGarantiEt(
+                canvasT, yonetici.geriBildirim.yanlisGorsel, "YanlisFB", YanlisIkonYolu);
+        }
+    }
+
+    // Mevcut FB Image'a sprite zorla ata; yoksa oluştur
+    static GameObject FeedbackIkonunuGarantiEt(Transform canvasT, GameObject mevcut, string ad, string yol)
+    {
+        Sprite sp = ArtSpriteYukle(yol);
+        Image img = mevcut != null ? mevcut.GetComponent<Image>() : null;
+        if (mevcut != null && img != null)
+        {
+            if (sp != null)
             {
-                GameObject dogruFb = FeedbackImage(canvasT, "DogruFB", DogruIkonYolu);
-                dogruFb.SetActive(false);
-                yonetici.geriBildirim.dogruGorsel = dogruFb;
+                img.sprite = sp;
+                img.preserveAspect = true;
+                img.color = Color.white;
             }
 
-            if (yonetici.geriBildirim.yanlisGorsel == null ||
-                yonetici.geriBildirim.yanlisGorsel.GetComponent<Image>() == null ||
-                yonetici.geriBildirim.yanlisGorsel.GetComponent<Image>().sprite == null)
-            {
-                GameObject yanlisFb = FeedbackImage(canvasT, "YanlisFB", YanlisIkonYolu);
-                yanlisFb.SetActive(false);
-                yonetici.geriBildirim.yanlisGorsel = yanlisFb;
-            }
+            mevcut.SetActive(false);
+            return mevcut;
         }
+
+        GameObject go = FeedbackImage(canvasT, ad, yol);
+        go.SetActive(false);
+        return go;
     }
 
     GunesSayac GunesSayaciniKur(Transform canvas)
@@ -426,9 +470,21 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
         return go;
     }
 
+    // Multiple spriteMode'da LoadAssetAtPath null döner; alt varlıkları tara
     static Sprite ArtSpriteYukle(string assetYolu)
     {
 #if UNITY_EDITOR
+        Object[] hepsi = AssetDatabase.LoadAllAssetsAtPath(assetYolu);
+        if (hepsi != null)
+        {
+            for (int i = 0; i < hepsi.Length; i++)
+            {
+                Sprite s = hepsi[i] as Sprite;
+                if (s != null)
+                    return s;
+            }
+        }
+
         return AssetDatabase.LoadAssetAtPath<Sprite>(assetYolu);
 #else
         return null;

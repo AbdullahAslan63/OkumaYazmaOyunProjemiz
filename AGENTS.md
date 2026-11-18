@@ -105,6 +105,7 @@ Mini Oyun 1 (Sepet) ve Mini Oyun 2 (Harf Seçme) aynı çocuk deneyimini paylaş
 | Tekrar butonu | Sepet: `Tekrar_Dene_Turuncu.png` (Bolum1); Harf: `Tekrar_Dene_Mavi.png` (Bolum2) |
 | Tik / çarpı | Sepet Bolum1 UI; Harf Bolum2 UI — aynı dosya adları |
 | Buton SFX | `ButonTiklamaSesi` (Tekrar Dene + Ana Menü) |
+| Köşe karakter | Sağ alt `OyunKarakteri` (`Ortak/`); doğruda mutlu+zıpla, yanlışta üzgün |
 
 Ses API’si yalnızca `SesYoneticisi` (Paket 3); yeni ses sistemi yazılmaz. Inspector clip finali Paket 6.
 
@@ -115,7 +116,7 @@ Ses API’si yalnızca `SesYoneticisi` (Paket 3); yeni ses sistemi yazılmaz. In
 | Paket | Sorumlu | Branch | Ana dosyalar / plan |
 | ----- | ------- | ------ | ------------------- |
 | 1 — Avatar | Mustafa Said Bayram | `said/avatar` | `AvatarYoneticisi`, `AvatarGorunumu`, `AvatarSecimEkrani`, `RenkSecici`, `AksesuarSecici` (+ `AvatarSahneKurucu`) — detay: `SAID_AVATAR.md` |
-| 3 — Ortak / efektler | Mustafa Yiğit Avan | `mustafayigit/efektler` | `HarfObjeVerisi`, `SoruSecici`, `SkorYoneticisi`, `GeriBildirimYoneticisi`, `SesYoneticisi`, `GunesSayac`, `YildizHesaplayici` — detay: `MUSTAFA_YIGIT_EFEKTLER.md` |
+| 3 — Ortak / efektler | Mustafa Yiğit Avan | `mustafayigit/efektler` | `HarfObjeVerisi`, `SoruSecici`, `SkorYoneticisi`, `GeriBildirimYoneticisi`, `SesYoneticisi`, `GunesSayac`, `YildizHesaplayici`, `OyunKarakteri` — detay: `MUSTAFA_YIGIT_EFEKTLER.md` |
 | 4 — Mini Oyun 1 | Enes Barış | `enes/level1` | `ObjeSurukleme`, `SepetOyunYoneticisi` — detay: `ENES_MINI_OYUN_1.md` |
 | 5 — Mini Oyun 2 | Mustafa Üz | `mustafauz/level2` | `HarfSecmeYoneticisi`, `SecenekBalonu` (+ `HarfSecmeSahneKurucu`) — detay: `MUSTAFA_UZ_MINI_OYUN_2.md` |
 | 6 — UI / font / entegrasyon | Süleyman Öz | (entegrasyon; genelde `main`) | `SahneGecisi`, font, ses/efekt Inspector bağlama, genel test |
