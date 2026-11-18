@@ -47,15 +47,16 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 
 
 
-## Mevcut durum özeti (2026-11-18)
+## Mevcut durum özeti (2026-11-19)
 
 - Branch: **`main`** (`enes/level1` + `suleyman/level_ekrani` merge edildi).
 - **Faz 0–4 (kod):** `SepetOyunYoneticisi`, `BalonKuyrugu`, `EgimliYazi`. `GunesSayac` + `OyunKarakteri` → `Ortak/`. `ObjeSurukleme` → `ObjeBirakildi`. `SepetDemoKurucu` Play’de sistemleri kurar + `SesYoneticisi.GarantiEt()` + sağ alt köşe karakteri.
 - **Parite (2026-11-14):** Harf/obje ses kancaları, güneş duraklatma, `TekrarOyna` + `ButonTiklamaSesi`, `bitisSkorYazisi`, ortak yıldız tablosu.
 - **Entegrasyon:** Bitişte `SeviyeIlerleme.KaydetYildiz(1, …)`; Ana Menü → `LevelEkranı`.
 - Prefab `Obje.prefab` hâlâ yok (runtime şablon). Final müzik/SFX Inspector bağlama Paket 6.
+- **Glow (2026-11-19, kod):** 4 obje arkası soft halo + sparkle; turuncu plaka kapalı; balon→obje ışık konisi; karakter halesi. Play teyidi bekleniyor.
 
-**Sıradaki tek iş:** Unity Play — Avatar seç → Sepet; sağ alt karakter + doğru/yanlış tepki; bitince “Play’de çalıştı” yaz.
+**Sıradaki tek iş:** Unity Play — SepetOyunu; 4 obje + glow/koni/sparkle + sağ alt karakter halesi; bitince “Play’de glow/partikül OK” yaz.
 
 ---
 

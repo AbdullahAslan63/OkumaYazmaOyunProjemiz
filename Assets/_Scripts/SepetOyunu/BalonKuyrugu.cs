@@ -55,6 +55,17 @@ public class BalonKuyrugu : MonoBehaviour
         }
     }
 
+    /// <summary>Ana (ortadaki) balon kökü — ışık konisi vb. için.</summary>
+    public Transform AnaBalonKok
+    {
+        get
+        {
+            if (sira.Count == 0 || sira[0] == null)
+                return null;
+            return sira[0].kok;
+        }
+    }
+
     /// <summary>4 balonu kurar; solda 3 küçük, ortada 1 ana.</summary>
     public void Kur(Camera kamera)
     {
@@ -456,34 +467,17 @@ public class BalonKuyrugu : MonoBehaviour
         tmp.overflowMode = TextOverflowModes.Overflow;
         tmp.extraPadding = true;
 
-        // Gökkuşağı balon (Balon_01): sarı/yeşil şeritlerde harf kaybolmasın → tam yeşil
-        bool gokkusagiBalon = b.sprite != null && b.sprite.name.Contains("Balon_01");
-        if (gokkusagiBalon)
-        {
-            // Gradient kapalı, düz yeşil
-            tmp.enableVertexGradient = false;
-            tmp.color = new Color32(20, 200, 55, 255);
-        }
-        else
-        {
-            // Diğer balonlar: turuncu → yeşil geçiş
-            tmp.color = Color.white;
-            tmp.enableVertexGradient = true;
-            tmp.colorGradient = new VertexGradient(
-                new Color32(255, 140, 30, 255),
-                new Color32(255, 200, 40, 255),
-                new Color32(40, 190, 70, 255),
-                new Color32(30, 150, 90, 255));
-        }
+        // Beyaz harf + koyu kontur — tüm balonlarda yüksek okunurluk
+        tmp.enableVertexGradient = false;
+        tmp.color = Color.white;
 
         if (tmp.fontMaterial != null)
         {
-            tmp.fontMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, 0.35f);
+            tmp.fontMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, 0.4f);
         }
 
-        // Koyu kontur okunurluğu artırır
-        tmp.outlineWidth = gokkusagiBalon ? 0.55f : 0.45f;
-        tmp.outlineColor = new Color(0.05f, 0.04f, 0.1f, 1f);
+        tmp.outlineWidth = 0.5f;
+        tmp.outlineColor = new Color(0.05f, 0.04f, 0.12f, 1f);
         tmp.rectTransform.sizeDelta = new Vector2(10f, 10f);
 
         // Ebeveyn ölçeğini nötrle
@@ -587,10 +581,7 @@ public class BalonKuyrugu : MonoBehaviour
         PariltiyiGuncelle(b);
     }
 
-    // Üretilmiş parıltı sprite (bir kez)
-    private static Sprite pariltiSprite;
-
-    // Harfin arkasına ışıltı + nabız koyar
+    // Harfin arkasına ortak yıldız-halo + nabız koyar
     private void PariltiyiGuncelle(BalonParca b)
     {
         if (b.harf == null || !b.harf.gameObject.activeSelf)
@@ -598,136 +589,34 @@ public class BalonKuyrugu : MonoBehaviour
             return;
         }
 
-        Transform eski = b.kok.Find("HarfPariltisi");
-        GameObject go = eski != null ? eski.gameObject : new GameObject("HarfPariltisi");
-        if (eski == null)
-        {
-            go.transform.SetParent(b.kok, false);
-        }
-
-        go.SetActive(true);
-        SpriteRenderer pc = go.GetComponent<SpriteRenderer>();
-        if (pc == null)
-        {
-            pc = go.AddComponent<SpriteRenderer>();
-        }
-
-        // Yıldızlı hale sprite
-        pc.sprite = PariltiSpriteAl();
-        // Daha güçlü altın parıltı
-        pc.color = new Color(1f, 0.95f, 0.65f, 0.88f);
-        // Harfin arkasında, balonun üstünde
-        pc.sortingOrder = 11;
-
-        // Harfle aynı nokta
-        Vector3 harfPos = b.harf.transform.position;
-        go.transform.position = new Vector3(harfPos.x, harfPos.y, 0f);
-
         float ebeveyn = Mathf.Max(0.001f, b.kok.lossyScale.y);
         float harfBoyu = b.harf.textBounds.size.y * b.harf.transform.lossyScale.y;
         if (harfBoyu < 0.05f)
-        {
             harfBoyu = 1f;
-        }
 
-        // Daha büyük hale (parıltı artsın)
-        Vector3 olcek = Vector3.one * ((harfBoyu * 2.65f) / ebeveyn);
-        go.transform.localScale = olcek;
+        float yerelOlcek = (harfBoyu * 2.65f) / ebeveyn;
+        // Soft koyu-mavi hale — beyaz harfi yıkamaz (sorting harf altında)
+        SpriteRenderer pc = YumusakPariltiYardimcisi.WorldHaloEkle(
+            b.kok,
+            "HarfPariltisi",
+            yerelOlcek,
+            11,
+            new Color(0.15f, 0.2f, 0.45f, 0.55f),
+            true,
+            false);
 
-        // Nabız animasyonu
-        HarfPariltisi nabiz = go.GetComponent<HarfPariltisi>();
-        if (nabiz == null)
-        {
-            nabiz = go.AddComponent<HarfPariltisi>();
-        }
+        if (pc == null)
+            return;
 
-        nabiz.TabanOlcegiKaydet(olcek);
-    }
+        // Harfle aynı dünya noktası
+        Vector3 harfPos = b.harf.transform.position;
+        pc.transform.position = new Vector3(harfPos.x, harfPos.y, 0f);
+        pc.gameObject.SetActive(true);
 
-    // Yumuşak hale + yıldız sprite üretir
-    private static Sprite PariltiSpriteAl()
-    {
-        if (pariltiSprite != null)
-        {
-            return pariltiSprite;
-        }
-
-        const int n = 128;
-        Texture2D tex = new Texture2D(n, n, TextureFormat.RGBA32, false);
-        tex.wrapMode = TextureWrapMode.Clamp;
-        tex.filterMode = FilterMode.Bilinear;
-        Color[] px = new Color[n * n];
-        float orta = (n - 1) * 0.5f;
-        float yaricap = n * 0.48f;
-        for (int y = 0; y < n; y++)
-        {
-            for (int x = 0; x < n; x++)
-            {
-                float dx = (x - orta) / yaricap;
-                float dy = (y - orta) / yaricap;
-                float d = Mathf.Sqrt(dx * dx + dy * dy);
-                float hale = Mathf.Clamp01(1f - d);
-                hale *= hale;
-                float ax = Mathf.Abs(dx);
-                float ay = Mathf.Abs(dy);
-                float arti = Mathf.Clamp01(1f - Mathf.Min(ax, ay) * 9f) * Mathf.Clamp01(1f - Mathf.Max(ax, ay) * 1.05f);
-                float capraz = Mathf.Clamp01(1f - Mathf.Abs(ax - ay) * 8f) * Mathf.Clamp01(1f - d * 1.15f);
-                float yildiz = Mathf.Max(arti, capraz * 0.8f);
-                float a = Mathf.Clamp01(hale * 0.75f + yildiz);
-                if (d > 1f && yildiz < 0.02f)
-                {
-                    a = 0f;
-                }
-
-                Color renk = Color.Lerp(new Color(1f, 0.82f, 0.28f, 1f), Color.white, Mathf.Clamp01(yildiz + hale * 0.35f));
-                renk.a = a;
-                px[y * n + x] = renk;
-            }
-        }
-
-        // Küçük yıldız noktaları
-        int[] yx = { 22, 40, 58, 76, 94, 110, 30, 48, 66, 84, 102, 18, 108, 36, 64, 92 };
-        int[] yy = { 102, 112, 96, 110, 100, 90, 78, 86, 74, 84, 70, 52, 48, 34, 24, 30 };
-        for (int s = 0; s < yx.Length; s++)
-        {
-            int cx = yx[s];
-            int cy = yy[s];
-            int cap = 4 + (s % 3);
-            for (int y = cy - cap; y <= cy + cap; y++)
-            {
-                for (int x = cx - cap; x <= cx + cap; x++)
-                {
-                    if (x < 0 || y < 0 || x >= n || y >= n)
-                    {
-                        continue;
-                    }
-
-                    float dx = (x - cx) / (float)cap;
-                    float dy = (y - cy) / (float)cap;
-                    float ax = Mathf.Abs(dx);
-                    float ay = Mathf.Abs(dy);
-                    float arti = Mathf.Clamp01(1f - Mathf.Min(ax, ay) * 4.5f) * Mathf.Clamp01(1f - Mathf.Max(ax, ay));
-                    float d = Mathf.Sqrt(dx * dx + dy * dy);
-                    float a = Mathf.Max(arti, Mathf.Clamp01(1f - d * 2.4f));
-                    if (a <= 0.02f)
-                    {
-                        continue;
-                    }
-
-                    int i = y * n + x;
-                    Color once = px[i];
-                    Color yildiz = new Color(1f, 0.98f, 0.86f, 1f);
-                    Color sonuc = Color.Lerp(once, yildiz, a);
-                    sonuc.a = Mathf.Max(once.a, a);
-                    px[i] = sonuc;
-                }
-            }
-        }
-
-        tex.SetPixels(px);
-        tex.Apply();
-        pariltiSprite = Sprite.Create(tex, new Rect(0f, 0f, n, n), new Vector2(0.5f, 0.5f), n);
-        return pariltiSprite;
+        // Eski HarfPariltisi varsa kaldır (PariltiNabzi kullanılır)
+        HarfPariltisi eskiNabiz = pc.GetComponent<HarfPariltisi>();
+        if (eskiNabiz != null)
+            Object.Destroy(eskiNabiz);
     }
 
     private void SallanmayiAyarla(BalonParca b, bool acik)

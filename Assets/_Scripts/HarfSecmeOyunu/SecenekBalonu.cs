@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 /// <summary>
 /// UI seçenek balonu: obje resmi + tıklanınca doğru/yanlış bildirir.
-/// Obje altında yumuşak beyaz bulut/parıltı; Mask ile balon dışına taşmaz.
+/// Glow yalnız objenin arkasında (beyaz); balon dışı halo yok.
 /// </summary>
 public class SecenekBalonu : MonoBehaviour
 {
@@ -26,13 +26,10 @@ public class SecenekBalonu : MonoBehaviour
     public float objeDikeyKayma = 0.14f;
 
     [Header("Obje altı bulut / parıltı")]
-    [Range(1f, 1.35f)]
-    public float arkaPlanOlcek = 1.2f;
-    // Bir tık daha beyaz / yoğun
-    public Color arkaPlanRengi = new Color(1f, 1f, 1f, 1f);
-
-    // Paylaşılan yumuşak elips sprite (bir kez üretilir)
-    private static Sprite yumusakBulutSprite;
+    [Range(1f, 1.45f)]
+    public float arkaPlanOlcek = 1.32f;
+    // Saf beyaz soft halo — yalnız obje
+    public Color arkaPlanRengi = new Color(1f, 1f, 1f, 0.95f);
 
     private void Awake()
     {
@@ -44,9 +41,9 @@ public class SecenekBalonu : MonoBehaviour
                 objeResmi = child.GetComponent<Image>();
         }
 
-        // Çocukları balon sprite alfa sınırına kırp (dışa taşma yok)
         BalonMaskesiniGarantiEt();
         ObjeArkaPlaniniGarantiEt();
+        BalonDisHaloyuKaldir();
         YerlesimiDuzenle(false);
     }
 
@@ -70,7 +67,6 @@ public class SecenekBalonu : MonoBehaviour
             objeResmi.raycastTarget = false;
         }
 
-        // Sprite atandıktan sonra zarf kutusuna sığdır
         YerlesimiDuzenle(false);
 
         if (buton == null)
@@ -85,8 +81,7 @@ public class SecenekBalonu : MonoBehaviour
     }
 
     /// <summary>
-    /// Balon boyutunu slot ile eşler; objeyi sepet bölgesinde ortalar.
-    /// pozisyonuSifirla=false iken yükseliş animasyonunun Y’sine dokunmaz.
+    /// Balon boyutunu slot ile eşler; objeyi zarf bölgesinde ortalar.
     /// </summary>
     public void YerlesimiDuzenle(bool pozisyonuSifirla = false)
     {
@@ -115,6 +110,7 @@ public class SecenekBalonu : MonoBehaviour
 
         BalonMaskesiniGarantiEt();
         ObjeArkaPlaniniGarantiEt();
+        BalonDisHaloyuKaldir();
 
         if (objeResmi == null) return;
 
@@ -125,7 +121,6 @@ public class SecenekBalonu : MonoBehaviour
         objeRt.localScale = Vector3.one;
         objeRt.localRotation = Quaternion.identity;
 
-        // Zarf içi kutu — sprite preserveAspect ile bu kutuya sığar, taşmaz
         float kutuW = alanW * objeGenislikOrani;
         float kutuH = alanH * objeYukseklikOrani;
         objeRt.sizeDelta = new Vector2(kutuW, kutuH);
@@ -136,7 +131,6 @@ public class SecenekBalonu : MonoBehaviour
         objeResmi.type = Image.Type.Simple;
         objeResmi.raycastTarget = false;
 
-        // Sprite en-boy oranı kutuyu aşmasın: kutu içinde Fit
         if (objeResmi.sprite != null)
         {
             Sprite s = objeResmi.sprite;
@@ -153,7 +147,7 @@ public class SecenekBalonu : MonoBehaviour
             }
         }
 
-        // Bulut: objeden biraz büyük, zarf kutusunu aşmaz
+        // Beyaz halo — objeyi sıkı saran, mask içinde
         if (objeArkaPlan != null)
         {
             RectTransform arkaRt = objeArkaPlan.rectTransform;
@@ -163,23 +157,37 @@ public class SecenekBalonu : MonoBehaviour
             arkaRt.localScale = Vector3.one;
             arkaRt.localRotation = Quaternion.identity;
             arkaRt.anchoredPosition = objePoz;
-            arkaRt.SetSiblingIndex(objeRt.GetSiblingIndex()); // objeden hemen önce
+            arkaRt.SetSiblingIndex(objeRt.GetSiblingIndex());
 
-            float olcek = Mathf.Clamp(arkaPlanOlcek, 1f, 1.35f);
-            float arkaW = Mathf.Min(objeRt.sizeDelta.x * olcek, kutuW * 1.05f);
-            float arkaH = Mathf.Min(objeRt.sizeDelta.y * olcek, kutuH * 1.05f);
-            // Hafif yatay bulut hissi
-            arkaW = Mathf.Min(arkaW * 1.08f, kutuW * 1.08f);
-            arkaRt.sizeDelta = new Vector2(arkaW, arkaH);
+            float olcek = Mathf.Clamp(arkaPlanOlcek, 1.05f, 1.45f);
+            arkaRt.sizeDelta = new Vector2(
+                objeRt.sizeDelta.x * olcek,
+                objeRt.sizeDelta.y * olcek);
 
             objeArkaPlan.color = arkaPlanRengi;
             objeArkaPlan.raycastTarget = false;
             objeArkaPlan.maskable = true;
             objeResmi.maskable = true;
+
+            PariltiNabzi nab = objeArkaPlan.GetComponent<PariltiNabzi>();
+            if (nab == null)
+                nab = objeArkaPlan.gameObject.AddComponent<PariltiNabzi>();
+            nab.TabanOlcegiKaydet(Vector3.one);
         }
     }
 
-    /// <summary>Balon Image alfa maskesi — çocuklar balon dışına çizilmez.</summary>
+    /// <summary>Eski balon dışı halo'yu temizler.</summary>
+    void BalonDisHaloyuKaldir()
+    {
+        Transform slot = transform.parent;
+        if (slot == null)
+            return;
+
+        Transform haloT = slot.Find("BalonDisHalo");
+        if (haloT != null)
+            Destroy(haloT.gameObject);
+    }
+
     void BalonMaskesiniGarantiEt()
     {
         Mask mask = GetComponent<Mask>();
@@ -188,76 +196,32 @@ public class SecenekBalonu : MonoBehaviour
         mask.showMaskGraphic = true;
     }
 
-    /// <summary>ObjeResmi altında yumuşak beyaz bulut Image oluşturur.</summary>
     void ObjeArkaPlaniniGarantiEt()
     {
-        if (objeArkaPlan != null) return;
-
-        Transform mevcut = transform.Find("ObjeArkaPlan");
-        if (mevcut != null)
+        if (objeArkaPlan == null)
         {
-            objeArkaPlan = mevcut.GetComponent<Image>();
-            if (objeArkaPlan != null) return;
+            Transform mevcut = transform.Find("ObjeArkaPlan");
+            if (mevcut != null)
+                objeArkaPlan = mevcut.GetComponent<Image>();
         }
 
-        GameObject go = new GameObject("ObjeArkaPlan", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-        go.transform.SetParent(transform, false);
-        objeArkaPlan = go.GetComponent<Image>();
-        objeArkaPlan.sprite = YumusakBulutSpriteAl();
+        if (objeArkaPlan == null)
+        {
+            GameObject go = new GameObject("ObjeArkaPlan", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            go.transform.SetParent(transform, false);
+            objeArkaPlan = go.GetComponent<Image>();
+
+            if (objeResmi != null)
+                go.transform.SetSiblingIndex(objeResmi.transform.GetSiblingIndex());
+            else
+                go.transform.SetAsFirstSibling();
+        }
+
+        objeArkaPlan.sprite = YumusakPariltiYardimcisi.DaireSpriteAl();
         objeArkaPlan.type = Image.Type.Simple;
         objeArkaPlan.preserveAspect = false;
         objeArkaPlan.color = arkaPlanRengi;
         objeArkaPlan.raycastTarget = false;
-
-        // ObjeResmi'nden önce (altta) dursun
-        if (objeResmi != null)
-            go.transform.SetSiblingIndex(objeResmi.transform.GetSiblingIndex());
-        else
-            go.transform.SetAsFirstSibling();
-    }
-
-    /// <summary>Yumuşak kenarlı beyaz elips (bulut/parıltı).</summary>
-    static Sprite YumusakBulutSpriteAl()
-    {
-        if (yumusakBulutSprite != null) return yumusakBulutSprite;
-
-        const int size = 128;
-        Texture2D tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
-        tex.wrapMode = TextureWrapMode.Clamp;
-        tex.filterMode = FilterMode.Bilinear;
-
-        float cx = (size - 1) * 0.5f;
-        float cy = (size - 1) * 0.5f;
-        float rx = cx * 0.98f;
-        float ry = cy * 0.82f; // yatay bulut
-
-        for (int y = 0; y < size; y++)
-        {
-            for (int x = 0; x < size; x++)
-            {
-                float nx = (x - cx) / rx;
-                float ny = (y - cy) / ry;
-                float d = Mathf.Sqrt(nx * nx + ny * ny);
-                float a = 0f;
-                if (d < 1f)
-                {
-                    // Merkez daha opak/beyaz, kenar hâlâ yumuşak
-                    float t = 1f - d;
-                    a = Mathf.Pow(t, 1.05f);
-                    a = Mathf.Clamp01(a * 1.25f);
-                }
-                tex.SetPixel(x, y, new Color(1f, 1f, 1f, a));
-            }
-        }
-
-        tex.Apply(false, true);
-        yumusakBulutSprite = Sprite.Create(
-            tex,
-            new Rect(0f, 0f, size, size),
-            new Vector2(0.5f, 0.5f),
-            100f);
-        yumusakBulutSprite.name = "ObjeBulutParilti";
-        return yumusakBulutSprite;
     }
 
     public void SoruHarfiniGuncelle(char soruHarfi)
@@ -271,9 +235,10 @@ public class SecenekBalonu : MonoBehaviour
             return;
 
         bool dogruMu = dogruHarf == aktifSoruHarfi;
-        // Doğruysa obje adı sesi için sprite iletilir
         Sprite resim = objeResmi != null ? objeResmi.sprite : null;
-        HarfSecmeYoneticisi.Instance.SecenekSecildi(dogruMu, resim);
+        // Tıklanan balonu ilet — tik/çarpı bunun üzerinde
+        Transform hedef = objeResmi != null ? objeResmi.transform : transform;
+        HarfSecmeYoneticisi.Instance.SecenekSecildi(dogruMu, resim, hedef);
     }
 
     public void TiklamayiAyarla(bool acik)

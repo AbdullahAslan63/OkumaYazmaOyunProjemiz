@@ -51,20 +51,21 @@ Bu dosya **sadece Mustafa Üz** için faz kapılı çalışma planıdır. Kod ya
 
 
 
-## Mevcut durum özeti (2026-11-18)
+## Mevcut durum özeti (2026-11-19)
 
 - `HarfSecmeYoneticisi` + `SecenekBalonu`: Canvas UI prefab, `HarfObjeVerisi` / `SoruSecici` / skor / geri bildirim
 - `AutoDoldur` / isim araması **yok** (kod başlığında da belirtilir)
 - Prefab: `Assets/_Prefabs/HarfSecmeOyunu/SecenekBalonu.prefab` **mevcut**
-- **Parite:** `GunesSayac`, `TekrarOyna` + Mavi buton, `HarfSesiCal` / `ObjeSesiCal` / prompt, `dogruPuan=1`, check/x Bolum2, `SesYoneticisi.GarantiEt`
-- **Köşe karakter:** `OyunKarakteri` sağ alt; doğru mutlu+zıpla, yanlış üzgün (`HarfSecmeSahneKurucu` + yönetici)
+- **Parite:** `GunesSayac` 60 sn (runtime bootstrap), `TekrarOyna` + Mavi, ses kancaları, `dogruPuan=1`
+- **Köşe karakter:** `OyunKarakteri` sağ alt
 - Ana Menü hedefi: `LevelEkranı`
+- **UI/feedback (2026-11-19, kod):** glow yalnız objede; beyaz harf + koyu panel; tik/çarpı tıklanan objede + partikül; `BitisKart` L1 paritesi. **Play teyidi bekleniyor.**
 
 **Eksik / sonraki:**
 
+- Play: “Play’de L2 UI/feedback OK” yaz
 - Faz 4 UI polish + runtime hardcode kaldırma (tema Inspector)
-- Faz 4c: tik/çarpı **balon üstünde** (şu an ekran ortası GeriBildirim)
-- Play smoke: sağ alt karakter tepkileri + `SMOKE_TEST_AVATAR_HARF.md`
+- Play smoke: `SMOKE_TEST_AVATAR_HARF.md`
 - Ses clip final bağlama Paket 6
 
 ---
@@ -76,7 +77,7 @@ Bu dosya **sadece Mustafa Üz** için faz kapılı çalışma planıdır. Kod ya
 ```
 Faz 0–3, 5–7  [kod büyük ölçüde tamam — ses kancaları + TekrarOyna + GunesSayac 2026-11-14]
 Faz 4 / 4b tema Inspector polish          ← sıradaki odak
-Faz 4c balon-üstü tik/çarpı               [ekran ortası ikon var; balon üstü sonra]
+Faz 4c balon-üstü tik/çarpı               [kod: obje üstü + sprite fix — Play teyidi]
 Faz 8 Play + teslim
 ```
 

@@ -157,23 +157,43 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
             slotlar[i] = slot.transform;
         }
 
-        GameObject bitis = Panel(canvasGo.transform, "BitisPaneli", new Color(0.72f, 0.88f, 0.98f, 0.97f));
+        // Tam ekran perde + ortada yumuşak kart
+        GameObject bitis = Panel(canvasGo.transform, "BitisPaneli", new Color(0.08f, 0.12f, 0.22f, 0.78f));
         RectTransform brt = bitis.GetComponent<RectTransform>();
         brt.anchorMin = Vector2.zero;
         brt.anchorMax = Vector2.one;
         brt.offsetMin = Vector2.zero;
         brt.offsetMax = Vector2.zero;
-        TextMeshProUGUI tebrik = Tmp(bitis.transform, "BitisTebrik", "Süper!", 72, new Vector2(0, 160));
-        TextMeshProUGUI bitisSkor = Tmp(bitis.transform, "BitisSkor", "Doğru: 0", 44, new Vector2(0, 20));
+        bitis.GetComponent<Image>().raycastTarget = true;
+
+        GameObject kart = Panel(bitis.transform, "BitisKart", new Color(1f, 1f, 1f, 0.92f));
+        RectTransform kRt = kart.GetComponent<RectTransform>();
+        kRt.anchorMin = kRt.anchorMax = kRt.pivot = new Vector2(0.5f, 0.5f);
+        kRt.anchoredPosition = new Vector2(0f, 20f);
+        kRt.sizeDelta = new Vector2(780f, 620f);
+        Image kartImg = kart.GetComponent<Image>();
+        kartImg.sprite = YumusakPariltiYardimcisi.ElipsSpriteAl();
+        kartImg.color = new Color(1f, 1f, 1f, 0.92f);
+
+        TextMeshProUGUI tebrik = Tmp(kart.transform, "BitisTebrik", "Süper!", 78, new Vector2(0, 210));
+        tebrik.fontStyle = FontStyles.Bold;
+        tebrik.color = new Color(0.25f, 0.55f, 0.95f, 1f);
+        tebrik.outlineWidth = 0.22f;
+        tebrik.outlineColor = new Color32(20, 40, 90, 255);
+
+        TextMeshProUGUI bitisSkor = Tmp(kart.transform, "BitisSkor", "Doğru: 0", 52, new Vector2(0, -40));
+        bitisSkor.fontStyle = FontStyles.Bold;
+        bitisSkor.color = new Color(0.2f, 0.35f, 0.55f, 1f);
+
         Image[] yildizlar = new Image[3];
         Sprite yildizSp = ArtSpriteYukle(YildizYolu);
         for (int i = 0; i < 3; i++)
         {
             GameObject y = new GameObject("Yildiz" + (i + 1), typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-            y.transform.SetParent(bitis.transform, false);
+            y.transform.SetParent(kart.transform, false);
             RectTransform yrt = y.GetComponent<RectTransform>();
-            yrt.anchoredPosition = new Vector2(-120 + i * 120, 90);
-            yrt.sizeDelta = new Vector2(72, 72);
+            yrt.anchoredPosition = new Vector2(-150 + i * 150, 70);
+            yrt.sizeDelta = new Vector2(120, 120);
             Image yi = y.GetComponent<Image>();
             if (yildizSp != null)
             {
@@ -183,19 +203,35 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
             yildizlar[i] = yi;
         }
 
-        // Tekrar Dene (Mavi)
-        Button tekrarBtn = TekrarDeneButonuKur(bitis.transform);
-        // Ana Menü
+        GameObject btnSatir = new GameObject("ButonSatiri", typeof(RectTransform));
+        btnSatir.transform.SetParent(kart.transform, false);
+        RectTransform bsRt = btnSatir.GetComponent<RectTransform>();
+        bsRt.anchorMin = bsRt.anchorMax = bsRt.pivot = new Vector2(0.5f, 0.5f);
+        bsRt.anchoredPosition = new Vector2(0f, -180f);
+        bsRt.sizeDelta = new Vector2(700f, 130f);
+
+        Button tekrarBtn = TekrarDeneButonuKur(btnSatir.transform);
+        RectTransform tekrarRt = tekrarBtn.GetComponent<RectTransform>();
+        tekrarRt.anchoredPosition = new Vector2(-170f, 0f);
+        tekrarRt.sizeDelta = new Vector2(280f, 120f);
+
         GameObject anaGo = new GameObject("AnaMenuButon", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
-        anaGo.transform.SetParent(bitis.transform, false);
+        anaGo.transform.SetParent(btnSatir.transform, false);
         RectTransform art = anaGo.GetComponent<RectTransform>();
-        art.anchoredPosition = new Vector2(0, -200);
-        art.sizeDelta = new Vector2(320, 90);
-        anaGo.GetComponent<Image>().color = new Color(0.98f, 0.55f, 0.25f);
+        art.anchorMin = art.anchorMax = art.pivot = new Vector2(0.5f, 0.5f);
+        art.anchoredPosition = new Vector2(170f, 0f);
+        art.sizeDelta = new Vector2(280f, 120f);
+        Image anaImg = anaGo.GetComponent<Image>();
+        anaImg.sprite = YumusakPariltiYardimcisi.ElipsSpriteAl();
+        anaImg.color = new Color(0.35f, 0.6f, 0.95f, 1f);
         Button anaBtn = anaGo.GetComponent<Button>();
+        anaBtn.targetGraphic = anaImg;
         anaGo.AddComponent<ButonTiklamaSesi>();
-        TextMeshProUGUI anaText = Tmp(anaGo.transform, "Text", "Ana Menü", 40, Vector2.zero);
+        TextMeshProUGUI anaText = Tmp(anaGo.transform, "Text", "Ana Menü", 42, Vector2.zero);
+        anaText.fontStyle = FontStyles.Bold;
         anaText.color = Color.white;
+        anaText.outlineWidth = 0.2f;
+        anaText.outlineColor = new Color32(15, 40, 90, 255);
         anaBtn.onClick.AddListener(yonetici.AnaMenuyeDon);
         bitis.SetActive(false);
 
@@ -219,11 +255,13 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
         yonetici.anaMenuSahneAdi = "LevelEkranı";
     }
 
-    /// <summary>Sahne kısmen kurulu olsa bile güneş / tekrar / skor / ikon tamamlar.</summary>
+    /// <summary>Sahne kısmen kurulu olsa bile güneş / bitiş / feedback tamamlar.</summary>
     void PariteyiGarantiEt()
     {
         if (yonetici.skorYoneticisi != null)
             yonetici.skorYoneticisi.dogruPuan = 1;
+
+        yonetici.oyunSuresi = 60f;
 
         Canvas canvas = FindAnyObjectByType<Canvas>();
         if (canvas == null)
@@ -231,7 +269,7 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
 
         Transform canvasT = canvas.transform;
 
-        // Güneş sayacı
+        // Güneş sayacı (15×4s = 60 sn)
         if (yonetici.gunesSayac == null)
         {
             Transform mevcut = canvasT.Find("GunesSayac");
@@ -241,24 +279,25 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
                 yonetici.gunesSayac = GunesSayaciniKur(canvasT);
         }
 
-        // Süre yazısı: güneş varken Doğru sayacı
+        if (yonetici.gunesSayac != null)
+            yonetici.gunesSayac.isinSuresi = 4f;
+
+        // Süre yazısı → sol üst Doğru sayacı (mm:ss yok)
         if (yonetici.sureYazisi != null && yonetici.gunesSayac != null)
         {
             yonetici.sureYazisi.text = "Doğru: 0";
             RectTransform srt = yonetici.sureYazisi.rectTransform;
-            srt.anchorMin = srt.anchorMax = srt.pivot = new Vector2(0.5f, 1f);
-            srt.anchoredPosition = new Vector2(-80f, -40f);
+            srt.anchorMin = srt.anchorMax = srt.pivot = new Vector2(0f, 1f);
+            srt.anchoredPosition = new Vector2(28f, -24f);
+            srt.sizeDelta = new Vector2(280f, 64f);
+            yonetici.sureYazisi.fontSize = 40f;
+            yonetici.sureYazisi.fontStyle = FontStyles.Bold;
+            yonetici.sureYazisi.color = Color.white;
+            yonetici.sureYazisi.alignment = TextAlignmentOptions.Left;
         }
 
-        // Bitiş paneli içinde Tekrar Dene
-        if (yonetici.bitisPaneli != null && yonetici.tekrarDeneButonu == null)
-        {
-            Transform t = yonetici.bitisPaneli.transform.Find("TekrarDene");
-            if (t != null)
-                yonetici.tekrarDeneButonu = t.GetComponent<Button>();
-            else
-                yonetici.tekrarDeneButonu = TekrarDeneButonuKur(yonetici.bitisPaneli.transform);
-        }
+        // Bitiş paneli L1 kart yapısına zorla
+        BitisPaneliniPariteKur(canvasT);
 
         if (yonetici.tekrarDeneButonu != null &&
             yonetici.tekrarDeneButonu.GetComponent<ButonTiklamaSesi>() == null)
@@ -266,19 +305,195 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
             yonetici.tekrarDeneButonu.gameObject.AddComponent<ButonTiklamaSesi>();
         }
 
-        // Geri bildirim sprite ikonları (Multiple spriteMode için LoadAll)
+        // Geri bildirim sprite’ları — sahne GUID kırık olsa bile Bolum2 path
         if (yonetici.geriBildirim != null)
         {
+            if (yonetici.geriBildirim.dogruGorsel == null)
+            {
+                Transform t = canvasT.Find("DogruGeriBildirim");
+                if (t != null) yonetici.geriBildirim.dogruGorsel = t.gameObject;
+            }
+
+            if (yonetici.geriBildirim.yanlisGorsel == null)
+            {
+                Transform t = canvasT.Find("YanlisGeriBildirim");
+                if (t != null) yonetici.geriBildirim.yanlisGorsel = t.gameObject;
+            }
+
             yonetici.geriBildirim.dogruGorsel = FeedbackIkonunuGarantiEt(
-                canvasT, yonetici.geriBildirim.dogruGorsel, "DogruFB", DogruIkonYolu);
+                canvasT, yonetici.geriBildirim.dogruGorsel, "DogruGeriBildirim", DogruIkonYolu);
             yonetici.geriBildirim.yanlisGorsel = FeedbackIkonunuGarantiEt(
-                canvasT, yonetici.geriBildirim.yanlisGorsel, "YanlisFB", YanlisIkonYolu);
+                canvasT, yonetici.geriBildirim.yanlisGorsel, "YanlisGeriBildirim", YanlisIkonYolu);
+            yonetici.geriBildirim.gosterimSuresi = 1.5f;
+
+            Transform tikParent = yonetici.geriBildirim.dogruGorsel != null
+                ? yonetici.geriBildirim.dogruGorsel.transform
+                : yonetici.geriBildirim.transform;
+            OrtamPariltilari.DogruBurstGarantiEt(tikParent, yonetici.geriBildirim);
         }
+    }
+
+    /// <summary>Eski açık mavi bitiş yerine L1 tarzı BitisKart kurar.</summary>
+    void BitisPaneliniPariteKur(Transform canvasT)
+    {
+        GameObject panel = yonetici.bitisPaneli;
+        if (panel == null)
+        {
+            Transform t = canvasT.Find("BitisPaneli");
+            if (t != null) panel = t.gameObject;
+        }
+
+        // Kart yoksa yeniden kur
+        bool kartYok = panel == null || panel.transform.Find("BitisKart") == null;
+        if (!kartYok)
+        {
+            // Referansları karttan bağla
+            Transform kart = panel.transform.Find("BitisKart");
+            BitisReferanslariniBagla(panel, kart);
+            return;
+        }
+
+        if (panel == null)
+        {
+            panel = new GameObject("BitisPaneli", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            panel.transform.SetParent(canvasT, false);
+        }
+
+        // Eski çocukları temizle
+        for (int i = panel.transform.childCount - 1; i >= 0; i--)
+            Destroy(panel.transform.GetChild(i).gameObject);
+
+        RectTransform pRt = panel.GetComponent<RectTransform>();
+        pRt.anchorMin = Vector2.zero;
+        pRt.anchorMax = Vector2.one;
+        pRt.offsetMin = Vector2.zero;
+        pRt.offsetMax = Vector2.zero;
+        Image perde = panel.GetComponent<Image>();
+        if (perde == null) perde = panel.AddComponent<Image>();
+        perde.color = new Color(0.08f, 0.12f, 0.22f, 0.78f);
+        perde.raycastTarget = true;
+
+        GameObject kartGo = new GameObject("BitisKart", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+        kartGo.transform.SetParent(panel.transform, false);
+        RectTransform kRt = kartGo.GetComponent<RectTransform>();
+        kRt.anchorMin = kRt.anchorMax = kRt.pivot = new Vector2(0.5f, 0.5f);
+        kRt.anchoredPosition = new Vector2(0f, 20f);
+        kRt.sizeDelta = new Vector2(780f, 620f);
+        Image kartImg = kartGo.GetComponent<Image>();
+        kartImg.sprite = YumusakPariltiYardimcisi.ElipsSpriteAl();
+        kartImg.color = new Color(1f, 1f, 1f, 0.92f);
+        kartImg.raycastTarget = false;
+
+        TextMeshProUGUI tebrik = Tmp(kartGo.transform, "BitisTebrik", "Süper!", 78, new Vector2(0, 210));
+        tebrik.fontStyle = FontStyles.Bold;
+        tebrik.color = new Color(0.25f, 0.55f, 0.95f, 1f);
+        tebrik.outlineWidth = 0.22f;
+        tebrik.outlineColor = new Color32(20, 40, 90, 255);
+
+        TextMeshProUGUI bitisSkor = Tmp(kartGo.transform, "BitisSkor", "Doğru: 0", 52, new Vector2(0, -40));
+        bitisSkor.fontStyle = FontStyles.Bold;
+        bitisSkor.color = new Color(0.2f, 0.35f, 0.55f, 1f);
+
+        Image[] yildizlar = new Image[3];
+        Sprite yildizSp = ArtSpriteYukle(YildizYolu);
+        for (int i = 0; i < 3; i++)
+        {
+            GameObject y = new GameObject("Yildiz" + (i + 1), typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            y.transform.SetParent(kartGo.transform, false);
+            RectTransform yrt = y.GetComponent<RectTransform>();
+            yrt.anchorMin = yrt.anchorMax = yrt.pivot = new Vector2(0.5f, 0.5f);
+            yrt.anchoredPosition = new Vector2(-150 + i * 150, 70);
+            yrt.sizeDelta = new Vector2(120, 120);
+            Image yi = y.GetComponent<Image>();
+            if (yildizSp != null)
+            {
+                yi.sprite = yildizSp;
+                yi.preserveAspect = true;
+            }
+            yi.color = new Color(0.55f, 0.55f, 0.6f, 0.5f);
+            yildizlar[i] = yi;
+        }
+
+        GameObject btnSatir = new GameObject("ButonSatiri", typeof(RectTransform));
+        btnSatir.transform.SetParent(kartGo.transform, false);
+        RectTransform bsRt = btnSatir.GetComponent<RectTransform>();
+        bsRt.anchorMin = bsRt.anchorMax = bsRt.pivot = new Vector2(0.5f, 0.5f);
+        bsRt.anchoredPosition = new Vector2(0f, -180f);
+        bsRt.sizeDelta = new Vector2(700f, 130f);
+
+        Button tekrarBtn = TekrarDeneButonuKur(btnSatir.transform);
+        RectTransform tekrarRt = tekrarBtn.GetComponent<RectTransform>();
+        tekrarRt.anchoredPosition = new Vector2(-170f, 0f);
+        tekrarRt.sizeDelta = new Vector2(280f, 120f);
+
+        GameObject anaGo = new GameObject("AnaMenuButon", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+        anaGo.transform.SetParent(btnSatir.transform, false);
+        RectTransform art = anaGo.GetComponent<RectTransform>();
+        art.anchorMin = art.anchorMax = art.pivot = new Vector2(0.5f, 0.5f);
+        art.anchoredPosition = new Vector2(170f, 0f);
+        art.sizeDelta = new Vector2(280f, 120f);
+        Image anaImg = anaGo.GetComponent<Image>();
+        anaImg.sprite = YumusakPariltiYardimcisi.ElipsSpriteAl();
+        anaImg.color = new Color(0.35f, 0.6f, 0.95f, 1f);
+        Button anaBtn = anaGo.GetComponent<Button>();
+        anaBtn.targetGraphic = anaImg;
+        if (anaGo.GetComponent<ButonTiklamaSesi>() == null)
+            anaGo.AddComponent<ButonTiklamaSesi>();
+        TextMeshProUGUI anaText = Tmp(anaGo.transform, "Text", "Ana Menü", 42, Vector2.zero);
+        anaText.fontStyle = FontStyles.Bold;
+        anaText.color = Color.white;
+        anaText.outlineWidth = 0.2f;
+        anaText.outlineColor = new Color32(15, 40, 90, 255);
+        anaBtn.onClick.RemoveAllListeners();
+        anaBtn.onClick.AddListener(yonetici.AnaMenuyeDon);
+
+        panel.SetActive(false);
+        yonetici.bitisPaneli = panel;
+        yonetici.bitisTebrikYazisi = tebrik;
+        yonetici.bitisSkorYazisi = bitisSkor;
+        yonetici.bitisYildizlari = yildizlar;
+        yonetici.tekrarDeneButonu = tekrarBtn;
+        yonetici.anaMenuButonu = anaBtn;
+        yonetici.anaMenuSahneAdi = "LevelEkranı";
+    }
+
+    void BitisReferanslariniBagla(GameObject panel, Transform kart)
+    {
+        yonetici.bitisPaneli = panel;
+        Transform tebrikT = kart.Find("BitisTebrik");
+        if (tebrikT != null) yonetici.bitisTebrikYazisi = tebrikT.GetComponent<TextMeshProUGUI>();
+        Transform skorT = kart.Find("BitisSkor");
+        if (skorT != null) yonetici.bitisSkorYazisi = skorT.GetComponent<TextMeshProUGUI>();
+
+        Image[] yildizlar = new Image[3];
+        for (int i = 0; i < 3; i++)
+        {
+            Transform yt = kart.Find("Yildiz" + (i + 1));
+            if (yt != null) yildizlar[i] = yt.GetComponent<Image>();
+        }
+        yonetici.bitisYildizlari = yildizlar;
+
+        Transform btnSatir = kart.Find("ButonSatiri");
+        if (btnSatir != null)
+        {
+            Transform tek = btnSatir.Find("TekrarDene");
+            if (tek != null) yonetici.tekrarDeneButonu = tek.GetComponent<Button>();
+            Transform ana = btnSatir.Find("AnaMenuButon");
+            if (ana != null) yonetici.anaMenuButonu = ana.GetComponent<Button>();
+        }
+
+        panel.SetActive(false);
     }
 
     // Mevcut FB Image'a sprite zorla ata; yoksa oluştur
     static GameObject FeedbackIkonunuGarantiEt(Transform canvasT, GameObject mevcut, string ad, string yol)
     {
+        if (mevcut == null)
+        {
+            Transform t = canvasT.Find(ad);
+            if (t != null) mevcut = t.gameObject;
+        }
+
         Sprite sp = ArtSpriteYukle(yol);
         Image img = mevcut != null ? mevcut.GetComponent<Image>() : null;
         if (mevcut != null && img != null)
@@ -287,8 +502,22 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
             {
                 img.sprite = sp;
                 img.preserveAspect = true;
+                img.type = Image.Type.Simple;
                 img.color = Color.white;
+                img.enabled = true;
             }
+            else
+            {
+                // Sprite yoksa renkli kare (beyaz boş kutu olmasın)
+                img.sprite = null;
+                img.color = ad.Contains("Yanlis") || ad.Contains("yanlis")
+                    ? new Color(0.9f, 0.2f, 0.2f, 0.95f)
+                    : new Color(0.2f, 0.85f, 0.35f, 0.95f);
+            }
+
+            RectTransform rt = mevcut.GetComponent<RectTransform>();
+            if (rt != null)
+                rt.sizeDelta = new Vector2(140f, 140f);
 
             mevcut.SetActive(false);
             return mevcut;

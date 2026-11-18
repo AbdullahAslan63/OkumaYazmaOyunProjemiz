@@ -191,6 +191,9 @@ public class SepetOyunYoneticisi : MonoBehaviour
             bitisPaneli.SetActive(false);
         }
 
+        // Oyun HUD'unu geri aç
+        OyunHudunuAyarla(true);
+
         if (skorYoneticisi != null)
         {
             skorYoneticisi.SkoruSifirla();
@@ -495,6 +498,26 @@ public class SepetOyunYoneticisi : MonoBehaviour
 
             // Başlangıç konumunu şimdi kaydet (Start'tan önce de güvenli)
             suruk.BaslangiciKaydet();
+
+            // Beyaz soft halo — sprite'ı tam çevreler
+            int objeOrder = cizici != null ? cizici.sortingOrder : 5;
+            YumusakPariltiYardimcisi.ObjeHalosuEkle(cizici, "ObjePariltisi", 1.32f, Color.white);
+            // Obje çevresinde hafif sparkle
+            float sparkleR = 0.45f;
+            if (cizici != null && cizici.sprite != null)
+            {
+                Bounds sb = cizici.sprite.bounds;
+                sparkleR = Mathf.Max(sb.size.x, sb.size.y) * 0.55f;
+            }
+
+            OrtamPariltilari.GarantiEt(
+                go.transform,
+                "ObjeOrtamPariltilari",
+                sparkleR,
+                2.5f,
+                objeOrder + 1,
+                false);
+
             // Listeye ekle
             aktifObjeler.Add(go);
         }
@@ -700,24 +723,26 @@ public class SepetOyunYoneticisi : MonoBehaviour
     // Yıldızlar + tebrik yazısı + Tekrar Dene paneli
     private void BitisPaneliniGoster()
     {
+        // Sol üst puan / güneş HUD bitişte gizlensin
+        OyunHudunuAyarla(false);
+
         if (bitisPaneli != null)
         {
             bitisPaneli.SetActive(true);
+            bitisPaneli.transform.SetAsLastSibling();
         }
 
         int puan = skorYoneticisi != null ? skorYoneticisi.skor : 0;
 
-        // Yıldızların üstünde eğimli tebrik metni
+        // Kısa, çocuk dostu tebrik (düz metin)
         if (bitisTebrikYazisi != null)
         {
-            bitisTebrikYazisi.text = "Tebrikler " + puan + " tane doğru eşleştirdiniz.";
+            bitisTebrikYazisi.text = TebrikMetni(puan);
             bitisTebrikYazisi.gameObject.SetActive(true);
-            // Yay eğrisini yeni metne göre uygula
+            // Eski eğri yazı bileşeni varsa kapat
             EgimliYazi egim = bitisTebrikYazisi.GetComponent<EgimliYazi>();
             if (egim != null)
-            {
-                egim.Yenile();
-            }
+                egim.enabled = false;
         }
 
         // Ortak sözleşme: Doğru: N
@@ -752,6 +777,31 @@ public class SepetOyunYoneticisi : MonoBehaviour
             bitisYildizlari[i].color = i < sariYildiz ? sari : soluk;
             bitisYildizlari[i].gameObject.SetActive(true);
         }
+    }
+
+    /// <summary>Yıldıza göre kısa tebrik.</summary>
+    private static string TebrikMetni(int puan)
+    {
+        int y = YildizHesaplayici.Hesapla(puan);
+        if (y >= 3) return "Tebrikler!";
+        if (y == 2) return "Aferin!";
+        return "Güzel!";
+    }
+
+    /// <summary>Puan barı / güneş gibi oyun HUD'unu aç-kapa.</summary>
+    private void OyunHudunuAyarla(bool acik)
+    {
+        if (skorYazisi != null)
+        {
+            Transform bar = skorYazisi.transform.parent;
+            if (bar != null && bar.name == "PuanBari")
+                bar.gameObject.SetActive(acik);
+            else
+                skorYazisi.gameObject.SetActive(acik);
+        }
+
+        if (gunesSayac != null)
+            gunesSayac.gameObject.SetActive(acik);
     }
 
     // Canlı objeleri yok et

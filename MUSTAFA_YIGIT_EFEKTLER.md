@@ -39,11 +39,13 @@ Bu dosya **sadece Mustafa Yiğit Avan** için faz kapılı çalışma planıdır
 
 ---
 
-## Mevcut durum özeti (2026-10-17)
+## Mevcut durum özeti (2026-11-19)
 
 Kod fazları (1–8) + Unity clip/partikül + MO2 ses akışı tamam. **SepetOyunu ses kancaları da bağlandı** (2026-11-14 parite).
 
-**Sıradaki odak:** Play doğrulama (`SMOKE_TEST_AVATAR_HARF.md`). Müzik/SFX gelince menüden yeniden bağla; final clip Paket 6.
+**Glow / ambient polish (2026-11-19, kod):** `YumusakPariltiYardimcisi` + `OrtamPariltilari` + `PariltiNabzi` (`Ortak/`). L1: per-obje halo, ışık konisi, ambient sparkle, tik burst runtime. L2: balon iç/dış halo, `buyukHarf` halo+sparkle. `OyunKarakteri` soft halo + sparkle. **Play teyidi bekleniyor** — “Play’de glow/partikül OK” yazılınca kutular işaretlenir.
+
+**Sıradaki odak:** Play doğrulama (glow + `SMOKE_TEST_AVATAR_HARF.md`). Müzik/SFX gelince menüden yeniden bağla; final clip Paket 6.
 
 | Script / asset | Durum |
 | -------------- | ----- |

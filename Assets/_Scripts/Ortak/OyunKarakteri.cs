@@ -67,6 +67,8 @@ public class OyunKarakteri : MonoBehaviour
 
         mevcut.GorunumuYenile();
         mevcut.NormalPoz();
+        // Soft halo + ambient sparkle (her iki mini oyun)
+        mevcut.PariltiyiGarantiEt();
         return mevcut;
     }
 
@@ -83,6 +85,7 @@ public class OyunKarakteri : MonoBehaviour
         // Child'lar yoksa kur
         HiyerarsiKur();
         SablonuUygula();
+        PariltiyiGarantiEt();
     }
 
     private void OnDestroy()
@@ -126,6 +129,7 @@ public class OyunKarakteri : MonoBehaviour
         float olcek = sablonH > 0.001f ? hedefWorldH / sablonH : 0.2f;
         transform.localScale = new Vector3(olcek, olcek, 1f);
         SortingAyarla();
+        PariltiyiGarantiEt();
     }
 
     /// <summary>Seçime göre sprite/renk/aksesuar yeniler.</summary>
@@ -279,6 +283,46 @@ public class OyunKarakteri : MonoBehaviour
         {
             gorunum.aksesuarRenderer.sortingOrder = sortingOrderAksesuar;
         }
+    }
+
+    /// <summary>Gövde arkasına soft halo + hafif ambient sparkle.</summary>
+    public void PariltiyiGarantiEt()
+    {
+        HiyerarsiKur();
+
+        // Halo gövde child'ı olarak (ölçek karakterle birlikte)
+        Transform govdeT = transform.Find("Govde");
+        Transform haloParent = govdeT != null ? govdeT : transform;
+        // Gövde sprite varsa onu saran beyaz halo; yoksa sabit ölçek
+        SpriteRenderer govdeSr = gorunum != null ? gorunum.govdeRenderer : null;
+        if (govdeSr != null && govdeSr.sprite != null)
+        {
+            YumusakPariltiYardimcisi.ObjeHalosuEkle(
+                govdeSr,
+                "KarakterPariltisi",
+                1.35f,
+                Color.white);
+        }
+        else
+        {
+            YumusakPariltiYardimcisi.WorldHaloEkle(
+                haloParent,
+                "KarakterPariltisi",
+                5.2f,
+                sortingOrderGovde - 1,
+                Color.white,
+                true,
+                false);
+        }
+
+        // Sparkle kökte — karakteri boğmayan düşük rate
+        OrtamPariltilari.GarantiEt(
+            transform,
+            "KarakterOrtamPariltilari",
+            0.7f,
+            3f,
+            sortingOrderAksesuar + 1,
+            false);
     }
 
     /// <summary>Şablon boşsa Editor'da Karakterler art'ından doldurur.</summary>

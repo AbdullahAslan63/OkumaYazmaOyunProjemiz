@@ -64,6 +64,9 @@ public class HarfSecmeYoneticisi : MonoBehaviour
     // İlk tur / TekrarOyna sonrası güneşi Baslat (yoksa yalnızca DevamEt)
     private bool gunesYenidenBaslat = true;
 
+    // Son tıklanan obje — tik/çarpı konumu
+    private Transform sonTiklananHedef;
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -72,6 +75,10 @@ public class HarfSecmeYoneticisi : MonoBehaviour
             return;
         }
         Instance = this;
+
+        // Sahne kurucu yoksa ekle (güneş / bitiş / feedback paritesi)
+        if (GetComponent<HarfSecmeSahneKurucu>() == null)
+            gameObject.AddComponent<HarfSecmeSahneKurucu>();
     }
 
     void OnDestroy()
@@ -94,7 +101,21 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         if (bitisPaneli != null)
             bitisPaneli.SetActive(false);
 
-        // Tekrar Dene / Ana Menü dinleyicileri
+        // Parite (Awake) sonrası butonları bağla
+        ButonDinleyicileriniBagla();
+
+        if (gunesSayac != null)
+            gunesSayac.SureBitti = OyunuBitir;
+
+        SoruUiHazirla();
+        SlotlariEkranaGoreAyarla();
+        SureYazisiniGuncelle();
+        // Prompt → ilk soru → balonlar → sonra süre
+        StartCoroutine(OyunBaslat());
+    }
+
+    void ButonDinleyicileriniBagla()
+    {
         if (tekrarDeneButonu != null)
         {
             tekrarDeneButonu.onClick.RemoveListener(TekrarOyna);
@@ -106,18 +127,6 @@ public class HarfSecmeYoneticisi : MonoBehaviour
             anaMenuButonu.onClick.RemoveListener(AnaMenuyeDon);
             anaMenuButonu.onClick.AddListener(AnaMenuyeDon);
         }
-
-        // Güneş varsa dijital mm:ss gizlenir; skor satırı kalır
-        if (gunesSayac != null && sureYazisi != null)
-        {
-            // Yalnızca Doğru sayacı gösterilecek
-        }
-
-        SoruUiHazirla();
-        SlotlariEkranaGoreAyarla();
-        SureYazisiniGuncelle();
-        // Prompt → ilk soru → balonlar → sonra süre
-        StartCoroutine(OyunBaslat());
     }
 
     /// <summary>Önce Hangisinin prompt, sonra ilk harf; süre balonlar gelince başlar.</summary>
@@ -174,15 +183,19 @@ public class HarfSecmeYoneticisi : MonoBehaviour
                 }
             }
 
-            // Yerleşim: süre üstte, başlık, harf — panel üzerinde
+            // Skor satırı — güneş varken sol üst "Doğru: N"
             if (sureYazisi != null)
             {
                 RectTransform srt = sureYazisi.rectTransform;
-                srt.anchoredPosition = new Vector2(0f, 520f);
-                srt.sizeDelta = new Vector2(900f, 56f);
+                srt.anchorMin = srt.anchorMax = srt.pivot = new Vector2(0f, 1f);
+                srt.anchoredPosition = new Vector2(28f, -24f);
+                srt.sizeDelta = new Vector2(280f, 64f);
                 sureYazisi.fontSize = 40f;
-                sureYazisi.color = new Color(1f, 1f, 1f, 1f);
-                sureYazisi.outlineWidth = 0f;
+                sureYazisi.fontStyle = FontStyles.Bold;
+                sureYazisi.color = Color.white;
+                sureYazisi.alignment = TextAlignmentOptions.Left;
+                sureYazisi.outlineWidth = 0.2f;
+                sureYazisi.outlineColor = new Color32(20, 30, 60, 255);
                 FontuUygula(sureYazisi);
             }
 
@@ -191,13 +204,14 @@ public class HarfSecmeYoneticisi : MonoBehaviour
                 RectTransform rt = soruBaslikYazisi.rectTransform;
                 rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
                 rt.anchoredPosition = new Vector2(0f, 455f);
-                rt.sizeDelta = new Vector2(1000f, 70f);
+                rt.sizeDelta = new Vector2(900f, 70f);
                 soruBaslikYazisi.text = soruBaslikMetni;
                 soruBaslikYazisi.alignment = TextAlignmentOptions.Center;
-                soruBaslikYazisi.fontSize = 44f;
-                soruBaslikYazisi.fontStyle = FontStyles.Normal;
+                soruBaslikYazisi.fontSize = 48f;
+                soruBaslikYazisi.fontStyle = FontStyles.Bold;
                 soruBaslikYazisi.color = Color.white;
-                soruBaslikYazisi.outlineWidth = 0f; // bozuk atlas outline’ı bozuyor
+                soruBaslikYazisi.outlineWidth = 0.18f;
+                soruBaslikYazisi.outlineColor = new Color32(10, 20, 50, 255);
                 FontuUygula(soruBaslikYazisi);
                 soruBaslikYazisi.transform.SetAsLastSibling();
             }
@@ -206,11 +220,16 @@ public class HarfSecmeYoneticisi : MonoBehaviour
             {
                 RectTransform brt = buyukHarf.rectTransform;
                 brt.anchorMin = brt.anchorMax = brt.pivot = new Vector2(0.5f, 0.5f);
-                brt.anchoredPosition = new Vector2(0f, 355f);
-                brt.sizeDelta = new Vector2(400f, 200f);
+                brt.anchoredPosition = new Vector2(0f, 340f);
+                brt.sizeDelta = new Vector2(420f, 220f);
                 buyukHarf.alignment = TextAlignmentOptions.Center;
-                buyukHarf.outlineWidth = 0f;
+                buyukHarf.fontStyle = FontStyles.Bold;
+                // Beyaz harf + koyu panel = yüksek kontrast
+                buyukHarf.color = Color.white;
+                buyukHarf.outlineWidth = 0.22f;
+                buyukHarf.outlineColor = new Color32(15, 25, 70, 255);
                 FontuUygula(buyukHarf);
+                BuyukHarfPariltisiniGarantiEt();
                 buyukHarf.transform.SetAsLastSibling();
             }
         }
@@ -219,6 +238,56 @@ public class HarfSecmeYoneticisi : MonoBehaviour
             Debug.LogWarning("SoruUiHazirla atlandı (font): " + e.Message);
             soruFontu = null;
         }
+    }
+
+    /// <summary>Harf arkasına koyu daire (kontrast) + hafif sparkle.</summary>
+    void BuyukHarfPariltisiniGarantiEt()
+    {
+        if (buyukHarf == null)
+            return;
+
+        Transform parent = buyukHarf.transform.parent;
+        if (parent == null)
+            return;
+
+        RectTransform brt = buyukHarf.rectTransform;
+        Vector2 pos = brt.anchoredPosition;
+
+        // Koyu daire — sarı/beyaz harfi yıkayan açık halo yok
+        Image halo = YumusakPariltiYardimcisi.UiHaloEkle(
+            parent,
+            "BuyukHarfPariltisi",
+            new Vector2(240f, 240f),
+            pos,
+            new Color(0.08f, 0.12f, 0.28f, 0.85f),
+            false,
+            false,
+            buyukHarf.transform.GetSiblingIndex());
+
+        if (halo != null)
+        {
+            halo.transform.SetSiblingIndex(Mathf.Max(0, buyukHarf.transform.GetSiblingIndex()));
+            halo.maskable = false;
+        }
+
+        Transform sparkleParent = parent.Find("BuyukHarfOrtam");
+        if (sparkleParent == null)
+        {
+            GameObject spGo = new GameObject("BuyukHarfOrtam", typeof(RectTransform));
+            spGo.transform.SetParent(parent, false);
+            sparkleParent = spGo.transform;
+        }
+
+        RectTransform spRt = sparkleParent as RectTransform;
+        if (spRt != null)
+        {
+            spRt.anchorMin = spRt.anchorMax = spRt.pivot = new Vector2(0.5f, 0.5f);
+            spRt.anchoredPosition = pos;
+            spRt.sizeDelta = Vector2.zero;
+        }
+
+        sparkleParent.SetSiblingIndex(buyukHarf.transform.GetSiblingIndex() + 1);
+        OrtamPariltilari.GarantiEt(sparkleParent, "OrtamPariltilari", 1.0f, 3.5f, 25, true);
     }
 
     /// <summary>Soru metninin okunması için yarı saydam koyu panel.</summary>
@@ -243,11 +312,14 @@ public class HarfSecmeYoneticisi : MonoBehaviour
 
         RectTransform prt = panelGo.GetComponent<RectTransform>();
         prt.anchorMin = prt.anchorMax = prt.pivot = new Vector2(0.5f, 0.5f);
-        prt.anchoredPosition = new Vector2(0f, 420f);
-        prt.sizeDelta = new Vector2(720f, 260f);
+        prt.anchoredPosition = new Vector2(0f, 400f);
+        prt.sizeDelta = new Vector2(760f, 300f);
 
         Image img = panelGo.GetComponent<Image>();
-        img.color = new Color(0.08f, 0.12f, 0.22f, 0.72f);
+        // Soft koyu kart — çocuk dostu, yüksek kontrast
+        img.sprite = YumusakPariltiYardimcisi.ElipsSpriteAl();
+        img.type = Image.Type.Simple;
+        img.color = new Color(0.06f, 0.1f, 0.22f, 0.92f);
         img.raycastTarget = false;
     }
 
@@ -382,6 +454,8 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         if (bitisPaneli != null)
             bitisPaneli.SetActive(false);
 
+        OyunHudunuAyarla(true);
+
         oyunBitti = false;
         islemYapiliyor = false;
         sureAkiyor = false;
@@ -393,6 +467,7 @@ public class HarfSecmeYoneticisi : MonoBehaviour
 
         if (gunesSayac != null)
         {
+            gunesSayac.gameObject.SetActive(true);
             gunesSayac.SureBitti = OyunuBitir;
             gunesSayac.Durdur();
         }
@@ -429,13 +504,15 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         if (buyukHarf != null)
         {
             buyukHarf.text = aktifHarf.harf.ToString();
-            buyukHarf.color = new Color(1f, 0.92f, 0.2f, 1f);
-            buyukHarf.fontSize = 160f;
-            buyukHarf.fontStyle = FontStyles.Normal;
+            buyukHarf.color = Color.white;
+            buyukHarf.fontSize = 168f;
+            buyukHarf.fontStyle = FontStyles.Bold;
             buyukHarf.enableAutoSizing = false;
-            buyukHarf.outlineWidth = 0f;
+            buyukHarf.outlineWidth = 0.22f;
+            buyukHarf.outlineColor = new Color32(15, 25, 70, 255);
             buyukHarf.alignment = TextAlignmentOptions.Center;
             FontuUygula(buyukHarf);
+            BuyukHarfPariltisiniGarantiEt();
         }
 
         if (soruBaslikYazisi != null)
@@ -448,11 +525,12 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         StartCoroutine(SecenekleriYerlestir());
     }
 
-    /// <summary>Seçenek tıklanınca çağrılır; doğruysa obje sprite'ı ses için iletilir.</summary>
-    public void SecenekSecildi(bool dogruMu, Sprite secilenResim = null)
+    /// <summary>Seçenek tıklanınca; hedef = tik/çarpı konumu (obje).</summary>
+    public void SecenekSecildi(bool dogruMu, Sprite secilenResim = null, Transform hedef = null)
     {
         if (oyunBitti || islemYapiliyor || kalanSure <= 0f) return;
 
+        sonTiklananHedef = hedef;
         if (dogruMu)
             StartCoroutine(DogruCevapSureci(secilenResim));
         else
@@ -634,7 +712,7 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         if (geriBildirim != null)
         {
             geriSure = geriBildirim.gosterimSuresi;
-            geriBildirim.DogruGoster();
+            geriBildirim.DogruGoster(sonTiklananHedef);
             geriBildirim.SkorYazisiniGuncelle(dogruSayisi);
         }
 
@@ -670,7 +748,7 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         if (geriBildirim != null)
         {
             geriSure = Mathf.Max(0.6f, geriBildirim.gosterimSuresi);
-            geriBildirim.YanlisGoster();
+            geriBildirim.YanlisGoster(sonTiklananHedef);
         }
 
         // Üzgün poz
@@ -709,10 +787,13 @@ public class HarfSecmeYoneticisi : MonoBehaviour
             gunesSayac.Durdur();
 
         kalanSure = 0f;
-        SureYazisiniGuncelle();
+        OyunHudunuAyarla(false);
 
         if (bitisPaneli != null)
+        {
             bitisPaneli.SetActive(true);
+            bitisPaneli.transform.SetAsLastSibling();
+        }
 
         // Bitiş panelinde Level 2 müziği loop ile devam etsin
         if (SesYoneticisi.Instance != null)
@@ -767,7 +848,20 @@ public class HarfSecmeYoneticisi : MonoBehaviour
     {
         if (yildiz >= 3) return "Süper!";
         if (yildiz == 2) return "Aferin!";
-        return "Güzel denedin!";
+        return "Güzel!";
+    }
+
+    /// <summary>Güneş / doğru HUD bitişte gizlenir.</summary>
+    void OyunHudunuAyarla(bool acik)
+    {
+        if (gunesSayac != null)
+            gunesSayac.gameObject.SetActive(acik);
+        if (sureYazisi != null)
+            sureYazisi.gameObject.SetActive(acik);
+        if (soruBaslikYazisi != null)
+            soruBaslikYazisi.gameObject.SetActive(acik);
+        if (buyukHarf != null)
+            buyukHarf.gameObject.SetActive(acik);
     }
 
     void Karistir<T>(List<T> liste)

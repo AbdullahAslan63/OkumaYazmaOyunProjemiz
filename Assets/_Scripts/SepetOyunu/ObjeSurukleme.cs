@@ -25,6 +25,7 @@ public class ObjeSurukleme : MonoBehaviour
     // Sürüklemeden önceki çizim sırası (kök + çocuk parıltı)
     private int eskiSira;
     private int[] eskiCocukSiralar;
+    private int[] eskiPsSiralar;
 
     // Aynı anda tek obje sürüklensin diye paylaşılan seçim
     private static ObjeSurukleme aktif;
@@ -124,6 +125,16 @@ public class ObjeSurukleme : MonoBehaviour
             if (cocuklar[i] == cizici) continue;
             cocuklar[i].sortingOrder = 29;
         }
+
+        // Ambient sparkle renderer'ları da üste al
+        ParticleSystemRenderer[] psList = GetComponentsInChildren<ParticleSystemRenderer>(true);
+        eskiPsSiralar = new int[psList.Length];
+        for (int i = 0; i < psList.Length; i++)
+        {
+            eskiPsSiralar[i] = psList[i] != null ? psList[i].sortingOrder : 0;
+            if (psList[i] != null)
+                psList[i].sortingOrder = 31;
+        }
     }
 
     // Bırakınca balona yakın mı bak, değilse başa dön
@@ -138,6 +149,18 @@ public class ObjeSurukleme : MonoBehaviour
         {
             // Saklanan sırayı geri yaz
             cizici.sortingOrder = eskiSira;
+        }
+
+        // Ambient sparkle sıralarını geri al
+        if (eskiPsSiralar != null)
+        {
+            ParticleSystemRenderer[] psList = GetComponentsInChildren<ParticleSystemRenderer>(true);
+            int nPs = Mathf.Min(eskiPsSiralar.Length, psList.Length);
+            for (int i = 0; i < nPs; i++)
+            {
+                if (psList[i] != null)
+                    psList[i].sortingOrder = eskiPsSiralar[i];
+            }
         }
 
         // Çocuk parıltı sıralarını geri al
