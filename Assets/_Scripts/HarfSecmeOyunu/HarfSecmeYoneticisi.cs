@@ -204,15 +204,19 @@ public class HarfSecmeYoneticisi : MonoBehaviour
                 RectTransform rt = soruBaslikYazisi.rectTransform;
                 rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
                 rt.anchoredPosition = new Vector2(0f, 455f);
-                rt.sizeDelta = new Vector2(900f, 70f);
+                rt.sizeDelta = new Vector2(920f, 78f);
                 soruBaslikYazisi.text = soruBaslikMetni;
                 soruBaslikYazisi.alignment = TextAlignmentOptions.Center;
-                soruBaslikYazisi.fontSize = 48f;
+                soruBaslikYazisi.fontSize = 52f;
                 soruBaslikYazisi.fontStyle = FontStyles.Bold;
-                soruBaslikYazisi.color = Color.white;
-                soruBaslikYazisi.outlineWidth = 0.18f;
-                soruBaslikYazisi.outlineColor = new Color32(10, 20, 50, 255);
-                FontuUygula(soruBaslikYazisi);
+                // SoruFontu Türkçe glifleri bozuyor — varsayılan TMP
+                soruBaslikYazisi.font = TMP_Settings.defaultFontAsset;
+                soruBaslikYazisi.enableVertexGradient = false;
+                // Açık krem bant üstünde koyu yazı = net okunur
+                soruBaslikYazisi.color = new Color(0.12f, 0.18f, 0.38f, 1f);
+                soruBaslikYazisi.outlineWidth = 0.12f;
+                soruBaslikYazisi.outlineColor = new Color32(255, 255, 255, 180);
+                SoruBaslikBandiniGarantiEt();
                 soruBaslikYazisi.transform.SetAsLastSibling();
             }
 
@@ -224,9 +228,8 @@ public class HarfSecmeYoneticisi : MonoBehaviour
                 brt.sizeDelta = new Vector2(420f, 220f);
                 buyukHarf.alignment = TextAlignmentOptions.Center;
                 buyukHarf.fontStyle = FontStyles.Bold;
-                // Beyaz harf + koyu panel = yüksek kontrast
                 buyukHarf.color = Color.white;
-                buyukHarf.outlineWidth = 0.22f;
+                buyukHarf.outlineWidth = 0.30f;
                 buyukHarf.outlineColor = new Color32(15, 25, 70, 255);
                 FontuUygula(buyukHarf);
                 BuyukHarfPariltisiniGarantiEt();
@@ -240,7 +243,7 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         }
     }
 
-    /// <summary>Harf arkasına koyu daire (kontrast) + hafif sparkle.</summary>
+    /// <summary>Harf arkasına açık soft halo (koyu gölge yok).</summary>
     void BuyukHarfPariltisiniGarantiEt()
     {
         if (buyukHarf == null)
@@ -253,13 +256,13 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         RectTransform brt = buyukHarf.rectTransform;
         Vector2 pos = brt.anchoredPosition;
 
-        // Koyu daire — sarı/beyaz harfi yıkayan açık halo yok
+        // Açık krem halo — meşgul arka planda harfi netleştirir
         Image halo = YumusakPariltiYardimcisi.UiHaloEkle(
             parent,
             "BuyukHarfPariltisi",
-            new Vector2(240f, 240f),
+            new Vector2(260f, 260f),
             pos,
-            new Color(0.08f, 0.12f, 0.28f, 0.85f),
+            new Color(1f, 0.95f, 0.75f, 0.55f),
             false,
             false,
             buyukHarf.transform.GetSiblingIndex());
@@ -287,10 +290,46 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         }
 
         sparkleParent.SetSiblingIndex(buyukHarf.transform.GetSiblingIndex() + 1);
-        OrtamPariltilari.GarantiEt(sparkleParent, "OrtamPariltilari", 1.0f, 3.5f, 25, true);
+        OrtamPariltilari.GarantiEt(sparkleParent, "OrtamPariltilari", 0.7f, 2f, 5, true);
     }
 
-    /// <summary>Soru metninin okunması için yarı saydam koyu panel.</summary>
+    /// <summary>Soru cümlesinin arkasına açık krem bant (koyu panel yok).</summary>
+    void SoruBaslikBandiniGarantiEt()
+    {
+        if (soruBaslikYazisi == null) return;
+        Transform parent = soruBaslikYazisi.transform.parent;
+        if (parent == null) return;
+
+        Transform bandT = parent.Find("SoruBaslikBand");
+        GameObject bandGo;
+        if (bandT == null)
+        {
+            bandGo = new GameObject("SoruBaslikBand", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            bandGo.transform.SetParent(parent, false);
+        }
+        else
+        {
+            bandGo = bandT.gameObject;
+        }
+
+        bandGo.SetActive(true);
+        RectTransform brt = bandGo.GetComponent<RectTransform>();
+        brt.anchorMin = brt.anchorMax = brt.pivot = new Vector2(0.5f, 0.5f);
+        brt.anchoredPosition = soruBaslikYazisi.rectTransform.anchoredPosition;
+        brt.sizeDelta = new Vector2(780f, 88f);
+
+        Image img = bandGo.GetComponent<Image>();
+        img.sprite = YumusakPariltiYardimcisi.ElipsSpriteAl();
+        img.type = Image.Type.Simple;
+        // Açık krem bant — koyu gölge yok, yazı net
+        img.color = new Color(1f, 0.94f, 0.78f, 0.94f);
+        img.raycastTarget = false;
+
+        // Bant yazının hemen altında
+        bandGo.transform.SetSiblingIndex(Mathf.Max(0, soruBaslikYazisi.transform.GetSiblingIndex()));
+    }
+
+    /// <summary>Eski koyu SoruPanel'i yok eder.</summary>
     void SoruPaneliniHazirla()
     {
         if (buyukHarf == null) return;
@@ -298,29 +337,8 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         if (parent == null) return;
 
         Transform panelT = parent.Find("SoruPanel");
-        GameObject panelGo;
-        if (panelT == null)
-        {
-            panelGo = new GameObject("SoruPanel", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
-            panelGo.transform.SetParent(parent, false);
-            panelGo.transform.SetSiblingIndex(0);
-        }
-        else
-        {
-            panelGo = panelT.gameObject;
-        }
-
-        RectTransform prt = panelGo.GetComponent<RectTransform>();
-        prt.anchorMin = prt.anchorMax = prt.pivot = new Vector2(0.5f, 0.5f);
-        prt.anchoredPosition = new Vector2(0f, 400f);
-        prt.sizeDelta = new Vector2(760f, 300f);
-
-        Image img = panelGo.GetComponent<Image>();
-        // Soft koyu kart — çocuk dostu, yüksek kontrast
-        img.sprite = YumusakPariltiYardimcisi.ElipsSpriteAl();
-        img.type = Image.Type.Simple;
-        img.color = new Color(0.06f, 0.1f, 0.22f, 0.92f);
-        img.raycastTarget = false;
+        if (panelT != null)
+            Destroy(panelT.gameObject);
     }
 
     void SoruFontunuGuvenliYukle()
@@ -508,7 +526,7 @@ public class HarfSecmeYoneticisi : MonoBehaviour
             buyukHarf.fontSize = 168f;
             buyukHarf.fontStyle = FontStyles.Bold;
             buyukHarf.enableAutoSizing = false;
-            buyukHarf.outlineWidth = 0.22f;
+            buyukHarf.outlineWidth = 0.30f;
             buyukHarf.outlineColor = new Color32(15, 25, 70, 255);
             buyukHarf.alignment = TextAlignmentOptions.Center;
             FontuUygula(buyukHarf);
@@ -851,7 +869,7 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         return "Güzel!";
     }
 
-    /// <summary>Güneş / doğru HUD bitişte gizlenir.</summary>
+    /// <summary>Güneş / doğru HUD + soru parıltıları bitişte gizlenir.</summary>
     void OyunHudunuAyarla(bool acik)
     {
         if (gunesSayac != null)
@@ -862,6 +880,40 @@ public class HarfSecmeYoneticisi : MonoBehaviour
             soruBaslikYazisi.gameObject.SetActive(acik);
         if (buyukHarf != null)
             buyukHarf.gameObject.SetActive(acik);
+
+        // Soru paneli / halo / ambient sparkle bitişte kalmasın
+        Transform hudParent = null;
+        if (buyukHarf != null)
+            hudParent = buyukHarf.transform.parent;
+        else if (soruBaslikYazisi != null)
+            hudParent = soruBaslikYazisi.transform.parent;
+
+        if (hudParent != null)
+        {
+            Transform soruPanel = hudParent.Find("SoruPanel");
+            if (soruPanel != null)
+                soruPanel.gameObject.SetActive(false);
+
+            Transform band = hudParent.Find("SoruBaslikBand");
+            if (band != null)
+                band.gameObject.SetActive(acik);
+
+            Transform halo = hudParent.Find("BuyukHarfPariltisi");
+            if (halo != null)
+                halo.gameObject.SetActive(acik);
+
+            Transform ortam = hudParent.Find("BuyukHarfOrtam");
+            if (ortam != null)
+            {
+                ortam.gameObject.SetActive(acik);
+                if (!acik)
+                {
+                    ParticleSystem ps = ortam.GetComponentInChildren<ParticleSystem>(true);
+                    if (ps != null)
+                        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                }
+            }
+        }
     }
 
     void Karistir<T>(List<T> liste)

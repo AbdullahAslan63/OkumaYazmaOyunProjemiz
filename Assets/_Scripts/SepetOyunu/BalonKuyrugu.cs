@@ -473,10 +473,11 @@ public class BalonKuyrugu : MonoBehaviour
 
         if (tmp.fontMaterial != null)
         {
-            tmp.fontMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, 0.4f);
+            // Bir tık daha ince harf
+            tmp.fontMaterial.SetFloat(ShaderUtilities.ID_FaceDilate, 0.28f);
         }
 
-        tmp.outlineWidth = 0.5f;
+        tmp.outlineWidth = 0.38f;
         tmp.outlineColor = new Color(0.05f, 0.04f, 0.12f, 1f);
         tmp.rectTransform.sizeDelta = new Vector2(10f, 10f);
 

@@ -116,13 +116,11 @@ public class GeriBildirimYoneticisi : MonoBehaviour
         if (rt != null)
         {
             rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
-            rt.anchoredPosition = Vector2.zero;
+            // Balon zarfının ortası / biraz üstü
+            rt.anchoredPosition = new Vector2(0f, 40f);
             rt.localScale = Vector3.one;
-            // Obje üstünde belirgin boyut
-            if (rt.sizeDelta.x < 10f || rt.sizeDelta.y < 10f)
-                rt.sizeDelta = new Vector2(140f, 140f);
-            else
-                rt.sizeDelta = new Vector2(140f, 140f);
+            // Büyük tik / çarpı — çocuklar rahat görsün
+            rt.sizeDelta = new Vector2(260f, 260f);
         }
         else
         {
@@ -137,7 +135,9 @@ public class GeriBildirimYoneticisi : MonoBehaviour
         if (img != null)
         {
             img.enabled = true;
-            img.color = Color.white;
+            // Sprite yoksa renkli fallback'i beyaza ezme (boş beyaz kare olmasın)
+            if (img.sprite != null)
+                img.color = Color.white;
             img.raycastTarget = false;
             img.preserveAspect = true;
             img.maskable = false;

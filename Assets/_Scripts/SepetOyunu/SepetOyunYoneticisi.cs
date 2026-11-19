@@ -70,6 +70,9 @@ public class SepetOyunYoneticisi : MonoBehaviour
     // Her doğru cevapta eklenecek puan
     public int dogruPuan = 1;
 
+    // Prompt ile harf sesi arası nefes (sn) — Level 2 ile aynı
+    public float sesArasiBosluk = 0.85f;
+
     // Bu turdaki soru kartı
     private HarfObjeVerisi aktifHarf;
 
@@ -139,11 +142,10 @@ public class SepetOyunYoneticisi : MonoBehaviour
             anaMenuButonu.onClick.AddListener(AnaMenuyeDon);
         }
 
-        // Güneş sayacı: 12 ışın bitince oyun biter
+        // Güneş sayacı: callback bağla; Baslat prompt sonrası (OyunBaslat)
         if (gunesSayac != null)
         {
             gunesSayac.SureBitti = OyunuBitir;
-            gunesSayac.Baslat();
         }
 
         // Skoru sıfırla
@@ -156,7 +158,44 @@ public class SepetOyunYoneticisi : MonoBehaviour
         SkorYazisiniGuncelle();
         // Süre yazısını doldur
         SureYazisiniGuncelle();
-        // İlk soruyu kur
+        // Prompt + ilk tur
+        StartCoroutine(OyunBaslat());
+    }
+
+    /// <summary>Açılış / Tekrar: Hangisinin prompt → nefes → ilk tur (+ güneş).</summary>
+    private IEnumerator OyunBaslat()
+    {
+        islemKilitli = true;
+        oyunAktif = true;
+
+        if (OyunKarakteri.Instance != null)
+        {
+            OyunKarakteri.Instance.NormalPoz();
+        }
+
+        SesYoneticisi ses = SesYoneticisi.GarantiEt();
+        float promptSure = 0f;
+        if (ses != null)
+        {
+            promptSure = ses.SoruPromptSesiCal();
+        }
+
+        if (promptSure <= 0f)
+        {
+            promptSure = 1.2f;
+        }
+
+        yield return new WaitForSeconds(promptSure);
+        yield return new WaitForSeconds(sesArasiBosluk);
+
+        // Süre prompt bitince başlar (Level 2 parity)
+        if (gunesSayac != null)
+        {
+            gunesSayac.SureBitti = OyunuBitir;
+            gunesSayac.Baslat();
+        }
+
+        islemKilitli = false;
         YeniTurBaslat();
     }
 
@@ -183,7 +222,7 @@ public class SepetOyunYoneticisi : MonoBehaviour
         }
     }
 
-    /// <summary>Tekrar Dene: skoru ve ışınları sıfırlayıp yeniden başlar.</summary>
+    /// <summary>Tekrar Dene: skoru sıfırlayıp prompt + yeni tur.</summary>
     public void TekrarOyna()
     {
         if (bitisPaneli != null)
@@ -204,10 +243,11 @@ public class SepetOyunYoneticisi : MonoBehaviour
         oyunAktif = true;
         islemKilitli = false;
 
+        // Güneş prompt bitince OyunBaslat içinde Baslatılır
         if (gunesSayac != null)
         {
             gunesSayac.SureBitti = OyunuBitir;
-            gunesSayac.Baslat();
+            gunesSayac.Durdur();
         }
 
         SureYazisiniGuncelle();
@@ -216,7 +256,8 @@ public class SepetOyunYoneticisi : MonoBehaviour
             OyunKarakteri.Instance.NormalPoz();
         }
 
-        YeniTurBaslat();
+        StopAllCoroutines();
+        StartCoroutine(OyunBaslat());
     }
 
     /// <summary>Level ekranına döner.</summary>

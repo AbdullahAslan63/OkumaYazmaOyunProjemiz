@@ -98,7 +98,7 @@ Mini Oyun 1 (Sepet) ve Mini Oyun 2 (Harf Seçme) aynı çocuk deneyimini paylaş
 | Geri bildirimde süre | Tik/çarpı + ses sırasında güneş **Duraklat** / **DevamEt** |
 | Harf sesi | Her yeni soruda `SesYoneticisi.HarfSesiCal` (her iki oyun) |
 | Obje sesi | Doğru cevapta `SesYoneticisi.ObjeSesiCal` (sprite adına göre; `Assets/_Audio/Objeler/`) |
-| Soru prompt | Yalnız Mini Oyun 2: `SoruPromptSesiCal` (“Hangisinin baş harfi”) — Sepet’te yok |
+| Soru prompt | Her iki oyun açılış / Tekrar: `SoruPromptSesiCal` (“Hangisinin baş harfi”); turlar arası yok |
 | Skor | `dogruPuan = 1` (her doğru = +1) |
 | Yıldız | `YildizHesaplayici`: 0–1 → 1, 2–4 → 2, ≥5 → 3 |
 | Bitiş ekranı | Tebrik + 1–3 yıldız + `Doğru: N` + **TekrarOyna** + Ana Menü |
@@ -203,7 +203,7 @@ Kod yazıldıktan sonra ilgili kişinin faz planındaki “Unity Editor” liste
 - Objeler ekranın **altında sabit pozisyonlarda** durur.
 - Oyuncu objeyi sürükleyip balonun üzerine bırakır.
 - Yanlış bırakınca obje başlangıç yerine döner; doğruysa puan + yeni tur.
-- Her yeni harfte `HarfSesiCal`; doğru bırakmada `ObjeSesiCal` (prompt yok). Süre: `GunesSayac`. Bitiş: TekrarOyna + Ana Menü.
+- Açılış / Tekrar’da `SoruPromptSesiCal`; her yeni harfte `HarfSesiCal`; doğru bırakmada `ObjeSesiCal`. Süre: `GunesSayac` (prompt sonrası). Bitiş: TekrarOyna + Ana Menü.
 
 ### İptal edilen dosya
 

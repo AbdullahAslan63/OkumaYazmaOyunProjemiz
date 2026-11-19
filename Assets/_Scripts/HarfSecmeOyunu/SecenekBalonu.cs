@@ -26,10 +26,10 @@ public class SecenekBalonu : MonoBehaviour
     public float objeDikeyKayma = 0.14f;
 
     [Header("Obje altı bulut / parıltı")]
-    [Range(1f, 1.45f)]
-    public float arkaPlanOlcek = 1.32f;
-    // Saf beyaz soft halo — yalnız obje
-    public Color arkaPlanRengi = new Color(1f, 1f, 1f, 0.95f);
+    [Range(1f, 1.6f)]
+    public float arkaPlanOlcek = 1.48f;
+    // Sıcak krem plaka — düz beyaz daire yerine daha dolgun arka plan
+    public Color arkaPlanRengi = new Color(1f, 0.95f, 0.82f, 0.98f);
 
     private void Awake()
     {
@@ -159,9 +159,10 @@ public class SecenekBalonu : MonoBehaviour
             arkaRt.anchoredPosition = objePoz;
             arkaRt.SetSiblingIndex(objeRt.GetSiblingIndex());
 
-            float olcek = Mathf.Clamp(arkaPlanOlcek, 1.05f, 1.45f);
+            float olcek = Mathf.Clamp(arkaPlanOlcek, 1.1f, 1.6f);
+            // Yatayda biraz daha geniş plaka
             arkaRt.sizeDelta = new Vector2(
-                objeRt.sizeDelta.x * olcek,
+                objeRt.sizeDelta.x * olcek * 1.12f,
                 objeRt.sizeDelta.y * olcek);
 
             objeArkaPlan.color = arkaPlanRengi;
@@ -217,7 +218,8 @@ public class SecenekBalonu : MonoBehaviour
                 go.transform.SetAsFirstSibling();
         }
 
-        objeArkaPlan.sprite = YumusakPariltiYardimcisi.DaireSpriteAl();
+        // Elips plaka — objeyi saran dolgun arka plan
+        objeArkaPlan.sprite = YumusakPariltiYardimcisi.ElipsSpriteAl();
         objeArkaPlan.type = Image.Type.Simple;
         objeArkaPlan.preserveAspect = false;
         objeArkaPlan.color = arkaPlanRengi;
@@ -236,8 +238,8 @@ public class SecenekBalonu : MonoBehaviour
 
         bool dogruMu = dogruHarf == aktifSoruHarfi;
         Sprite resim = objeResmi != null ? objeResmi.sprite : null;
-        // Tıklanan balonu ilet — tik/çarpı bunun üzerinde
-        Transform hedef = objeResmi != null ? objeResmi.transform : transform;
+        // Balon kökü — tik/çarpı küçük obje kutusuna sıkışmasın
+        Transform hedef = transform;
         HarfSecmeYoneticisi.Instance.SecenekSecildi(dogruMu, resim, hedef);
     }
 
