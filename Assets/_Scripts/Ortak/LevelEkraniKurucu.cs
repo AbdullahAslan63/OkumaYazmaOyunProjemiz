@@ -44,6 +44,10 @@ public class LevelEkraniKurucu : MonoBehaviour
         UiKur(transform);
         kuruldu = true;
         SesYoneticisi.GarantiEt();
+        // Prefs'ten gelen sessiz duruma göre buton yazısını yenile
+        SesAcKapaButonu sesBtn = GetComponentInChildren<SesAcKapaButonu>(true);
+        if (sesBtn != null)
+            sesBtn.GorunumuGuncelle();
     }
 
     void Start()
@@ -125,6 +129,9 @@ public class LevelEkraniKurucu : MonoBehaviour
         }
         geri.onClick.AddListener(secim.GeriDon);
         TiklamaSesiEkle(geri.gameObject);
+
+        // Sol alt: yalnızca fon müziğini aç/kapa
+        SesButonunuKur(canvasRoot);
 
         // Banner
         Image banner = ImageOlustur(canvasRoot, "BaslikBanner", new Vector2(0f, -90f), new Vector2(420f, 88f));
@@ -241,6 +248,30 @@ public class LevelEkraniKurucu : MonoBehaviour
             nokta.color = i == 0 ? SariSecili : new Color(0.75f, 0.75f, 0.75f, 1f);
             nokta.raycastTarget = false;
         }
+    }
+
+    /// <summary>Sol alt sarı buton — yalnızca fon müziğini aç/kapa.</summary>
+    private static void SesButonunuKur(Transform canvasRoot)
+    {
+        Button ses = ButonOlustur(canvasRoot, "SesButon", new Vector2(100f, 90f), new Vector2(110f, 110f));
+        RectTransform sesRt = ses.GetComponent<RectTransform>();
+        sesRt.anchorMin = new Vector2(0f, 0f);
+        sesRt.anchorMax = new Vector2(0f, 0f);
+        sesRt.pivot = new Vector2(0.5f, 0.5f);
+        sesRt.anchoredPosition = new Vector2(100f, 90f);
+        ses.GetComponent<Image>().color = SariSecili;
+
+        // Varsayılan TMP — SoruFontu Türkçe glifleri bozabilir
+        TextMeshProUGUI yazi = TmpOlustur(
+            ses.transform, "SesYazi", "Müzik", 26f, Vector2.zero, new Vector2(100f, 90f));
+        yazi.font = TMP_Settings.defaultFontAsset;
+        yazi.fontStyle = FontStyles.Bold;
+        yazi.color = new Color(0.35f, 0.18f, 0.35f, 1f);
+        yazi.textWrappingMode = TextWrappingModes.NoWrap;
+
+        SesAcKapaButonu acKapa = ses.gameObject.AddComponent<SesAcKapaButonu>();
+        acKapa.durumYazisi = yazi;
+        acKapa.GorunumuGuncelle();
     }
 
     private static void KartOlustur(

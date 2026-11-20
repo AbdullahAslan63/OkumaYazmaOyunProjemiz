@@ -65,6 +65,11 @@ public class SesYoneticisi : MonoBehaviour
     // Obje clip sözlüğü (isim → clip)
     private Dictionary<string, AudioClip> objeSozlugu;
 
+    // PlayerPrefs: 1 = yalnızca fon müziği kapalı (SFX açık kalır)
+    private const string SesKapaliPref = "SesKapali";
+    // true ise sadece muzikKaynagi sessiz
+    private bool sesKapali;
+
     /// <summary>
     /// Sahnedeki / Instance kopyasını döner.
     /// Yoksa clip'li prefab'dan üretir (boş GO ile sessiz kalmayı önler).
@@ -120,6 +125,38 @@ public class SesYoneticisi : MonoBehaviour
         // Prefab/Inspector boşsa level1.wav'ı yüklemeyi dene
         EksikMuzikClipleriniDoldur();
         ObjeSozlugunuKur();
+        // Level ekranı butonundan kalan sessiz tercih
+        sesKapali = PlayerPrefs.GetInt(SesKapaliPref, 0) == 1;
+        SesMuteUygula();
+    }
+
+    /// <summary>Şu an fon müziği kapalı mı? (SFX etkilenmez.)</summary>
+    public bool SesKapaliMi => sesKapali;
+
+    /// <summary>Müzik açık ↔ kapalı; LevelEkranı butonu için.</summary>
+    public void SesAcKapa()
+    {
+        SesKapaliAyarla(!sesKapali);
+    }
+
+    /// <summary>Yalnızca fon müziğini kapatır veya açar (kalıcı). Harf/obje/tıklama SFX açık kalır.</summary>
+    public void SesKapaliAyarla(bool kapali)
+    {
+        sesKapali = kapali;
+        PlayerPrefs.SetInt(SesKapaliPref, kapali ? 1 : 0);
+        PlayerPrefs.Save();
+        SesMuteUygula();
+    }
+
+    /// <summary>Sadece müzik mute; SFX ve AudioListener her zaman açık.</summary>
+    void SesMuteUygula()
+    {
+        // Eski "tüm sesi kapat" denemesinden kalan 0'ı düzelt
+        AudioListener.volume = 1f;
+        if (muzikKaynagi != null)
+            muzikKaynagi.mute = sesKapali;
+        if (efektKaynagi != null)
+            efektKaynagi.mute = false;
     }
 
     void OnEnable()
@@ -164,7 +201,6 @@ public class SesYoneticisi : MonoBehaviour
 
         // Harf/obje seslerinin üstüne binmesin
         muzikKaynagi.volume = Mathf.Clamp01(muzikSesSeviyesi);
-        muzikKaynagi.mute = false;
 
         if (efektKaynagi == null)
         {
@@ -174,7 +210,7 @@ public class SesYoneticisi : MonoBehaviour
         }
 
         efektKaynagi.volume = Mathf.Clamp01(efektSesSeviyesi);
-        efektKaynagi.mute = false;
+        // mute: SesMuteUygula / Awake Prefs
     }
 
     /// <summary>Obje clip dizisinden isim sözlüğü kurar.</summary>
@@ -309,6 +345,7 @@ public class SesYoneticisi : MonoBehaviour
         muzikKaynagi.clip = clip;
         muzikKaynagi.loop = true;
         muzikKaynagi.volume = Mathf.Clamp01(muzikSesSeviyesi);
+        muzikKaynagi.mute = sesKapali;
         muzikKaynagi.Play();
     }
 
@@ -370,10 +407,10 @@ public class SesYoneticisi : MonoBehaviour
         muzikKaynagi.clip = clip;
         muzikKaynagi.loop = true;
         muzikKaynagi.volume = Mathf.Clamp01(muzikSesSeviyesi);
-        muzikKaynagi.mute = false;
+        muzikKaynagi.mute = sesKapali;
         muzikKaynagi.Play();
 
-        if (!muzikKaynagi.isPlaying)
+        if (!muzikKaynagi.isPlaying && !sesKapali)
             Debug.LogWarning("SesYoneticisi: Play çağrıldı ama müzik çalmıyor (" + clip.name + ")");
     }
 
@@ -459,10 +496,11 @@ public class SesYoneticisi : MonoBehaviour
         return null;
     }
 
-    /// <summary>efektKaynagi üzerinden OneShot; null ise sessiz. SFX müzikten yüksek kalır.</summary>
+    /// <summary>efektKaynagi üzerinden OneShot; null ise sessiz. Müzik kapalı olsa da SFX çalar.</summary>
     void EfektCal(AudioClip clip)
     {
         if (efektKaynagi == null || clip == null) return;
+        efektKaynagi.mute = false;
         efektKaynagi.volume = Mathf.Clamp01(efektSesSeviyesi);
         // PlayOneShot kendi volume çarpanı: 1 = kaynak volume
         efektKaynagi.PlayOneShot(clip, 1f);
