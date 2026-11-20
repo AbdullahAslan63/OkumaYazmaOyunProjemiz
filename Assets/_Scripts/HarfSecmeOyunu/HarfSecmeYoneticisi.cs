@@ -183,7 +183,7 @@ public class HarfSecmeYoneticisi : MonoBehaviour
                 }
             }
 
-            // Skor satırı — güneş varken sol üst "Doğru: N"
+            // Skor satırı — güneş varken sol üst "Doğru: N" (SoruFontu Türkçe bozar)
             if (sureYazisi != null)
             {
                 RectTransform srt = sureYazisi.rectTransform;
@@ -194,9 +194,10 @@ public class HarfSecmeYoneticisi : MonoBehaviour
                 sureYazisi.fontStyle = FontStyles.Bold;
                 sureYazisi.color = Color.white;
                 sureYazisi.alignment = TextAlignmentOptions.Left;
+                sureYazisi.textWrappingMode = TextWrappingModes.NoWrap;
                 sureYazisi.outlineWidth = 0.2f;
                 sureYazisi.outlineColor = new Color32(20, 30, 60, 255);
-                FontuUygula(sureYazisi);
+                sureYazisi.font = TMP_Settings.defaultFontAsset;
             }
 
             if (soruBaslikYazisi != null)
@@ -807,35 +808,56 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         kalanSure = 0f;
         OyunHudunuAyarla(false);
 
+        // Bitiş panelinde Level 2 müziği loop ile devam etsin
+        if (SesYoneticisi.Instance != null)
+            SesYoneticisi.Instance.OyunMuziginiSurdur();
+
+        BitisPaneliniGoster();
+    }
+
+    /// <summary>L1 paritesi: tebrik + yıldız + Doğru: N + Tekrar + Ana Menü.</summary>
+    void BitisPaneliniGoster()
+    {
         if (bitisPaneli != null)
         {
             bitisPaneli.SetActive(true);
             bitisPaneli.transform.SetAsLastSibling();
         }
 
-        // Bitiş panelinde Level 2 müziği loop ile devam etsin
-        if (SesYoneticisi.Instance != null)
-            SesYoneticisi.Instance.OyunMuziginiSurdur();
-
         int yildiz = YildizHesaplayici.Hesapla(dogruSayisi);
         // Seviye 2 en iyi yıldızını kalıcı kaydet
         SeviyeIlerleme.KaydetYildiz(2, yildiz);
-        if (bitisTebrikYazisi != null)
-            bitisTebrikYazisi.text = TebrikMetni(yildiz);
-        if (bitisSkorYazisi != null)
-            bitisSkorYazisi.text = "Doğru: " + dogruSayisi;
 
+        if (bitisTebrikYazisi != null)
+        {
+            bitisTebrikYazisi.text = TebrikMetni(yildiz);
+            bitisTebrikYazisi.gameObject.SetActive(true);
+        }
+
+        if (bitisSkorYazisi != null)
+        {
+            bitisSkorYazisi.text = "Doğru: " + dogruSayisi;
+            bitisSkorYazisi.gameObject.SetActive(true);
+        }
+
+        Color sari = new Color(1f, 0.78f, 0.2f, 1f);
+        Color soluk = new Color(0.85f, 0.88f, 0.92f, 1f);
         if (bitisYildizlari != null)
         {
             for (int i = 0; i < bitisYildizlari.Length; i++)
             {
                 if (bitisYildizlari[i] == null) continue;
                 bitisYildizlari[i].enabled = true;
-                bitisYildizlari[i].color = i < yildiz
-                    ? new Color(1f, 0.78f, 0.2f, 1f)
-                    : new Color(0.85f, 0.88f, 0.92f, 1f);
+                bitisYildizlari[i].color = i < yildiz ? sari : soluk;
+                bitisYildizlari[i].gameObject.SetActive(true);
             }
         }
+
+        // Butonlar görünür kalsın (sahne/kurucu pasif bıraktıysa)
+        if (tekrarDeneButonu != null)
+            tekrarDeneButonu.gameObject.SetActive(true);
+        if (anaMenuButonu != null)
+            anaMenuButonu.gameObject.SetActive(true);
     }
 
     void SecenekleriTemizle()
@@ -851,7 +873,7 @@ public class HarfSecmeYoneticisi : MonoBehaviour
     void SureYazisiniGuncelle()
     {
         if (sureYazisi == null) return;
-        // Güneş varken yalnızca doğru sayısı
+        // Güneş varken yalnızca doğru sayısı (okunaklı varsayılan font)
         if (gunesSayac != null)
         {
             sureYazisi.text = "Doğru: " + dogruSayisi;

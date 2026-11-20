@@ -210,7 +210,7 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
         if (yonetici.gunesSayac != null)
             yonetici.gunesSayac.isinSuresi = 4f;
 
-        // Süre yazısı → sol üst Doğru sayacı (mm:ss yok)
+        // Süre yazısı → sol üst Doğru sayacı (mm:ss yok; SoruFontu Türkçe bozar)
         if (yonetici.sureYazisi != null && yonetici.gunesSayac != null)
         {
             yonetici.sureYazisi.text = "Doğru: 0";
@@ -222,9 +222,15 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
             yonetici.sureYazisi.fontStyle = FontStyles.Bold;
             yonetici.sureYazisi.color = Color.white;
             yonetici.sureYazisi.alignment = TextAlignmentOptions.Left;
+            yonetici.sureYazisi.textWrappingMode = TextWrappingModes.NoWrap;
+            yonetici.sureYazisi.outlineWidth = 0.2f;
+            yonetici.sureYazisi.outlineColor = new Color32(20, 30, 60, 255);
+            yonetici.sureYazisi.font = TMP_Settings.defaultFontAsset;
+            if (yonetici.geriBildirim != null)
+                yonetici.geriBildirim.skorYazisi = yonetici.sureYazisi;
         }
 
-        // Bitiş paneli L1 kart yapısına zorla
+        // Bitiş paneli L1 kart — eksikse kur, varsa yalnız ref bağla
         BitisPaneliniPariteKur(canvasT);
 
         if (yonetici.tekrarDeneButonu != null &&
@@ -261,7 +267,7 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
         }
     }
 
-    /// <summary>Her Play'de Level 1 bitiş tasarımını yeniden kurar.</summary>
+    /// <summary>L1 bitiş kartı: geçerliyse ref bağla; eksikse yeniden kur.</summary>
     void BitisPaneliniPariteKur(Transform canvasT)
     {
         GameObject panel = yonetici.bitisPaneli;
@@ -277,10 +283,6 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
             panel.transform.SetParent(canvasT, false);
         }
 
-        // Eski düz beyaz kutu / eksik çocukları sil — her seferinde L1 tarzı
-        for (int i = panel.transform.childCount - 1; i >= 0; i--)
-            DestroyImmediate(panel.transform.GetChild(i).gameObject);
-
         RectTransform pRt = panel.GetComponent<RectTransform>();
         pRt.anchorMin = Vector2.zero;
         pRt.anchorMax = Vector2.one;
@@ -291,10 +293,103 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
         perde.color = new Color(0.08f, 0.1f, 0.18f, 0.78f);
         perde.raycastTarget = true;
 
+        // Tam L1 kartı zaten varsa wipe etme — yalnız ref'leri bağla
+        if (BitisKartGecerliMi(panel) && BitisRefleriniBagla(panel))
+        {
+            panel.SetActive(false);
+            yonetici.bitisPaneli = panel;
+            yonetici.anaMenuSahneAdi = "LevelEkranı";
+            return;
+        }
+
+        // Eski düz sahne / eksik çocuklar — L1 tarzı kart kur
+        for (int i = panel.transform.childCount - 1; i >= 0; i--)
+            DestroyImmediate(panel.transform.GetChild(i).gameObject);
+
         BitisKartiniLevel1TarziKur(panel);
         panel.SetActive(false);
         yonetici.bitisPaneli = panel;
         yonetici.anaMenuSahneAdi = "LevelEkranı";
+    }
+
+    /// <summary>BitisKart + Tekrar + Ana Menü + skor + 3 yıldız var mı?</summary>
+    static bool BitisKartGecerliMi(GameObject panel)
+    {
+        if (panel == null) return false;
+        Transform kart = panel.transform.Find("BitisKart");
+        if (kart == null) return false;
+        if (kart.Find("BitisTebrik") == null) return false;
+        if (kart.Find("BitisSkor") == null) return false;
+        Transform yildizlar = kart.Find("Yildizlar");
+        if (yildizlar == null || yildizlar.childCount < 3) return false;
+        Transform btnSatir = kart.Find("ButonSatiri");
+        if (btnSatir == null) return false;
+        if (btnSatir.Find("TekrarDene") == null) return false;
+        if (btnSatir.Find("AnaMenuButon") == null) return false;
+        return true;
+    }
+
+    /// <summary>Mevcut BitisKart çocuklarından yönetici ref'lerini doldurur.</summary>
+    bool BitisRefleriniBagla(GameObject panel)
+    {
+        Transform kart = panel.transform.Find("BitisKart");
+        if (kart == null) return false;
+
+        TextMeshProUGUI tebrik = kart.Find("BitisTebrik") != null
+            ? kart.Find("BitisTebrik").GetComponent<TextMeshProUGUI>()
+            : null;
+        TextMeshProUGUI skor = kart.Find("BitisSkor") != null
+            ? kart.Find("BitisSkor").GetComponent<TextMeshProUGUI>()
+            : null;
+
+        Transform yildizGrup = kart.Find("Yildizlar");
+        Image[] yildizlar = new Image[3];
+        if (yildizGrup != null)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                Transform yt = yildizGrup.Find("Yildiz" + (i + 1));
+                if (yt != null)
+                    yildizlar[i] = yt.GetComponent<Image>();
+            }
+        }
+
+        Transform btnSatir = kart.Find("ButonSatiri");
+        Button tekrar = null;
+        Button anaMenu = null;
+        if (btnSatir != null)
+        {
+            Transform tekrarT = btnSatir.Find("TekrarDene");
+            Transform anaT = btnSatir.Find("AnaMenuButon");
+            if (tekrarT != null) tekrar = tekrarT.GetComponent<Button>();
+            if (anaT != null) anaMenu = anaT.GetComponent<Button>();
+        }
+
+        if (tebrik == null || skor == null || tekrar == null || anaMenu == null)
+            return false;
+        for (int i = 0; i < 3; i++)
+        {
+            if (yildizlar[i] == null)
+                return false;
+        }
+
+        // Dinleyicileri her Play'de taze bağla
+        tekrar.onClick.RemoveAllListeners();
+        tekrar.onClick.AddListener(yonetici.TekrarOyna);
+        anaMenu.onClick.RemoveAllListeners();
+        anaMenu.onClick.AddListener(yonetici.AnaMenuyeDon);
+        if (tekrar.GetComponent<ButonTiklamaSesi>() == null)
+            tekrar.gameObject.AddComponent<ButonTiklamaSesi>();
+        if (anaMenu.GetComponent<ButonTiklamaSesi>() == null)
+            anaMenu.gameObject.AddComponent<ButonTiklamaSesi>();
+
+        yonetici.bitisPaneli = panel;
+        yonetici.bitisTebrikYazisi = tebrik;
+        yonetici.bitisSkorYazisi = skor;
+        yonetici.bitisYildizlari = yildizlar;
+        yonetici.tekrarDeneButonu = tekrar;
+        yonetici.anaMenuButonu = anaMenu;
+        return true;
     }
 
     /// <summary>Level 1 ile aynı bitiş kartı: soft elips, turuncu tebrik, yıldız, skor, butonlar.</summary>
@@ -357,7 +452,9 @@ public class HarfSecmeSahneKurucu : MonoBehaviour
         }
 
         TextMeshProUGUI bitisSkor = UiTmp(kart.transform, "BitisSkor", "Doğru: 0", 52f, new Vector2(0f, -40f), new Vector2(420f, 70f));
+        bitisSkor.font = TMP_Settings.defaultFontAsset;
         bitisSkor.fontStyle = FontStyles.Bold;
+        bitisSkor.textWrappingMode = TextWrappingModes.NoWrap;
         bitisSkor.color = new Color(0.2f, 0.35f, 0.55f, 1f);
         bitisSkor.outlineWidth = 0.15f;
         bitisSkor.outlineColor = new Color32(255, 255, 255, 220);

@@ -59,11 +59,12 @@ Bu dosya **sadece Mustafa Üz** için faz kapılı çalışma planıdır. Kod ya
 - **Parite:** `GunesSayac` 60 sn (runtime bootstrap), `TekrarOyna` + Mavi, ses kancaları, `dogruPuan=1`
 - **Köşe karakter:** `OyunKarakteri` sağ alt
 - Ana Menü hedefi: `LevelEkranı`
-- **UI/feedback (2026-11-19, kod):** glow yalnız objede; beyaz harf + koyu panel; tik/çarpı tıklanan objede + partikül; `BitisKart` L1 paritesi. **Play teyidi bekleniyor.**
+- **UI/feedback (2026-11-19, kod):** glow yalnız objede; beyaz harf + koyu panel; tik/çarpı tıklanan objede + partikül; `BitisKart` L1 paritesi.
+- **Bitiş + Doğru HUD (2026-11-20, kod):** `BitisPaneliniPariteKur` idempotent (eksikse L1 kart: yıldız / `Doğru: N` / Tekrar / Ana Menü); `OyunuBitir` çocukları `SetActive`; oyun içi `sureYazisi` artık `SoruFontu` kullanmıyor (Türkçe `ğ` okunur). **Play teyidi bekleniyor.**
 
 **Eksik / sonraki:**
 
-- Play: “Play’de L2 UI/feedback OK” yaz
+- Play: “Play’de L2 bitiş + Doğru sayacı OK” yaz
 - Faz 4 UI polish + runtime hardcode kaldırma (tema Inspector)
 - Play smoke: `SMOKE_TEST_AVATAR_HARF.md`
 - Ses clip final bağlama Paket 6
