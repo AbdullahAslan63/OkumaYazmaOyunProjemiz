@@ -101,7 +101,7 @@ Mini Oyun 1 (Sepet) ve Mini Oyun 2 (Harf Seçme) aynı çocuk deneyimini paylaş
 | Soru prompt | Her iki oyun açılış / Tekrar: `SoruPromptSesiCal` (“Hangisinin baş harfi”); turlar arası yok |
 | Skor | `dogruPuan = 1` (her doğru = +1) |
 | Yıldız | `YildizHesaplayici`: 0–1 → 1, 2–4 → 2, ≥5 → 3 |
-| Bitiş ekranı | Tebrik + 1–3 yıldız + `Doğru: N` + **TekrarOyna** + Ana Menü |
+| Bitiş ekranı | Tebrik + 1–3 yıldız + `Doğru: N` + üç ikon: **Ana Menü** \| **TekrarOyna** \| **Sonraki Level** |
 | Tekrar butonu | Sepet: `Tekrar_Dene_Turuncu.png` (Bolum1); Harf: `Tekrar_Dene_Mavi.png` (Bolum2) |
 | Tik / çarpı | Sepet Bolum1 UI; Harf Bolum2 UI — aynı dosya adları |
 | Buton SFX | `ButonTiklamaSesi` (Tekrar Dene + Ana Menü) |
@@ -203,7 +203,7 @@ Kod yazıldıktan sonra ilgili kişinin faz planındaki “Unity Editor” liste
 - Objeler ekranın **altında sabit pozisyonlarda** durur.
 - Oyuncu objeyi sürükleyip balonun üzerine bırakır.
 - Yanlış bırakınca obje başlangıç yerine döner; doğruysa puan + yeni tur.
-- Açılış / Tekrar’da `SoruPromptSesiCal`; her yeni harfte `HarfSesiCal`; doğru bırakmada `ObjeSesiCal`. Süre: `GunesSayac` (prompt sonrası). Bitiş: TekrarOyna + Ana Menü.
+- Açılış / Tekrar’da `SoruPromptSesiCal`; her yeni harfte `HarfSesiCal`; doğru bırakmada `ObjeSesiCal`. Süre: `GunesSayac` (prompt sonrası). Bitiş: Ana Menü + TekrarOyna + Sonraki Level (L1 Sonraki → `HarfSecmeOyunu`).
 
 ### İptal edilen dosya
 
@@ -218,7 +218,7 @@ Eski planda geçen `SepetHareketi.cs` (balonu hareket ettirme) **geçerli değil
 - Yanlışta soru değişmez; doğruda yeni soru.
 - Yanlış balonun üstünde `wrong_x.png`, doğru balonun üstünde `correct_check.png` (`Assets/_Art/Bolum2/UI/`). Görseli **Paket 5** koyar.
 - Yanlış cevap sesi ve tıklanan objenin klibi (`Assets/_Audio/Objeler/`) **Paket 3**. Paket 5 yalnızca null-safe çağrı bırakır.
-- Süre varsayılan **60** sn; bitiş ekranı **sade** (tebrik + yıldız + doğru sayısı + **Yeniden Dene** + Ana Menü) — uzun harf raporu yok. Yeniden Dene butonu **Paket 5** (`Tekrar_Dene_Mavi.png`).
+- Süre varsayılan **60** sn; bitiş ekranı **sade** (tebrik + yıldız + doğru sayısı + üç ikon: Ana Menü \| Yeniden Dene \| Sonraki Level) — uzun harf raporu yok. Yeniden Dene **Paket 5** (`Tekrar_Dene_Mavi.png`); L2 Sonraki şimdilik → `LevelEkranı`.
 - Seçenek balonları tur başında **aşağıdan yukarı** yükselerek gelir (hafif rastgele hız farkı); birden belirmez.
 - Soru harfi ve üst UI, meşgul arka plan üzerinde **okunaklı** ve **büyük** olmalı (mobil + akıllı tahta).
 - Arka plan sprite’ı, yazı renkleri / boyutları / konumları **Inspector’dan değiştirilebilir** olmalı (runtime hardcode ezmesin).

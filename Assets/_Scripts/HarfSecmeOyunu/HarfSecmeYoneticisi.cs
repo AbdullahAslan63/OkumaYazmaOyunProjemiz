@@ -33,6 +33,7 @@ public class HarfSecmeYoneticisi : MonoBehaviour
     public Image[] bitisYildizlari;
     public Button tekrarDeneButonu;
     public Button anaMenuButonu;
+    public Button sonrakiLevelButonu;
     public TMP_FontAsset soruFontu;
     public string soruBaslikMetni = "Hangisinin baş harfi";
 
@@ -44,6 +45,8 @@ public class HarfSecmeYoneticisi : MonoBehaviour
 
     [Header("Sahne")]
     public string anaMenuSahneAdi = "LevelEkranı";
+    // Level 3 yokken geçici: LevelEkranı
+    public string sonrakiSahneAdi = "LevelEkranı";
 
     [Header("Animasyon")]
     public float yukselmeSuresi = 0.45f;
@@ -126,6 +129,12 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         {
             anaMenuButonu.onClick.RemoveListener(AnaMenuyeDon);
             anaMenuButonu.onClick.AddListener(AnaMenuyeDon);
+        }
+
+        if (sonrakiLevelButonu != null)
+        {
+            sonrakiLevelButonu.onClick.RemoveListener(SonrakiSeviyeyeGit);
+            sonrakiLevelButonu.onClick.AddListener(SonrakiSeviyeyeGit);
         }
     }
 
@@ -563,6 +572,13 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         SceneManager.LoadScene(anaMenuSahneAdi);
     }
 
+    /// <summary>Sonraki seviye; L2’de geçici olarak LevelEkranı.</summary>
+    public void SonrakiSeviyeyeGit()
+    {
+        if (string.IsNullOrEmpty(sonrakiSahneAdi)) return;
+        SceneManager.LoadScene(sonrakiSahneAdi);
+    }
+
     IEnumerator SecenekleriYerlestir()
     {
         islemYapiliyor = true;
@@ -815,7 +831,7 @@ public class HarfSecmeYoneticisi : MonoBehaviour
         BitisPaneliniGoster();
     }
 
-    /// <summary>L1 paritesi: tebrik + yıldız + Doğru: N + Tekrar + Ana Menü.</summary>
+    /// <summary>L1 paritesi: tebrik + yıldız + Doğru: N + üç ikon buton.</summary>
     void BitisPaneliniGoster()
     {
         if (bitisPaneli != null)
@@ -858,6 +874,8 @@ public class HarfSecmeYoneticisi : MonoBehaviour
             tekrarDeneButonu.gameObject.SetActive(true);
         if (anaMenuButonu != null)
             anaMenuButonu.gameObject.SetActive(true);
+        if (sonrakiLevelButonu != null)
+            sonrakiLevelButonu.gameObject.SetActive(true);
     }
 
     void SecenekleriTemizle()

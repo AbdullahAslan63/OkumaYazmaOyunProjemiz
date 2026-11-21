@@ -61,8 +61,14 @@ public class SepetOyunYoneticisi : MonoBehaviour
     // Level ekranına dönen buton
     public Button anaMenuButonu;
 
+    // Sonraki seviyeye giden buton
+    public Button sonrakiLevelButonu;
+
     // Bitiş sonrası dönüş sahnesi
     public string anaMenuSahneAdi = "LevelEkranı";
+
+    // Sonraki seviye sahnesi (L1 → HarfSecmeOyunu)
+    public string sonrakiSahneAdi = "HarfSecmeOyunu";
 
     // Geri sayım (saniye) — 15 ışın × 4 sn = 60
     public float kalanSure = 60f;
@@ -140,6 +146,13 @@ public class SepetOyunYoneticisi : MonoBehaviour
         {
             anaMenuButonu.onClick.RemoveListener(AnaMenuyeDon);
             anaMenuButonu.onClick.AddListener(AnaMenuyeDon);
+        }
+
+        // Sonraki level bağla
+        if (sonrakiLevelButonu != null)
+        {
+            sonrakiLevelButonu.onClick.RemoveListener(SonrakiSeviyeyeGit);
+            sonrakiLevelButonu.onClick.AddListener(SonrakiSeviyeyeGit);
         }
 
         // Güneş sayacı: callback bağla; Baslat prompt sonrası (OyunBaslat)
@@ -271,6 +284,19 @@ public class SepetOyunYoneticisi : MonoBehaviour
 
         // Level seçim sahnesini aç
         SceneManager.LoadScene(anaMenuSahneAdi);
+    }
+
+    /// <summary>Sonraki seviye sahnesini açar.</summary>
+    public void SonrakiSeviyeyeGit()
+    {
+        // Hedef boşsa dokunma
+        if (string.IsNullOrEmpty(sonrakiSahneAdi))
+        {
+            return;
+        }
+
+        // Sonraki mini oyun / level ekranı
+        SceneManager.LoadScene(sonrakiSahneAdi);
     }
 
     /// <summary>Yeni harf seçer, objeleri yeniden dizer (ilk tur / animasyonsuz).</summary>

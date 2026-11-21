@@ -38,7 +38,7 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 | Doğru puan     | Varsayılan **+1** (`dogruPuan`)                          |
 | Yıldız         | `YildizHesaplayici`: 0–1→1, 2–4→2, ≥5→3                  |
 | Ses            | Yeni harfte `HarfSesiCal`; doğru bırakmada `ObjeSesiCal` (prompt yok) |
-| Bitiş          | Tebrik + yıldız + `Doğru: N` + TekrarOyna + Ana Menü     |
+| Bitiş          | Tebrik + yıldız + `Doğru: N` + üç ikon: Ana Menü \| TekrarOyna \| Sonraki Level |
 | Sahne yolu     | Güncel: `Assets/Scenes/SepetOyunu.unity` (eski `_Scenes` notu geçersiz) |
 | Paket 3        | Skor/soru/geri bildirim/ses olmadan yönetici yazılmaz    |
 
@@ -52,7 +52,8 @@ Bu dosya **sadece Enes Barış** için faz kapılı çalışma planıdır. Kod y
 - Branch: **`main`** (`enes/level1` + `suleyman/level_ekrani` merge edildi).
 - **Faz 0–4 (kod):** `SepetOyunYoneticisi`, `BalonKuyrugu`, `EgimliYazi`. `GunesSayac` + `OyunKarakteri` → `Ortak/`. `ObjeSurukleme` → `ObjeBirakildi`. `SepetDemoKurucu` Play’de sistemleri kurar + `SesYoneticisi.GarantiEt()` + sağ alt köşe karakteri.
 - **Parite (2026-11-14):** Harf/obje ses kancaları, güneş duraklatma, `TekrarOyna` + `ButonTiklamaSesi`, `bitisSkorYazisi`, ortak yıldız tablosu.
-- **Entegrasyon:** Bitişte `SeviyeIlerleme.KaydetYildiz(1, …)`; Ana Menü → `LevelEkranı`.
+- **Entegrasyon:** Bitişte `SeviyeIlerleme.KaydetYildiz(1, …)`; Ana Menü → `LevelEkranı`; Sonraki Level → `HarfSecmeOyunu`.
+- **Bitiş butonları (2026-11-21):** `ButonSatiri` üç eşit ikon (Ana Menü \| Yeniden Dene \| Sonraki); `SonrakiSeviyeyeGit()`.
 - Prefab `Obje.prefab` hâlâ yok (runtime şablon). Final müzik/SFX Inspector bağlama Paket 6.
 - **Glow (2026-11-19, kod):** 4 obje arkası soft halo + sparkle; turuncu plaka kapalı; balon→obje ışık konisi; karakter halesi. Play teyidi bekleniyor.
 
@@ -528,7 +529,7 @@ Mini Oyun 1 (Enes) teslim
 - Scriptler: ObjeSurukleme.cs, SepetOyunYoneticisi.cs (+ BalonKuyrugu, GunesSayac, EgimliYazi, SepetDemoKurucu; Ortak/OyunKarakteri)
 - Prefab: runtime şablon (Obje.prefab yok)
 - Süre varsayılan 60 sn, doğru +1; yıldız → SeviyeIlerleme seviye 1
-- Ana Menü → LevelEkranı
+- Ana Menü → LevelEkranı; Sonraki Level → HarfSecmeOyunu
 - Sağ alt köşe karakter (doğru mutlu+zıpla, yanlış üzgün)
 - SepetHareketi YOK (iptal)
 

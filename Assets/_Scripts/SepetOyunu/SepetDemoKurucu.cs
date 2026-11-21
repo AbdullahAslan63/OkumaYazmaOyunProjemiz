@@ -35,8 +35,14 @@ public class SepetDemoKurucu : MonoBehaviour
     // Tekrar Dene butonu
     private const string TekrarDeneYolu = "Assets/_Art/Bolum1/UI/Tekrar_Dene_Turuncu.png";
 
+    // Sonraki Level ikonu (avatar ok)
+    private const string SonrakiIkonYolu = "Assets/_Art/Avatar/UI/ui_icon_sag_ok.png";
+
     // Yıldız (Bolum1'de yok; Bolum2'deki kullanılır)
     private const string YildizYolu = "Assets/_Art/Bolum2/UI/Dogru_Yildiz.png";
+
+    // Bitiş ikon buton boyutu
+    private const float BitisIkonBoy = 120f;
 
     // Bir turda kaç obje
     private const int ObjeSayisi = 4;
@@ -552,7 +558,7 @@ public class SepetDemoKurucu : MonoBehaviour
         bitisSkor.outlineWidth = 0.15f;
         bitisSkor.outlineColor = new Color32(255, 255, 255, 220);
 
-        // Buton satırı — yan yana, aynı boy
+        // Buton satırı — Ana Menü | Yeniden Dene | Sonraki Level (üç eşit ikon)
         GameObject btnSatir = new GameObject("ButonSatiri", typeof(RectTransform));
         btnSatir.transform.SetParent(kart.transform, false);
         RectTransform bsRt = btnSatir.GetComponent<RectTransform>();
@@ -560,66 +566,118 @@ public class SepetDemoKurucu : MonoBehaviour
         bsRt.anchoredPosition = new Vector2(0f, -180f);
         bsRt.sizeDelta = new Vector2(700f, 130f);
 
-        // Tekrar Dene (turuncu art)
-        GameObject btnGo = new GameObject("TekrarDene", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
-        btnGo.transform.SetParent(btnSatir.transform, false);
-        RectTransform bRt = btnGo.GetComponent<RectTransform>();
-        bRt.anchorMin = bRt.anchorMax = bRt.pivot = new Vector2(0.5f, 0.5f);
-        bRt.anchoredPosition = new Vector2(-170f, 0f);
-        bRt.sizeDelta = new Vector2(280f, 120f);
-        Image bImg = btnGo.GetComponent<Image>();
-        Sprite tekrarSp = ArtSpriteYukle(TekrarDeneYolu);
-        if (tekrarSp != null)
-        {
-            bImg.sprite = tekrarSp;
-            bImg.preserveAspect = true;
-            bImg.color = Color.white;
-        }
-        else
-        {
-            bImg.color = new Color(1f, 0.55f, 0.2f, 1f);
-        }
+        Color turuncu = new Color(1f, 0.5f, 0.22f, 1f);
 
-        Button btn = btnGo.GetComponent<Button>();
-        btn.targetGraphic = bImg;
+        // Sol: Ana Menü (daire + home glyph)
+        Button anaBtn = BitisIkonButonuKur(
+            btnSatir.transform,
+            "AnaMenu",
+            -180f,
+            turuncu,
+            null,
+            "⌂");
 
-        // Ana Menü — aynı yükseklik, sıcak turuncu-kırmızı kapsül
-        GameObject anaGo = new GameObject("AnaMenu", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
-        anaGo.transform.SetParent(btnSatir.transform, false);
-        RectTransform aRt = anaGo.GetComponent<RectTransform>();
-        aRt.anchorMin = aRt.anchorMax = aRt.pivot = new Vector2(0.5f, 0.5f);
-        aRt.anchoredPosition = new Vector2(170f, 0f);
-        aRt.sizeDelta = new Vector2(280f, 120f);
-        Image aImg = anaGo.GetComponent<Image>();
-        aImg.sprite = YumusakPariltiYardimcisi.ElipsSpriteAl();
-        aImg.type = Image.Type.Simple;
-        aImg.color = new Color(1f, 0.5f, 0.22f, 1f);
-        Button anaBtn = anaGo.GetComponent<Button>();
-        anaBtn.targetGraphic = aImg;
-        TextMeshProUGUI anaYazi = UiTmp(
-            anaGo.transform,
-            "Yazi",
-            "Ana Menü",
-            42f,
-            Vector2.zero,
-            new Vector2(260f, 100f));
-        anaYazi.fontStyle = FontStyles.Bold;
-        anaYazi.color = Color.white;
-        anaYazi.outlineWidth = 0.22f;
-        anaYazi.outlineColor = new Color32(90, 30, 10, 255);
-        anaYazi.raycastTarget = false;
+        // Orta: Yeniden Dene (turuncu art sprite; yoksa turuncu daire)
+        Button tekrarBtn = BitisIkonButonuKur(
+            btnSatir.transform,
+            "TekrarDene",
+            0f,
+            turuncu,
+            ArtSpriteYukle(TekrarDeneYolu),
+            null);
 
-        btnGo.AddComponent<ButonTiklamaSesi>();
-        anaGo.AddComponent<ButonTiklamaSesi>();
+        // Sağ: Sonraki Level (ok ikonu)
+        Button sonrakiBtn = BitisIkonButonuKur(
+            btnSatir.transform,
+            "SonrakiLevel",
+            180f,
+            turuncu,
+            ArtSpriteYukle(SonrakiIkonYolu),
+            "›");
 
         panel.SetActive(false);
         yonetici.bitisPaneli = panel;
         yonetici.bitisTebrikYazisi = tebrik;
         yonetici.bitisSkorYazisi = bitisSkor;
         yonetici.bitisYildizlari = yildizlar;
-        yonetici.tekrarDeneButonu = btn;
         yonetici.anaMenuButonu = anaBtn;
+        yonetici.tekrarDeneButonu = tekrarBtn;
+        yonetici.sonrakiLevelButonu = sonrakiBtn;
         yonetici.anaMenuSahneAdi = "LevelEkranı";
+        yonetici.sonrakiSahneAdi = "HarfSecmeOyunu";
+    }
+
+    // Bitiş satırı için eşit daire ikon butonu
+    private Button BitisIkonButonuKur(
+        Transform parent,
+        string ad,
+        float x,
+        Color daireRenk,
+        Sprite ikonSprite,
+        string glyphFallback)
+    {
+        GameObject go = new GameObject(ad, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+        go.transform.SetParent(parent, false);
+        RectTransform rt = go.GetComponent<RectTransform>();
+        rt.anchorMin = rt.anchorMax = rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.anchoredPosition = new Vector2(x, 0f);
+        rt.sizeDelta = new Vector2(BitisIkonBoy, BitisIkonBoy);
+
+        Image img = go.GetComponent<Image>();
+        Button btn = go.GetComponent<Button>();
+        btn.targetGraphic = img;
+
+        // Tekrar gibi tam daire PNG varsa doğrudan kullan
+        if (ikonSprite != null && ad == "TekrarDene")
+        {
+            img.sprite = ikonSprite;
+            img.preserveAspect = true;
+            img.color = Color.white;
+        }
+        else
+        {
+            // Renkli daire zemin
+            img.sprite = YumusakPariltiYardimcisi.ElipsSpriteAl();
+            img.type = Image.Type.Simple;
+            img.color = daireRenk;
+
+            if (ikonSprite != null)
+            {
+                // İkon çocuğu (ok vb.)
+                GameObject ikonGo = new GameObject("Ikon", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+                ikonGo.transform.SetParent(go.transform, false);
+                RectTransform iRt = ikonGo.GetComponent<RectTransform>();
+                iRt.anchorMin = iRt.anchorMax = iRt.pivot = new Vector2(0.5f, 0.5f);
+                iRt.anchoredPosition = Vector2.zero;
+                iRt.sizeDelta = new Vector2(64f, 64f);
+                Image iImg = ikonGo.GetComponent<Image>();
+                iImg.sprite = ikonSprite;
+                iImg.preserveAspect = true;
+                iImg.color = Color.white;
+                iImg.raycastTarget = false;
+            }
+            else if (!string.IsNullOrEmpty(glyphFallback))
+            {
+                // Home / ok yedek glyph
+                TextMeshProUGUI yazi = UiTmp(
+                    go.transform,
+                    "Yazi",
+                    glyphFallback,
+                    56f,
+                    Vector2.zero,
+                    new Vector2(100f, 100f));
+                yazi.fontStyle = FontStyles.Bold;
+                yazi.color = Color.white;
+                yazi.outlineWidth = 0.2f;
+                yazi.outlineColor = new Color32(90, 30, 10, 255);
+                yazi.raycastTarget = false;
+            }
+        }
+
+        if (go.GetComponent<ButonTiklamaSesi>() == null)
+            go.AddComponent<ButonTiklamaSesi>();
+
+        return btn;
     }
 
     // UI Image geri bildirim ikonu

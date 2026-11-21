@@ -39,7 +39,7 @@ Bu dosya **sadece Mustafa Üz** için faz kapılı çalışma planıdır. Kod ya
 | Ses                | Üz ses çalmaz. Yalnızca null-safe çağrı bırakır; yanlış SFX ve obje klibi **Paket 3**                                          |
 | Süre               | Varsayılan **60** sn; görsel `GunesSayac` (`Ortak/`, Bolum1 güneş art) — dijital `mm:ss` gizlenir                              |
 | Skor / yıldız      | `dogruPuan=1`; `YildizHesaplayici` (0–1→1, 2–4→2, ≥5→3)                                                                      |
-| Bitiş ekranı       | Sade: tebrik + 1–3 yıldız + `Doğru: N` + **Yeniden Dene** (`TekrarOyna`, `Tekrar_Dene_Mavi.png`) + Ana Menü — harf rapor yok   |
+| Bitiş ekranı       | Sade: tebrik + 1–3 yıldız + `Doğru: N` + üç ikon: Ana Menü \| **Yeniden Dene** (`Tekrar_Dene_Mavi.png`) \| Sonraki Level — harf rapor yok |
 | Tema               | Arka plan, yazı renkleri, yazı boyut/konum **Inspector’dan değiştirilebilir**; runtime hardcode ezmesin                        |
 | Hedef cihazlar     | **Mobil** ve **Windows akıllı tahta** (büyük ekran) — UI ölçeği kritik                                                         |
 | Balon girişi       | Anında belirme yok; **aşağıdan yukarı** yükseliş; hızlar hafif rastgele farklarla                                              |
@@ -58,9 +58,10 @@ Bu dosya **sadece Mustafa Üz** için faz kapılı çalışma planıdır. Kod ya
 - Prefab: `Assets/_Prefabs/HarfSecmeOyunu/SecenekBalonu.prefab` **mevcut**
 - **Parite:** `GunesSayac` 60 sn (runtime bootstrap), `TekrarOyna` + Mavi, ses kancaları, `dogruPuan=1`
 - **Köşe karakter:** `OyunKarakteri` sağ alt
-- Ana Menü hedefi: `LevelEkranı`
+- Ana Menü hedefi: `LevelEkranı`; Sonraki Level (geçici): `LevelEkranı` (L3 gelince güncellenir)
 - **UI/feedback (2026-11-19, kod):** glow yalnız objede; beyaz harf + koyu panel; tik/çarpı tıklanan objede + partikül; `BitisKart` L1 paritesi.
 - **Bitiş + Doğru HUD (2026-11-20, kod):** `BitisPaneliniPariteKur` idempotent (eksikse L1 kart: yıldız / `Doğru: N` / Tekrar / Ana Menü); `OyunuBitir` çocukları `SetActive`; oyun içi `sureYazisi` artık `SoruFontu` kullanmıyor (Türkçe `ğ` okunur). **Play teyidi bekleniyor.**
+- **Bitiş üç ikon (2026-11-21, kod):** Ana Menü \| Yeniden Dene (mavi) \| Sonraki Level — L1 ile aynı hiza; `SonrakiSeviyeyeGit()`.
 
 **Eksik / sonraki:**
 
@@ -201,7 +202,7 @@ Faz 8 Play + teslim
 - `YeniSoru()` — desteden harf; 1 doğru + 3 çeldirici; Fisher-Yates; 4 slot
 - `SecenekSecildi(bool)` + `SecenekSecildi(bool, SecenekBalonu)`
 - Süre `kalanSure`; bitince `OyunuBitir`
-- Bitiş: tebrik + 1–3 yıldız + `Doğru: N` + TekrarOyna + Ana Menü (harf rapor listesi yok)
+- Bitiş: tebrik + 1–3 yıldız + `Doğru: N` + Ana Menü \| TekrarOyna \| Sonraki Level (harf rapor listesi yok)
 - Paket 3 olmadan yerel skor sayacı kullanılabilir
 
 
@@ -502,7 +503,7 @@ Mini Oyun 2 (Mustafa Üz) teslim
 - UI: mobil + akıllı tahta ölçeği hedeflendi
 - Tema: arka plan + yazı renk/boyut/konum Inspector’dan
 - Balon giriş: aşağıdan yükseliş
-- Bitiş: sade (tebrik + yıldız + Doğru + Yeniden Dene + Ana Menü)
+- Bitiş: sade (tebrik + yıldız + Doğru + Ana Menü \| Yeniden Dene \| Sonraki Level)
 - Seslendirme: çağrı kancaları hazır; clip’ler Paket 3/6
 
 Paket 6’dan beklenenler:

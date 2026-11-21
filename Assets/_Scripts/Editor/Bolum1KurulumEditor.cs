@@ -693,18 +693,24 @@ public static class Bolum1KurulumEditor
             if (ys != null) yi.sprite = ys;
             yildizlar[i] = yi;
         }
-        // Tekrar Dene (Mavi) — ortak sözleşme
-        Button tekrar = UiButonOlustur(bitis.transform, "TekrarDene", new Vector2(0, -90), new Vector2(360, 110),
+        // Üç ikon: Ana Menü | Yeniden Dene | Sonraki Level
+        Button anaMenu = UiButonOlustur(bitis.transform, "AnaMenuButon", new Vector2(-180, -160), new Vector2(120, 120), null);
+        anaMenu.GetComponent<Image>().color = new Color(0.35f, 0.55f, 0.95f, 1f);
+        TextMeshProUGUI anaText = TmpOlustur(anaMenu.transform, "Text", "⌂", 48, Vector2.zero);
+        anaText.color = Color.white;
+        anaMenu.gameObject.AddComponent<ButonTiklamaSesi>();
+
+        Button tekrar = UiButonOlustur(bitis.transform, "TekrarDene", new Vector2(0, -160), new Vector2(120, 120),
             SpriteYukle("Assets/_Art/Bolum2/UI/Tekrar_Dene_Mavi.png"));
         if (tekrar.GetComponent<Image>().sprite == null)
             tekrar.GetComponent<Image>().color = new Color(0.35f, 0.55f, 0.95f, 1f);
         tekrar.gameObject.AddComponent<ButonTiklamaSesi>();
 
-        Button anaMenu = UiButonOlustur(bitis.transform, "AnaMenuButon", new Vector2(0, -200), new Vector2(320, 90), null);
-        anaMenu.GetComponent<Image>().color = new Color(0.98f, 0.55f, 0.25f);
-        TextMeshProUGUI anaText = TmpOlustur(anaMenu.transform, "Text", "Ana Menü", 40, Vector2.zero);
-        anaText.color = Color.white;
-        anaMenu.gameObject.AddComponent<ButonTiklamaSesi>();
+        Button sonraki = UiButonOlustur(bitis.transform, "SonrakiLevel", new Vector2(180, -160), new Vector2(120, 120),
+            SpriteYukle("Assets/_Art/Avatar/UI/ui_icon_sag_ok.png"));
+        if (sonraki.GetComponent<Image>().sprite == null)
+            sonraki.GetComponent<Image>().color = new Color(0.35f, 0.55f, 0.95f, 1f);
+        sonraki.gameObject.AddComponent<ButonTiklamaSesi>();
         bitis.SetActive(false);
 
         // Oyun yöneticisi + runtime parite kurucu (GunesSayac vb.)
@@ -728,11 +734,14 @@ public static class Bolum1KurulumEditor
         hy.bitisTebrikYazisi = tebrik;
         hy.bitisSkorYazisi = bitisSkor;
         hy.bitisYildizlari = yildizlar;
-        hy.tekrarDeneButonu = tekrar;
         hy.anaMenuButonu = anaMenu;
+        hy.tekrarDeneButonu = tekrar;
+        hy.sonrakiLevelButonu = sonraki;
         hy.anaMenuSahneAdi = "LevelEkranı";
-        UnityEventTools.AddPersistentListener(tekrar.onClick, hy.TekrarOyna);
+        hy.sonrakiSahneAdi = "LevelEkranı";
         UnityEventTools.AddPersistentListener(anaMenu.onClick, hy.AnaMenuyeDon);
+        UnityEventTools.AddPersistentListener(tekrar.onClick, hy.TekrarOyna);
+        UnityEventTools.AddPersistentListener(sonraki.onClick, hy.SonrakiSeviyeyeGit);
 
         EditorSceneManager.SaveScene(scene, HarfSahne);
         Debug.Log("HarfSecme sahnesi yeniden kuruldu: " + HarfSahne);
